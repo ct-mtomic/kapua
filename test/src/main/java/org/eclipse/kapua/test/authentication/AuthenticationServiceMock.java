@@ -26,7 +26,10 @@ import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserService;
 
 @TestService
+<<<<<<< HEAD:test/src/main/java/org/eclipse/kapua/test/authentication/AuthenticationServiceMock.java
 @KapuaProvider
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d:test/src/main/java/org/eclipse/kapua/test/AuthenticationServiceMock.java
 public class AuthenticationServiceMock implements AuthenticationService {
 
     public AuthenticationServiceMock() {
@@ -53,6 +56,10 @@ public class AuthenticationServiceMock implements AuthenticationService {
     @Override
     public void logout()
             throws KapuaException {
+<<<<<<< HEAD:test/src/main/java/org/eclipse/kapua/test/authentication/AuthenticationServiceMock.java
+=======
+        // TODO Auto-generated method stub
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d:test/src/main/java/org/eclipse/kapua/test/AuthenticationServiceMock.java
         KapuaSecurityUtils.clearSession();
     }
 

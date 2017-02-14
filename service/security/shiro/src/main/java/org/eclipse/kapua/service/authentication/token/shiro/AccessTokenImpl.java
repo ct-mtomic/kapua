@@ -1,5 +1,9 @@
 /*******************************************************************************
+<<<<<<< HEAD
  * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
+=======
+ * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,12 +33,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.KapuaException;
+<<<<<<< HEAD
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
 import org.eclipse.kapua.commons.model.id.IdGenerator;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.token.AccessToken;
+=======
+import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authentication.token.AccessToken;
+import org.eclipse.kapua.service.generator.id.IdGeneratorService;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
 /**
  * Access token entity implementation.
@@ -88,9 +101,15 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
      */
     public AccessTokenImpl(KapuaId scopeId, KapuaId userId, String tokenId, Date expiresOn) {
         super(scopeId);
+<<<<<<< HEAD
         setUserId(userId);
         setTokenId(tokenId);
         setExpiresOn(expiresOn);
+=======
+        this.userId = new KapuaEid(userId.getId());
+        this.tokenId = tokenId;
+        this.expiresOn = expiresOn;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     }
 
     @Override
@@ -99,6 +118,7 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
     }
 
     @Override
+<<<<<<< HEAD
     public void setUserId(KapuaId userId) {
         if (userId != null) {
             this.userId = new KapuaEid(userId);
@@ -106,16 +126,21 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
     }
 
     @Override
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public String getTokenId() {
         return tokenId;
     }
 
     @Override
+<<<<<<< HEAD
     public void setTokenId(String tokenId) {
         this.tokenId = tokenId;
     }
 
     @Override
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public Date getExpiresOn() {
         return expiresOn;
     }
@@ -125,6 +150,7 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
         this.expiresOn = expiresOn;
     }
 
+<<<<<<< HEAD
     /**
      * The {@link AbstractKapuaUpdatableEntity#prePersistAction} is overridden because the property {@link AbstractKapuaEntity#createdBy}
      * must be set to the current userId instead of the user in session, which is not set at the time of the creation of this {@link AccessToken}.
@@ -139,5 +165,16 @@ public class AccessTokenImpl extends AbstractKapuaUpdatableEntity implements Acc
         this.createdOn = new Date();
         this.modifiedBy = this.createdBy;
         this.modifiedOn = this.createdOn;
+=======
+    @Override
+    protected void prePersistsAction()
+            throws KapuaException {
+        KapuaLocator locator = KapuaLocator.getInstance();
+        IdGeneratorService idGenerator = locator.getService(IdGeneratorService.class);
+
+        this.id = new KapuaEid(idGenerator.generate().getId());
+        this.createdBy = userId;
+        this.createdOn = new Date();
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     }
 }

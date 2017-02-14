@@ -55,7 +55,12 @@ public class AccountDAO {
         organizationImpl.setStateProvinceCounty(accountCreator.getOrganizationStateProvinceCounty());
         organizationImpl.setCountry(accountCreator.getOrganizationCountry());
 
+<<<<<<< HEAD
         AccountImpl accountImpl = new AccountImpl(accountCreator.getScopeId(), accountCreator.getName());
+=======
+        AccountImpl accountImpl = new AccountImpl(accountCreator.getScopeId(),
+                accountCreator.getName());
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         accountImpl.setOrganization(organizationImpl);
 
         return ServiceDAO.create(em, accountImpl);
@@ -86,7 +91,11 @@ public class AccountDAO {
      * @throws KapuaEntityNotFoundException
      *             If the {@link Account} is not found
      */
+<<<<<<< HEAD
     public static void delete(EntityManager em, KapuaId accountId) throws KapuaEntityNotFoundException {
+=======
+    public static void delete(EntityManager em, KapuaId accountId) {
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         ServiceDAO.delete(em, AccountImpl.class, accountId);
     }
 

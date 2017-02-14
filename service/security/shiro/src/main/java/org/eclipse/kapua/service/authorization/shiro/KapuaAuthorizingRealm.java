@@ -54,11 +54,27 @@ import org.slf4j.LoggerFactory;
  * The JPA-based application's one and only configured Apache Shiro Realm.
  */
 public class KapuaAuthorizingRealm extends AuthorizingRealm {
+<<<<<<< HEAD
 
     private static final Logger logger = LoggerFactory.getLogger(KapuaAuthorizingRealm.class);
 
     public static final String REALM_NAME = "kapuaAuthorizingRealm";
 
+=======
+
+    private static final Logger logger = LoggerFactory.getLogger(KapuaAuthorizingRealm.class);
+
+    /**
+     * Realm name
+     */
+    public static final String REALM_NAME = "kapuaAuthorizingRealm";
+
+    /**
+     * Constructor
+     * 
+     * @throws KapuaException
+     */
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public KapuaAuthorizingRealm() throws KapuaException {
         setName(REALM_NAME);
     }
@@ -86,8 +102,13 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
         final User user;
         try {
             user = KapuaSecurityUtils.doPriviledge(() -> userService.findByName(username));
+<<<<<<< HEAD
         } catch (AuthenticationException e) {
             throw e;
+=======
+        } catch (AuthenticationException ae) {
+            throw ae;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         } catch (Exception e) {
             throw new ShiroException("Error while find user!", e);
         }
@@ -106,6 +127,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
 
         final KapuaListResult<AccessInfo> accessInfos;
         try {
+<<<<<<< HEAD
             accessInfos = KapuaSecurityUtils.doPriviledge(() -> accessInfoService.query(accessInfoQuery));
         } catch (AuthenticationException e) {
             throw e;
@@ -117,12 +139,20 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
         // Check existence
         if (accessInfos == null) {
             throw new UnknownAccountException();
+=======
+            userPermissions = KapuaSecurityUtils.doPriviledge(() -> userPermissionService.query(query));
+        } catch (AuthenticationException ae) {
+            throw ae;
+        } catch (Exception e) {
+            throw new ShiroException("Error while find permissions!", e);
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         }
 
         //
         // Create SimpleAuthorizationInfo with principals permissions
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
+<<<<<<< HEAD
         // Get user roles set and related permissions
         for (AccessInfo accessInfo : accessInfos.getItems()) {
 
@@ -178,6 +208,11 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
                 }
 
                 for (RolePermission rolePermission : rolePermissions.getItems()) {
+=======
+            Permission p = permissionFactory.newPermission(userPermission.getPermission().getDomain(),
+                    userPermission.getPermission().getAction(),
+                    userPermission.getPermission().getTargetScopeId());
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
                     PermissionImpl p = rolePermission.getPermission();
                     logger.trace("Role: {} has permission: {}", role, p);
@@ -196,6 +231,12 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     public boolean supports(AuthenticationToken authenticationToken) {
+<<<<<<< HEAD
+=======
+        /**
+         * This method always returns false as it works only as AuthorizingReam.
+         */
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         return false;
     }
 
@@ -205,6 +246,12 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
             throws AuthenticationException {
+<<<<<<< HEAD
+=======
+        /**
+         * This method can always return null as it does not support any authentication token.
+         */
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         return null;
     }
 

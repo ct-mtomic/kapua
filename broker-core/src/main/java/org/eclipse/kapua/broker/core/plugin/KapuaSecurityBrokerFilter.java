@@ -366,10 +366,17 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter {
                 Context loginCheckAccessTimeContext = metricLoginCheckAccessTime.time();
                 boolean[] hasPermissions = new boolean[] {
                         // TODO check the permissions... move them to a constants class?
+<<<<<<< HEAD
                         authorizationService.isPermitted(permissionFactory.newPermission(brokerDomain, Actions.connect, scopeId)),
                         authorizationService.isPermitted(permissionFactory.newPermission(deviceManagementDomain, Actions.write, scopeId)),
                         authorizationService.isPermitted(permissionFactory.newPermission(datastoreDomain, Actions.read, scopeId)),
                         authorizationService.isPermitted(permissionFactory.newPermission(datastoreDomain, Actions.write, scopeId))
+=======
+                        authorizationService.isPermitted(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId)),
+                        authorizationService.isPermitted(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.write, scopeId)),
+                        authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.read, scopeId)),
+                        authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.write, scopeId))
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
                 };
                 if (!hasPermissions[AclConstants.BROKER_CONNECT_IDX]) {
                     throw new KapuaIllegalAccessException(permissionFactory.newPermission(brokerDomain, Actions.connect, scopeId).toString());
@@ -398,7 +405,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter {
                     deviceConnectionCreator.setProtocol("MQTT");
                     deviceConnectionCreator.setServerIp(null);// TODO to be filled with the proper value
                     deviceConnectionCreator.setUserId(userId);
+<<<<<<< HEAD
                     deviceConnection = KapuaSecurityUtils.doPriviledge(() -> deviceConnectionService.create(deviceConnectionCreator));
+=======
+                    deviceConnection = deviceConnectionService.create(deviceConnectionCreator);
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
                 } else {
                     deviceConnection.setClientIp(clientIp);
                     deviceConnection.setProtocol("MQTT");

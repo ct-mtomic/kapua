@@ -45,7 +45,11 @@ public class RestApisApplication extends ResourceConfig {
 		register(KapuaSerializableBodyWriter.class);
 		register(ListBodyWriter.class);
 		register(CORSResponseFilter.class);
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 		register(new ContainerLifecycleListener() {
 
 			@Override

@@ -449,7 +449,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+<<<<<<< HEAD
                 <artifactId>kapua-qa</artifactId>
+=======
+                <artifactId>kapua-console-v2</artifactId>
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
                 <version>${project.version}</version>
             </dependency>
 
@@ -561,7 +565,8 @@
         <!-- Applications -->
         <module>console</module>
         <module>rest-api</module>
-        
+        <module>console-v2</module>
+
         <!-- Assembly -->
         <module>assembly</module>
 

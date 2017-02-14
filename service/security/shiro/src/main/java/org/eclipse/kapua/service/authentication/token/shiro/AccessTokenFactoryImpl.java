@@ -1,5 +1,9 @@
 /*******************************************************************************
+<<<<<<< HEAD
  * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
+=======
+ * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +18,10 @@ package org.eclipse.kapua.service.authentication.token.shiro;
 
 import java.util.Date;
 
+<<<<<<< HEAD
 import org.eclipse.kapua.locator.KapuaProvider;
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.token.AccessTokenFactory;
 
@@ -24,7 +31,10 @@ import org.eclipse.kapua.service.authentication.token.AccessTokenFactory;
  * @since 1.0
  * 
  */
+<<<<<<< HEAD
 @KapuaProvider
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 public class AccessTokenFactoryImpl implements AccessTokenFactory {
 
     @Override

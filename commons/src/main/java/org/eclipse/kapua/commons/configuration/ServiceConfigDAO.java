@@ -71,8 +71,12 @@ public class ServiceConfigDAO extends ServiceDAO {
      * @throws KapuaEntityNotFoundException
      *             If {@link ServiceConfig} is not found.
      */
+<<<<<<< HEAD
     public static void delete(EntityManager em, KapuaId userId)
             throws KapuaEntityNotFoundException {
+=======
+    public static void delete(EntityManager em, KapuaId userId) {
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         ServiceDAO.delete(em, ServiceConfigImpl.class, userId);
     }
 

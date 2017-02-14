@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
+<<<<<<< HEAD
 import org.eclipse.kapua.locator.KapuaProvider;
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.service.authentication.AccessTokenCredentials;
 import org.eclipse.kapua.service.authentication.ApiKeyCredentials;
 import org.eclipse.kapua.service.authentication.CredentialsFactory;
@@ -25,7 +28,10 @@ import org.eclipse.kapua.service.authentication.UsernamePasswordCredentials;
  * @since 1.0
  * 
  */
+<<<<<<< HEAD
 @KapuaProvider
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 public class CredentialsFactoryImpl implements CredentialsFactory {
 
     @Override

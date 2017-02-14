@@ -129,6 +129,10 @@
                                     <srcFiles>
                                         <srcFile>src/main/sql/H2/atht_credential_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/atht_access_token_drop.sql</srcFile>
+<<<<<<< HEAD
+=======
+                                        <srcFile>src/main/sql/H2/athz_user_permission_drop.sql</srcFile>
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
                                         <srcFile>src/main/sql/H2/athz_role_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_permission_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_access_info_drop.sql</srcFile>
@@ -140,6 +144,10 @@
 
                                         <srcFile>src/main/sql/H2/atht_credential_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/atht_access_token_create.sql</srcFile>
+<<<<<<< HEAD
+=======
+                                        <srcFile>src/main/sql/H2/athz_user_permission_create.sql</srcFile>
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
                                         <srcFile>src/main/sql/H2/athz_role_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_permission_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_access_info_create.sql</srcFile>

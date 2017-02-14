@@ -36,7 +36,10 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.locator.KapuaLocator;
+<<<<<<< HEAD
 import org.eclipse.kapua.locator.KapuaProvider;
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.LoginCredentials;
 import org.eclipse.kapua.service.authentication.SessionCredentials;
@@ -62,7 +65,10 @@ import org.slf4j.MDC;
  * since 1.0
  * 
  */
+<<<<<<< HEAD
 @KapuaProvider
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 public class AuthenticationServiceShiroImpl implements AuthenticationService {
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationServiceShiroImpl.class);
@@ -158,7 +164,11 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
 
             //
             // Set some logging
+<<<<<<< HEAD
             MDC.put(KapuaSecurityUtils.MDC_USER_ID, accessToken.getUserId().toCompactId());
+=======
+            MDC.put(KapuaSecurityUtils.MDC_USER_ID, accessToken.getUserId().getShortId());
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
             logger.info("Login for thread '{}' - '{}' - '{}'", new Object[] { Thread.currentThread().getId(), Thread.currentThread().getName(), shiroSubject.toString() });
 
         } catch (ShiroException se) {
@@ -221,7 +231,11 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
             //
             // Set some logging
             Subject shiroSubject = SecurityUtils.getSubject();
+<<<<<<< HEAD
             MDC.put(KapuaSecurityUtils.MDC_USER_ID, accessToken.getUserId().toCompactId());
+=======
+            MDC.put(KapuaSecurityUtils.MDC_USER_ID, accessToken.getUserId().getShortId());
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
             logger.info("Login for thread '{}' - '{}' - '{}'", new Object[] { Thread.currentThread().getId(), Thread.currentThread().getName(), shiroSubject.toString() });
         } catch (ShiroException se) {
 
@@ -260,6 +274,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
                 if (accessToken != null) {
                     KapuaLocator locator = KapuaLocator.getInstance();
                     AccessTokenService accessTokenService = locator.getService(AccessTokenService.class);
+<<<<<<< HEAD
                     KapuaSecurityUtils.doPriviledge(() -> {
                         accessTokenService.invalidate(accessToken.getScopeId(), accessToken.getId());
                         return null;
@@ -269,6 +284,12 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
             currentUser.logout();
         } catch (Exception e) {
             throw KapuaAuthenticationException.internalError(e);
+=======
+                    accessTokenService.invalidate(accessToken.getScopeId(), accessToken.getId());
+                }
+            }
+            currentUser.logout();
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         } finally {
             KapuaSecurityUtils.clearSession();
         }
@@ -391,8 +412,13 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService {
         // .setIssuedAt(issuedAtDate)
         // .setExpiration(new Date(expiresOnDate))
         // .setSubject(userId.getShortId()).claims.setClaim("sId", scopeId.getShortId());
+<<<<<<< HEAD
         claims.setSubject(userId.toCompactId());
         claims.setClaim("sId", scopeId.toCompactId());
+=======
+        claims.setSubject(userId.getShortId());
+        claims.setClaim("sId", scopeId.getShortId());
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
         String jwt = null;
         try {

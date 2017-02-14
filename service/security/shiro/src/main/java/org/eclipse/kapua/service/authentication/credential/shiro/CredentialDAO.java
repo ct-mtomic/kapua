@@ -95,7 +95,11 @@ public class CredentialDAO extends ServiceDAO {
      * @throws KapuaEntityNotFoundException
      *             If {@link Credential} is now found.
      */
+<<<<<<< HEAD
     public static void delete(EntityManager em, KapuaId credentialId) throws KapuaEntityNotFoundException {
+=======
+    public static void delete(EntityManager em, KapuaId credentialId) {
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         ServiceDAO.delete(em, CredentialImpl.class, credentialId);
     }
 

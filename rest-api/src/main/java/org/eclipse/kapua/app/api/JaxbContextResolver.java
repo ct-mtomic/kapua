@@ -34,6 +34,7 @@ import org.eclipse.kapua.service.authentication.AuthenticationXmlRegistry;
 import org.eclipse.kapua.service.authentication.JwtCredentials;
 import org.eclipse.kapua.service.authentication.UsernamePasswordCredentials;
 import org.eclipse.kapua.service.authentication.token.shiro.AccessTokenImpl;
+<<<<<<< HEAD
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
 import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
@@ -59,6 +60,8 @@ import org.eclipse.kapua.service.authorization.role.RolePermissionCreator;
 import org.eclipse.kapua.service.authorization.role.RolePermissionListResult;
 import org.eclipse.kapua.service.authorization.role.RolePermissionXmlRegistry;
 import org.eclipse.kapua.service.authorization.role.RoleXmlRegistry;
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
 import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPackage;
 import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPackages;
@@ -154,6 +157,7 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     AccessTokenImpl.class,
                     ApiKeyCredentials.class,
                     JwtCredentials.class,
+<<<<<<< HEAD
                     UsernamePasswordCredentials.class,
                     Credential.class,
                     CredentialListResult.class,
@@ -182,6 +186,9 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     AccessRoleCreator.class,
                     AccessRoleXmlRegistry.class
 
+=======
+                    UsernamePasswordCredentials.class
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
             }, null);
         } catch (Exception e) {
             throw new RuntimeException(e);

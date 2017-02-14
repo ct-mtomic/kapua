@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.credential;
 
+<<<<<<< HEAD
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -19,6 +20,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.id.KapuaIdAdapter;
@@ -30,6 +33,7 @@ import org.eclipse.kapua.model.id.KapuaIdAdapter;
  * @since 1.0
  *
  */
+<<<<<<< HEAD
 @XmlRootElement(name = "credential")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = { "userId", 
@@ -39,6 +43,10 @@ import org.eclipse.kapua.model.id.KapuaIdAdapter;
         factoryMethod = "newCredential")
 public interface Credential extends KapuaUpdatableEntity
 {
+=======
+public interface Credential extends KapuaUpdatableEntity {
+
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public static final String TYPE = "credential";
 
     public default String getType() {

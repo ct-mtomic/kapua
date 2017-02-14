@@ -54,12 +54,19 @@ public class KapuaTokenAuthenticationFilter extends AuthenticatingFilter {
         //
         // Extract token
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         String authorizationHeader = httpRequest.getHeader(AUTHORIZATION_HEADER);
         String tokenId = null;
         if (authorizationHeader != null) {
             tokenId = httpRequest.getHeader(AUTHORIZATION_HEADER).replace(BEARER + " ", "");
         }
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         //
         // Build AccessToken for Shiro Auth
         KapuaLocator locator = KapuaLocator.getInstance();

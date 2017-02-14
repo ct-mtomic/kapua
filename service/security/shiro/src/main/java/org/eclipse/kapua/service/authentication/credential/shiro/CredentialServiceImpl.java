@@ -17,7 +17,10 @@ import java.security.SecureRandom;
 import org.apache.shiro.codec.Base64;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
+<<<<<<< HEAD
 import org.eclipse.kapua.KapuaIllegalArgumentException;
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
@@ -52,6 +55,7 @@ import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
  * @since 1.0
  *
  */
+<<<<<<< HEAD
 @KapuaProvider
 public class CredentialServiceImpl extends AbstractKapuaService implements CredentialService {
 
@@ -60,6 +64,9 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
     public CredentialServiceImpl() {
         super(AuthenticationEntityManagerFactory.getInstance());
     }
+=======
+public class CredentialServiceImpl implements CredentialService {
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
     @Override
     public Credential create(CredentialCreator credentialCreator)
@@ -171,9 +178,25 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
                 throw new KapuaEntityNotFoundException(Credential.TYPE, credential.getId());
             }
 
+<<<<<<< HEAD
             if (currentCredential.getCredentialType() != credential.getCredentialType()) {
                 throw new KapuaIllegalArgumentException("credentialType", credential.getCredentialType().toString());
             }
+=======
+            // Passing attributes??
+
+            em.beginTransaction();
+            CredentialDAO.update(em, credential);
+            em.commit();
+
+            credentialUpdated = CredentialDAO.find(em, credential.getId());
+        } catch (Exception pe) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
+        } finally {
+            em.close();
+        }
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
             // Passing attributes??
             return CredentialDAO.update(em, credential);
@@ -194,7 +217,23 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(credentialDomain, Actions.read, scopeId));
 
+<<<<<<< HEAD
         return entityManagerSession.onResult(em -> CredentialDAO.find(em, credentialId));
+=======
+        //
+        // Do find
+        Credential credential = null;
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
+        try {
+            credential = CredentialDAO.find(em, credentialId);
+        } catch (Exception pe) {
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
+        } finally {
+            em.close();
+        }
+
+        return credential;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     }
 
     @Override
@@ -210,7 +249,23 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+<<<<<<< HEAD
         authorizationService.checkPermission(permissionFactory.newPermission(credentialDomain, Actions.read, query.getScopeId()));
+=======
+        authorizationService.checkPermission(permissionFactory.newPermission(CredentialDomain.CREDENTIAL, Actions.read, query.getScopeId()));
+
+        //
+        // Do count
+        CredentialListResult result = null;
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
+        try {
+            result = CredentialDAO.query(em, query);
+        } catch (Exception e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
+        } finally {
+            em.close();
+        }
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
         return entityManagerSession.onResult(em -> CredentialDAO.query(em, query));
     }
@@ -230,7 +285,23 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(credentialDomain, Actions.read, query.getScopeId()));
 
+<<<<<<< HEAD
         return entityManagerSession.onResult(em -> CredentialDAO.count(em, query));
+=======
+        //
+        // Do count
+        long count = 0;
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
+        try {
+            count = CredentialDAO.count(em, query);
+        } catch (Exception e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
+        } finally {
+            em.close();
+        }
+
+        return count;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     }
 
     @Override
@@ -253,7 +324,17 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
                 throw new KapuaEntityNotFoundException(Credential.TYPE, credentialId);
             }
             CredentialDAO.delete(em, credentialId);
+<<<<<<< HEAD
         });
+=======
+            em.commit();
+        } catch (Exception e) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
+        } finally {
+            em.close();
+        }
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     }
 
     @Override
@@ -335,12 +416,17 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
             KapuaLocator locator = KapuaLocator.getInstance();
             AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
             PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+<<<<<<< HEAD
             authorizationService.checkPermission(permissionFactory.newPermission(credentialDomain, Actions.read, credential.getId()));
+=======
+            authorizationService.checkPermission(permissionFactory.newPermission(CredentialDomain.CREDENTIAL, Actions.read, credential.getId()));
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         }
 
         return credential;
     }
 
+<<<<<<< HEAD
     private long countExistingCredentials(CredentialType credentialType, KapuaId scopeId, KapuaId userId) throws KapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
@@ -352,4 +438,6 @@ public class CredentialServiceImpl extends AbstractKapuaService implements Crede
         credentialQuery.setPredicate(andPredicate);
         return count(credentialQuery);
     }
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 }

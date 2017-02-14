@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*******************************************************************************
  * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
@@ -10,6 +11,8 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 package org.eclipse.kapua.service.authentication;
 
 public interface SessionCredentials extends AuthenticationCredentials {

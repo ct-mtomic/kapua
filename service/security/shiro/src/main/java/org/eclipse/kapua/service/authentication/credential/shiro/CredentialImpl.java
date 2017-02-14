@@ -47,17 +47,22 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
 
     @Embedded
     @AttributeOverrides({
-                          @AttributeOverride(name = "eid", column = @Column(name = "user_id", updatable = false, nullable = false))
+            @AttributeOverride(name = "eid", column = @Column(name = "user_id", updatable = false, nullable = false))
     })
-    private KapuaEid          userId;
+    private KapuaEid userId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "credential_type", updatable = false, nullable = false)
-    private CredentialType    credentialType;
+    private CredentialType credentialType;
 
     @Basic
+<<<<<<< HEAD
     @Column(name = "credential_key", nullable = false)
     private String            credentialKey;
+=======
+    @Column(name = "credential_key", updatable = false, nullable = false)
+    private String credentialKey;
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
     /**
      * Constructor
@@ -97,6 +102,7 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
     }
 
     @Override
+<<<<<<< HEAD
     public void setUserId(KapuaId userId) {
         this.userId = (KapuaEid)userId;
     }
@@ -108,6 +114,8 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
     }
 
     @Override
+=======
+>>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public void setCredentialKey(String credentialKey) {
         this.credentialKey = credentialKey;
     }

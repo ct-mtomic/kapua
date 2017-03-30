@@ -18,6 +18,7 @@ import org.eclipse.kapua.commons.configuration.KapuaConfigurableServiceSchemaUti
 import org.eclipse.kapua.commons.jpa.CommonsEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.SimpleSqlScriptExecutor;
+import org.eclipse.kapua.service.liquibase.KapuaLiquibaseClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
@@ -27,11 +28,8 @@ public abstract class AbstractCommonServiceTest
 {
     private static final Logger logger = LoggerFactory.getLogger(AbstractCommonServiceTest.class);
     
-    public static String DEFAULT_PATH = "./src/main/sql/H2/";
     public static String DEFAULT_TEST_PATH = "./src/test/sql/H2/";
-
     public static String DEFAULT_COMMONS_PATH = "../commons";
-    public static String DEFAULT_TEST_FILTER  = "test_*.sql";
     public static String DROP_TEST_FILTER     = "test_*_drop.sql";
 
     public static void scriptSession(String path, String fileFilter)
@@ -68,8 +66,7 @@ public abstract class AbstractCommonServiceTest
     public static void tearUp()
         throws KapuaException
     {
-    	KapuaConfigurableServiceSchemaUtils.createSchemaObjects(DEFAULT_COMMONS_PATH);
-        scriptSession(DEFAULT_TEST_PATH, DEFAULT_TEST_FILTER);
+        new KapuaLiquibaseClient("jdbc:h2:mem:kapua;MODE=MySQL", "kapua", "kapua").update();
     }
     
     @AfterClass

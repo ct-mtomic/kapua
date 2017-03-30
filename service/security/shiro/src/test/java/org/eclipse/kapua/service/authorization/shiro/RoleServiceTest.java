@@ -8,12 +8,10 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.shiro;
 
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +43,6 @@ import org.junit.Test;
 
 public class RoleServiceTest extends KapuaTest {
 
-    public static String DEFAULT_FILTER = "athz_*.sql";
     public static String DROP_FILTER = "athz_*_drop.sql";
 
     private static final Domain testDomain = new TestDomain();
@@ -57,12 +54,11 @@ public class RoleServiceTest extends KapuaTest {
     @BeforeClass
     public static void beforeClass() throws KapuaException {
         enableH2Connection();
-        scriptSession(AuthorizationEntityManagerFactory.getInstance(), DEFAULT_FILTER);
     }
 
     @AfterClass
     public static void afterClass() throws KapuaException {
-        scriptSession(AuthorizationEntityManagerFactory.getInstance(), DROP_FILTER);
+        // scriptSession(AuthorizationEntityManagerFactory.getInstance(), DROP_FILTER);
     }
 
     // Tests
@@ -71,7 +67,7 @@ public class RoleServiceTest extends KapuaTest {
     public void testCreate()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create permission
@@ -125,7 +121,7 @@ public class RoleServiceTest extends KapuaTest {
     public void testUpdate()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create permission
@@ -176,7 +172,7 @@ public class RoleServiceTest extends KapuaTest {
     public void testFind()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create permission
@@ -220,7 +216,7 @@ public class RoleServiceTest extends KapuaTest {
     public void testQueryAndCount()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create permission
@@ -244,7 +240,7 @@ public class RoleServiceTest extends KapuaTest {
             //
             // Query
             RoleQuery query = new RoleQueryImpl(scope);
-            query.setPredicate(new AttributePredicate<String>(RolePredicates.ROLE_NAME, role.getName()));
+            query.setPredicate(new AttributePredicate<String>(RolePredicates.NAME, role.getName()));
             RoleListResult rolesFound = roleService.query(query);
             long rolesCount = roleService.count(query);
 
@@ -278,7 +274,7 @@ public class RoleServiceTest extends KapuaTest {
     public void testDelete()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create permission

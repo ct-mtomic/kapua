@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -42,31 +41,13 @@ import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
 import org.eclipse.kapua.service.user.UserService;
 import org.eclipse.kapua.test.KapuaTest;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class AccessInfoServiceTest extends KapuaTest {
 
-    public static String DEFAULT_FILTER = "athz_*.sql";
-    public static String DROP_FILTER = "athz_*_drop.sql";
-
     private static final Domain testDomain = new TestDomain();
 
     KapuaEid scope = new KapuaEid(BigInteger.valueOf(random.nextLong()));
-
-    // Database fixtures
-
-    @BeforeClass
-    public static void beforeClass() throws KapuaException {
-        enableH2Connection();
-        scriptSession(AuthorizationEntityManagerFactory.getInstance(), DEFAULT_FILTER);
-    }
-
-    @AfterClass
-    public static void afterClass() throws KapuaException {
-        scriptSession(AuthorizationEntityManagerFactory.getInstance(), DROP_FILTER);
-    }
 
     // Tests
 
@@ -74,7 +55,7 @@ public class AccessInfoServiceTest extends KapuaTest {
     public void testSimpleCreate()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create mock user
@@ -101,7 +82,7 @@ public class AccessInfoServiceTest extends KapuaTest {
     public void testPermissionCreate()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create mock user
@@ -143,7 +124,7 @@ public class AccessInfoServiceTest extends KapuaTest {
     public void testRoleCreate()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create mock user
@@ -197,7 +178,7 @@ public class AccessInfoServiceTest extends KapuaTest {
     public void testFind()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create mock user
@@ -266,7 +247,7 @@ public class AccessInfoServiceTest extends KapuaTest {
     public void testDelete()
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             KapuaLocator locator = KapuaLocator.getInstance();
 
             // Create mock user

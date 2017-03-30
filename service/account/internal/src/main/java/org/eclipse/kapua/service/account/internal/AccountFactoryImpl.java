@@ -23,38 +23,41 @@ import org.eclipse.kapua.service.account.Organization;
 
 /**
  * Account service factory implementation.
- * 
- * @since 1.0
  *
+ * @since 1.0
  */
 @KapuaProvider
-public class AccountFactoryImpl implements AccountFactory
-{
-    @Override
-    public AccountCreator newAccountCreator(KapuaId scopeId, String name)
-    {
-        return new AccountCreatorImpl(scopeId, name);
-    }
-
-	@Override
-	public Account newAccount() {
-		return new AccountImpl();
-	}
-
-	@Override
-	public Organization newOrganization() {
-		return new OrganizationImpl();
-	}
-
-    @Override
-    public AccountQuery newQuery(KapuaId scopeId)
-    {
-        return new AccountQueryImpl(scopeId);
-    }
+public class AccountFactoryImpl implements AccountFactory {
     
     @Override
-    public AccountListResult newAccountListResult()
-    {
-    	return new AccountListResultImpl();
+    public AccountCreator newCreator(KapuaId scopeId) {
+        return new AccountCreatorImpl(scopeId, null);
+    }
+
+    @Override
+    public AccountCreator newCreator(KapuaId scopeId, String name) {
+        AccountCreator creator = newCreator(scopeId);
+        creator.setName(name);
+        return creator;
+    }
+
+    @Override
+    public Account newEntity(KapuaId scopeId) {
+        return new AccountImpl(scopeId);
+    }
+
+    @Override
+    public Organization newOrganization() {
+        return new OrganizationImpl();
+    }
+
+    @Override
+    public AccountQuery newQuery(KapuaId scopeId) {
+        return new AccountQueryImpl(scopeId);
+    }
+
+    @Override
+    public AccountListResult newListResult() {
+        return new AccountListResultImpl();
     }
 }

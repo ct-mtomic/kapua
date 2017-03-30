@@ -108,7 +108,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
         // Find accessToken
         final AccessToken accessToken;
         try {
-            accessToken = KapuaSecurityUtils.doPriviledge(() -> accessTokenService.findByTokenId(tokenTokenId));
+            accessToken = KapuaSecurityUtils.doPrivileged(() -> accessTokenService.findByTokenId(tokenTokenId));
         } catch (AuthenticationException ae) {
             throw ae;
         } catch (Exception e) {
@@ -121,8 +121,8 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
         }
 
         // Check validity
-        if (accessToken.getExpiresOn() != null &&
-                accessToken.getExpiresOn().before(new Date())) {
+        if ((accessToken.getExpiresOn() != null && accessToken.getExpiresOn().before(new Date())) ||
+            (accessToken.getInvalidatedOn() != null && accessToken.getInvalidatedOn().before(new Date()))){
             throw new ExpiredCredentialsException();
         }
 
@@ -130,7 +130,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
         // Get the associated user by name
         final User user;
         try {
-            user = KapuaSecurityUtils.doPriviledge(() -> userService.find(accessToken.getScopeId(), accessToken.getUserId()));
+            user = KapuaSecurityUtils.doPrivileged(() -> userService.find(accessToken.getScopeId(), accessToken.getUserId()));
         } catch (AuthenticationException ae) {
             throw ae;
         } catch (Exception e) {
@@ -151,7 +151,7 @@ public class AccessTokenAuthenticatingRealm extends AuthenticatingRealm {
         // Find account
         final Account account;
         try {
-            account = KapuaSecurityUtils.doPriviledge(() -> accountService.find(user.getScopeId()));
+            account = KapuaSecurityUtils.doPrivileged(() -> accountService.find(user.getScopeId()));
         } catch (AuthenticationException ae) {
             throw ae;
         } catch (Exception e) {

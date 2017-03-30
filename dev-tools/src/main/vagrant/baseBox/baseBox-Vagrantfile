@@ -1,5 +1,5 @@
 #*******************************************************************************
-# Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+# Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
 #
 # All rights reserved. This program and the accompanying materials
 # are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
 #
 # Contributors:
 #     Eurotech - initial API and implementation
-#
+#     Red Hat Inc
 #*******************************************************************************
 
 Vagrant.configure(2) do |config|
@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
 	 export ELASTICSEARCH_VERSION="2.3.4"
 	 export H2DB_VERSION="1.4.192"
 	 export ACTIVE_MQ_VERSION="5.14.0"
-	 export TOMCAT_VERSION="8.0.38"
+	 export TOMCAT_VERSION="8.0.41"
 
      # update
      sudo apt-get update -y
@@ -51,9 +51,7 @@ Vagrant.configure(2) do |config|
 	 sudo rm -rf lib/geronimo-jta_1.0.1B_spec*
 	 sudo rm -rf lib/optional/activeio-core-*
 	 sudo rm -rf lib/optional/activemq-amqp-*
-	 sudo rm -rf lib/optional/activemq-http*
 	 sudo rm -rf lib/optional/activemq-jdbc-store*
-	 sudo rm -rf lib/optional/activemq-jms-pool*
 	 sudo rm -rf lib/optional/activemq-leveldb-store*
 	 sudo rm -rf lib/optional/activemq-log4j-appender*
 	 sudo rm -rf lib/optional/activemq-shiro*
@@ -88,7 +86,17 @@ Vagrant.configure(2) do |config|
 	 sudo rm -rf lib/optional/xpp3-*
 	 sudo rm -rf lib/optional/xstream-*
 	 sudo rm -rf lib/optional/zookeeper-*
-	 sudo rm -rf lib/web/
+
+     sudo rm -rf lib/web/apache*
+     sudo rm -rf lib/web/taglibs*
+     sudo rm -rf lib/web/spring*
+     sudo rm -rf lib/web/org.eclipse*
+     sudo rm -rf lib/web/json-simple*
+     sudo rm -rf lib/web/jolokia*
+     sudo rm -rf lib/web/rome*
+     sudo rm -rf lib/web/jdom*
+     sudo rm -rf lib/web/geronimo*
+     sudo rm -rf lib/web/asm*
 
 	 sudo rm -rf bin/wrapper.jar
 	 sudo rm -rf bin/macosx/
@@ -107,8 +115,8 @@ Vagrant.configure(2) do |config|
 
      ### install Elasticsearch ###
      sudo mkdir -p /usr/local/elasticsearch
-     sudo curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ELASTICSEARCH_VERSION}/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz -P /usr/local/elasticsearch
      cd /usr/local/elasticsearch
+     sudo curl -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/${ELASTICSEARCH_VERSION}/elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz
      sudo tar -xvf elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz
      sudo rm elasticsearch-${ELASTICSEARCH_VERSION}.tar.gz
 
@@ -118,6 +126,12 @@ Vagrant.configure(2) do |config|
      sudo curl -O https://archive.apache.org/dist/tomcat/tomcat-8/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
      sudo tar zxvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
      sudo rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
+
+     ### fix tomcat8 to provide slf4j and logback
+     cd /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/lib
+     sudo curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar
+     sudo curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.1.8/logback-core-1.1.8.jar
+     sudo curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.1.8/logback-classic-1.1.8.jar
 
 	cat /dev/null > ~/.bash_history && history -c
 

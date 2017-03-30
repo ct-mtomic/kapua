@@ -17,8 +17,6 @@ package org.eclipse.kapua.service.authentication.token.shiro;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.token.AccessToken;
@@ -34,14 +32,11 @@ public class AccessTokenCreatorImpl extends AbstractKapuaEntityCreator<AccessTok
 
     private static final long serialVersionUID = -27718046815190710L;
 
-    @XmlElement(name = "tokenId")
-    private String tokenId;
-
-    @XmlElement(name = "userId")
+    private String tokenId; 
     private KapuaId userId;
-
-    @XmlElement(name = "expiresOn")
     private Date expiresOn;
+    private String refreshToken;
+    private Date refreshExpiresOn;
 
     /**
      * Constructor
@@ -81,6 +76,27 @@ public class AccessTokenCreatorImpl extends AbstractKapuaEntityCreator<AccessTok
     @Override
     public void setExpiresOn(Date expiresOn) {
         this.expiresOn = expiresOn;
+    }
+    
+    @Override
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    @Override
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+
+    }
+
+    @Override
+    public Date getRefreshExpiresOn() {
+        return refreshExpiresOn;
+    }
+
+    @Override
+    public void setRefreshExpiresOn(Date refreshExpiresOn) {
+        this.refreshExpiresOn = refreshExpiresOn;
     }
 
 }

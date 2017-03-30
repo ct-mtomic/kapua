@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,34 +12,17 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.account;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.ui.button.Button;
-import org.eclipse.kapua.app.console.client.ui.button.EditButton;
-import org.eclipse.kapua.app.console.client.util.FailureHandler;
-import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
-import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
-import org.eclipse.kapua.app.console.shared.model.GwtSession;
-import org.eclipse.kapua.app.console.shared.model.account.GwtAccount;
-import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
-import org.eclipse.kapua.app.console.shared.service.GwtAccountServiceAsync;
-
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseListLoader;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.LoadEvent;
 import com.extjs.gxt.ui.client.data.RpcProxy;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.ComponentEvent;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.event.*;
 import com.extjs.gxt.ui.client.store.GroupingStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -53,6 +36,19 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
+import org.eclipse.kapua.app.console.client.ui.button.Button;
+import org.eclipse.kapua.app.console.client.ui.button.EditButton;
+import org.eclipse.kapua.app.console.client.util.FailureHandler;
+import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
+import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
+import org.eclipse.kapua.app.console.shared.model.GwtSession;
+import org.eclipse.kapua.app.console.shared.model.account.GwtAccount;
+import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
+import org.eclipse.kapua.app.console.shared.service.GwtAccountServiceAsync;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDetailsView extends LayoutContainer {
 
@@ -64,7 +60,6 @@ public class AccountDetailsView extends LayoutContainer {
 
     private GwtAccount selectedAccount;
     private Button m_editButton;
-    private LayoutContainer m_bodyLayoutContainer;
 
     private boolean m_dirty;
     private boolean m_initialized;
@@ -93,12 +88,12 @@ public class AccountDetailsView extends LayoutContainer {
         // Borderlayout that expands to the whole screen
         setLayout(new FitLayout());
 
-        m_bodyLayoutContainer = new LayoutContainer();
+        LayoutContainer m_bodyLayoutContainer = new LayoutContainer();
         m_bodyLayoutContainer.setBorders(true);
         m_bodyLayoutContainer.setLayout(new BorderLayout());
         m_bodyLayoutContainer.setScrollMode(Scroll.AUTO);
+        m_bodyLayoutContainer.setStyleAttribute("background-color", "#F0F0F0");
         m_bodyLayoutContainer.setStyleAttribute("padding", "0px");
-        m_bodyLayoutContainer.setStyleAttribute("background-color", "white");
 
         //
         // Toolbar
@@ -116,8 +111,26 @@ public class AccountDetailsView extends LayoutContainer {
         createGrid(parent);
         m_bodyLayoutContainer.add(m_grid, centerData);
 
+        //
+        // South View
+
+        BorderLayoutData southData = new BorderLayoutData(LayoutRegion.SOUTH, 430.0F);
+        southData.setCollapsible(true);
+        southData.setHideCollapseTool(true);
+        southData.setSplit(true);
+        southData.setMargins(new Margins(5, 0, 0, 0));
+        TabPanel m_tabPanel = new TabPanel();
+        m_tabPanel.setPlain(true);
+        m_tabPanel.setBorders(false);
+        m_tabPanel.setBodyBorder(false);
+        AccountTabConfiguration settingsTabItem = new AccountTabConfiguration(m_currentSession);
+        settingsTabItem.setEntity(selectedAccount);
+        m_tabPanel.add(settingsTabItem);
+        m_bodyLayoutContainer.add(m_tabPanel, southData);
+
         add(m_bodyLayoutContainer);
         m_initialized = true;
+
     }
 
     private void createGrid(Element parent) {
@@ -153,17 +166,16 @@ public class AccountDetailsView extends LayoutContainer {
         m_grid.setBorders(false);
         m_grid.setLoadMask(true);
         m_grid.setStripeRows(true);
+        m_grid.setTrackMouseOver(false);
         m_grid.disableTextSelection(false);
 
         add(m_grid);
     }
 
     private ToolBar getAccountsToolBar() {
-        ToolBar accountsToolBar = null;
+        ToolBar accountsToolBar = new ToolBar();
+        accountsToolBar.setHeight("27px");
         if (m_currentSession.hasAccountUpdatePermission()) {
-            accountsToolBar = new ToolBar();
-            accountsToolBar.setHeight("27px");
-
             //
             // Edit Account Button
             m_editButton = new EditButton(new SelectionListener<ButtonEvent>() {
@@ -178,7 +190,7 @@ public class AccountDetailsView extends LayoutContainer {
 
                                 // reload the account and update the grid
                                 if (m_centerAccountView != null) {
-                                    m_centerAccountView.updateAccountGrid(accountForm.getExistingAccount());
+                                    //m_centerAccountView.updateAccountGrid(accountForm.getExistingAccount());
                                 }
                                 setAccount(accountForm.getExistingAccount());
                                 refresh();

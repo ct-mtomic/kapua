@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+    Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
 
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
     http://www.eclipse.org/legal/epl-v10.html
+    
+    Contributors:
+        Eurotech - initial API and implementation
+        Red Hat Inc
   -->
-<assembly>
+<assembly
+    xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+
     <id>kapua-broker</id>
 
     <formats>
@@ -17,8 +25,8 @@
     <fileSets>
         <!-- Expanded ActiveMQ Runtime -->
         <fileSet>
-            <outputDirectory>/</outputDirectory>
-            <directory>target/dependencies/activemq/apache-activemq-${activemq.version}</directory>
+            <outputDirectory>.</outputDirectory>
+            <directory>${project.build.directory}/dependencies/activemq/apache-activemq-${activemq.version}</directory>
             <fileMode>0644</fileMode>
             <excludes>
                 <exclude>conf/activemq.xml</exclude>
@@ -39,17 +47,15 @@
                 -->
                 
                 
-				<exclude>activemq-all-*</exclude>
-				<exclude>lib/activemq-jaas-*</exclude>
+                <exclude>activemq-all-*</exclude>
+                <exclude>lib/activemq-jaas-*</exclude>
                 <exclude>lib/activemq-openwire-legacy*</exclude>
                 <exclude>lib/activemq-web-*</exclude>
                 <exclude>lib/activemq-rar.txt</exclude>
                 <exclude>lib/geronimo-jta_1.0.1B_spec*</exclude>
                 <exclude>lib/optional/activeio-core-*</exclude>
                 <exclude>lib/optional/activemq-amqp-*</exclude>
-                <exclude>lib/optional/activemq-http*</exclude>
                 <exclude>lib/optional/activemq-jdbc-store*</exclude>
-                <exclude>lib/optional/activemq-jms-pool*</exclude>
                 <exclude>lib/optional/activemq-leveldb-store*</exclude>
                 <exclude>lib/optional/activemq-log4j-appender*</exclude>
                 <exclude>lib/optional/activemq-shiro*</exclude>
@@ -84,8 +90,16 @@
                 <exclude>lib/optional/xpp3-*</exclude>
                 <exclude>lib/optional/xstream-*</exclude>
                 <exclude>lib/optional/zookeeper-*</exclude>
-                <exclude>lib/web/</exclude>
-
+                <exclude>lib/web/apache*</exclude>
+                <exclude>lib/web/taglibs*</exclude>
+                <exclude>lib/web/spring*</exclude>
+                <exclude>lib/web/org.eclipse*</exclude>
+                <exclude>lib/web/json-simple*</exclude>
+                <exclude>lib/web/jolokia*</exclude>
+                <exclude>lib/web/rome*</exclude>
+                <exclude>lib/web/jdom*</exclude>
+                <exclude>lib/web/geronimo*</exclude>
+                <exclude>lib/web/asm*</exclude>
                 <exclude>bin/</exclude>
 
                 <exclude>examples/</exclude>
@@ -103,7 +117,7 @@
 
         <fileSet>
             <outputDirectory>bin/</outputDirectory>
-            <directory>target/dependencies/activemq/apache-activemq-${activemq.version}/bin/</directory>
+            <directory>${project.build.directory}/dependencies/activemq/apache-activemq-${activemq.version}/bin/</directory>
             <fileMode>0755</fileMode>
             <excludes>
                 <exclude>bin/wrapper.jar</exclude>
@@ -120,6 +134,7 @@
             <outputDirectory>lib/extra</outputDirectory>
             <unpack>false</unpack>
             <scope>runtime</scope>
+            <useProjectArtifact>false</useProjectArtifact>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <fileMode>0644</fileMode>
             <includes>
@@ -135,13 +150,36 @@
                 <include>com.h2database:h2</include>
                 <include>com.google.protobuf:protobuf-java</include>
                 <include>org.apache.shiro:shiro-core</include>
-				<include>org.elasticsearch:elasticsearch</include>
-				<include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
-				<include>org.apache.commons:commons-pool2</include>
-				<include>org.bitbucket.b_c:jose4j</include>
+
+                <include>org.elasticsearch:elasticsearch</include>
+                <include>org.elasticsearch:securesm</include>
+                <include>org.apache.lucene:*</include>
+                <include>com.twitter:jsr166e</include>
+                <include>joda-time:joda-time</include>
+                <include>org.joda:joda-convert</include>
+                <include>com.spatial4j:spatial4j</include>
+                <include>com.fasterxml.jackson.core:*</include>
+                <include>com.fasterxml.jackson.dataformat:*</include>
+                <include>com.carrotsearch:hppc</include>
+                <include>com.tdunning:t-digest</include>
+                <include>org.hdrhistogram:HdrHistogram</include>
+                <include>com.ning:compress-lzf</include>
+                <include>io.netty:netty</include>
+
+                <include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
+                <include>org.apache.commons:commons-pool2</include>
+                <include>org.bitbucket.b_c:jose4j</include>
+                <include>org.reflections:reflections</include>
+                <include>org.javassist:javassist</include>
+                <include>com.google.code.findbugs:annotations</include>
+                <include>commons-io:commons-io</include>
+                <include>org.apache.commons:commons-lang3</include>
+                <include>org.liquibase:liquibase-core</include>
+                <include>org.yaml:snakeyaml</include>
 
                 <include>${pom.groupId}:kapua-commons</include>
                 <include>${pom.groupId}:kapua-service-api</include>
+                <include>${pom.groupId}:kapua-liquibase</include>
                 <include>${pom.groupId}:kapua-guice</include>
                 <include>${pom.groupId}:kapua-broker-core</include>
                 <include>${pom.groupId}:kapua-message-api</include>
@@ -178,5 +216,6 @@
                 <include>${pom.groupId}:kapua-transport-mqtt</include>
             </includes>
         </dependencySet>
+
     </dependencySets>
 </assembly>

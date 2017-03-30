@@ -12,17 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-
-import java.math.BigInteger;
-import java.security.acl.Permission;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
-
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.configuration.KapuaConfigurableServiceSchemaUtils;
 import org.eclipse.kapua.commons.configuration.metatype.KapuaMetatypeFactoryImpl;
@@ -36,27 +31,26 @@ import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.KapuaQuery;
-import org.eclipse.kapua.service.account.Account;
-import org.eclipse.kapua.service.account.AccountCreator;
-import org.eclipse.kapua.service.account.AccountFactory;
-import org.eclipse.kapua.service.account.AccountQuery;
-import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.account.Organization;
+import org.eclipse.kapua.service.account.*;
 import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSetting;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
+import org.eclipse.kapua.service.liquibase.KapuaLiquibaseClient;
 import org.eclipse.kapua.test.KapuaTest;
 import org.eclipse.kapua.test.MockedLocator;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import java.math.BigInteger;
+import java.security.acl.Permission;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 
 /**
  * Implementation of Gherkin steps used in AccountService.feature scenarios.
@@ -69,10 +63,9 @@ import cucumber.api.java.en.When;
  */
 public class AccountServiceTestSteps extends KapuaTest {
 
-    public static String DEFAULT_PATH = "src/main/sql/H2";
-    public static String DEFAULT_COMMONS_PATH = "../../../commons";
-    public static String CREATE_ACCOUNT_TABLES = "act_*.sql";
-    public static String DROP_ACCOUNT_TABLES = "act_*_drop.sql";
+    public static final String DEFAULT_PATH = "src/main/sql/H2";
+    public static final String DEFAULT_COMMONS_PATH = "../../../commons";
+    public static final String DROP_ACCOUNT_TABLES = "act_*_drop.sql";
 
     KapuaId rootScopeId = new KapuaEid(BigInteger.ONE);
 
@@ -121,8 +114,7 @@ public class AccountServiceTestSteps extends KapuaTest {
         enableH2Connection();
 
         // Create the account service tables
-        KapuaConfigurableServiceSchemaUtils.createSchemaObjects(DEFAULT_COMMONS_PATH);
-        scriptSession(AccountEntityManagerFactory.getInstance(), CREATE_ACCOUNT_TABLES);
+        new KapuaLiquibaseClient("jdbc:h2:mem:kapua;MODE=MySQL", "kapua", "kapua").update();
         XmlUtil.setContextProvider(new AccountsJAXBContextProvider());
 
         MockedLocator mockLocator = (MockedLocator) locator;
@@ -350,7 +342,7 @@ public class AccountServiceTestSteps extends KapuaTest {
     public void deleteRandomAccount() {
         try {
             exceptionCaught = false;
-            accountService.delete(rootScopeId, new KapuaEid(BigInteger.valueOf(new Random().nextLong())));
+            accountService.delete(rootScopeId, new KapuaEid(BigInteger.valueOf(random.nextLong())));
         } catch (KapuaException ex) {
             exceptionCaught = true;
         }
@@ -377,7 +369,7 @@ public class AccountServiceTestSteps extends KapuaTest {
     @When("^I search for a random account Id$")
     public void findRandomAccountId()
             throws KapuaException {
-        account = accountService.find(rootScopeId, new KapuaEid(BigInteger.valueOf(new Random().nextLong())));
+        account = accountService.find(rootScopeId, new KapuaEid(BigInteger.valueOf(random.nextLong())));
     }
 
     @When("^I set the following parameters$")
@@ -406,6 +398,7 @@ public class AccountServiceTestSteps extends KapuaTest {
         default:
             break;
         }
+        valueMap.put("infiniteChildAccounts", true);
 
         try {
             exceptionCaught = false;
@@ -582,9 +575,8 @@ public class AccountServiceTestSteps extends KapuaTest {
      * @return The newly created account creator object.
      */
     private AccountCreator prepareRegularAccountCreator(KapuaId parentId, String name) {
-        AccountCreator tmpAccCreator = accountFactory.newAccountCreator(parentId, name);
+        AccountCreator tmpAccCreator = accountFactory.newCreator(parentId, name);
 
-        tmpAccCreator.setAccountPassword("pp12345678$$QQ");
         tmpAccCreator.setOrganizationName("org_" + name);
         tmpAccCreator.setOrganizationPersonName(String.format("person_%s", name));
         tmpAccCreator.setOrganizationCountry("home_country");

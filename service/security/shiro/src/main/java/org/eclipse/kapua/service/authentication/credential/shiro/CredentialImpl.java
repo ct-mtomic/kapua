@@ -86,6 +86,10 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
         this.credentialKey = credentialKey;
     }
 
+    public CredentialImpl(KapuaId scopeId) {
+        super(scopeId);
+    }
+    
     @Override
     public KapuaId getUserId() {
         return userId;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,33 +8,31 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
+ *     Red Hat Inc
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 
 /**
  * Device configuration entity implementation.
- * 
- * @since 1.0
  *
+ * @since 1.0
  */
-public class DeviceConfigurationImpl implements DeviceConfiguration
-{
-    private List<DeviceComponentConfigurationImpl> configurations;
+public class DeviceConfigurationImpl implements DeviceConfiguration {
 
-    public DeviceConfigurationImpl()
-    {
+    private List<DeviceComponentConfiguration> configurations;
+
+    public DeviceConfigurationImpl() {
         configurations = new ArrayList<>();
     }
 
     @Override
-    public List<DeviceComponentConfigurationImpl> getComponentConfigurations()
-    {
+    public List<DeviceComponentConfiguration> getComponentConfigurations() {
         return configurations;
     }
 

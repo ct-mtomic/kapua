@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
-   
+    Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
+
     All rights reserved. This program and the accompanying materials
     are made available under the terms of the Eclipse Public License v1.0
     which accompanies this distribution, and is available at
     http://www.eclipse.org/legal/epl-v10.html
-   
+
     Contributors:
         Eurotech - initial API and implementation
-   
+
  -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -26,7 +26,7 @@
 	<properties>
 		<maven.test.skip>true</maven.test.skip>
 	</properties>
-    
+
     <build>
 	    <plugins>
 	    	<!-- TEST RUN -->
@@ -101,7 +101,7 @@
 					<dependency>
 					    <groupId>com.h2database</groupId>
 					    <artifactId>h2</artifactId>
-					    <version>1.4.192</version>
+					    <version>${h2.version}</version>
 					</dependency>
 	            </dependencies>
 	            <configuration>
@@ -130,35 +130,27 @@
 	                        <detail>true</detail>
 							<srcFiles>
 	                        	<srcFile>../service/account/internal/src/main/sql/H2/act_account_drop.sql</srcFile>
-								<srcFile>../service/account/internal/src/main/sql/H2/act_account_create.sql</srcFile>
-								<srcFile>../service/account/internal/src/main/sql/H2/act_account_seed.sql</srcFile>
+								<srcFile>../service/account/internal/src/main/resources/liquibase/account.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/atht_credential_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/atht_credential_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/atht_credential_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/atht_credential_create.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/athz_role_create.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_permission_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_permission_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_role_permission_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/athz_role_permission_create.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_permission_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_permission_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_permission_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/athz_user_permission_create.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/athz_user_role_create.sql</srcFile>
 								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_roles_drop.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_roles_create.sql</srcFile>
-								<srcFile>../service/security/shiro/src/main/sql/H2/athz_user_role_roles_seed.sql</srcFile>
+								<srcFile>../service/security/shiro/src/main/resource/liquibase/athz_user_role_roles_create.sql</srcFile>
 								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_connection_drop.sql</srcFile>
-								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_connection_create.sql</srcFile>
+								<srcFile>../service/device/registry/internal/src/main/resources/liquibase/dvc_device_connection.sql</srcFile>
 								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_drop.sql</srcFile>
-								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_create.sql</srcFile>
+								<srcFile>../service/device/registry/internal/src/main/resources/liquibase/dvc_device.sql</srcFile>
 								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_event_drop.sql</srcFile>
-								<srcFile>../service/device/registry/internal/src/main/sql/H2/dvc_device_event_create.sql</srcFile>
+								<srcFile>../service/device/registry/internal/src/main/resources/liquibase/dvc_device_event.sql</srcFile>
 								<srcFile>../service/user/internal/src/main/sql/H2/usr_user_drop.sql</srcFile>
-								<srcFile>../service/user/internal/src/main/sql/H2/usr_user_create.sql</srcFile>
-								<srcFile>../service/user/internal/src/main/sql/H2/usr_user_seed.sql</srcFile>
+								<srcFile>../service/user/internal/src/main/resources/liquibase/user.sql</srcFile>
 				            </srcFiles>
 	                        <autocommit>true</autocommit>
 	                    </configuration>
@@ -167,7 +159,7 @@
 	        </plugin>
 		</plugins>
 	</build>
-	
+
     <dependencies>
         <!-- Required service interfaces -->
         <dependency>
@@ -186,7 +178,11 @@
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-user-api</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>kapua-device-registry-api</artifactId>
+        </dependency>
+
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

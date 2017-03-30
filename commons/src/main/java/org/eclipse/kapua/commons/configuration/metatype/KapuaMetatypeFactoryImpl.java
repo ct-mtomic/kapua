@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.configuration.metatype;
 
-import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.locator.KapuaProvider;
 import org.eclipse.kapua.model.config.metatype.*;
 
@@ -19,15 +18,9 @@ import org.eclipse.kapua.model.config.metatype.*;
  * Kapua metatype objects factory service implementation.
  *
  * @since 1.0
- *
  */
 @KapuaProvider
 public class KapuaMetatypeFactoryImpl implements KapuaMetatypeFactory {
-
-    /**
-     * Locator instance
-     */
-    private KapuaLocator locator = KapuaLocator.getInstance();
 
     @Override
     public KapuaTocd newKapuaTocd() {

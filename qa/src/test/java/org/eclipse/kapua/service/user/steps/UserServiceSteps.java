@@ -22,6 +22,7 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.configuration.KapuaConfigurableServiceSchemaUtils;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -44,15 +45,19 @@ import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.Permission;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.shiro.PermissionFactoryImpl;
+import org.eclipse.kapua.service.liquibase.KapuaLiquibaseClient;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserService;
 import org.eclipse.kapua.service.user.internal.UserDomain;
 import org.eclipse.kapua.service.user.internal.UserFactoryImpl;
+import org.eclipse.kapua.service.user.internal.UsersJAXBContextProvider;
 import org.eclipse.kapua.test.KapuaTest;
 
 import java.math.BigInteger;
 import java.util.*;
+
+import static org.eclipse.kapua.commons.jpa.JdbcConnectionUrlResolvers.resolveJdbcUrl;
 
 /**
  * Implementation of Gherkin steps used in UserServiceI9n.feature scenarios.
@@ -63,11 +68,6 @@ public class UserServiceSteps extends KapuaTest {
      * Path to root of full DB schema scripts.
      */
     public static final String FULL_SCHEMA_PATH = "../dev-tools/src/main/database/";
-
-    /**
-     * Default filter for droping, creating and seeding DB schema.
-     */
-    public static final String DEFAULT_FILTER = "all_*.sql";
 
     /**
      * Filter for droping full DB schema.
@@ -131,7 +131,7 @@ public class UserServiceSteps extends KapuaTest {
 
         // Create User Service tables
         enableH2Connection();
-        KapuaConfigurableServiceSchemaUtils.scriptSession(FULL_SCHEMA_PATH, DEFAULT_FILTER);
+        new KapuaLiquibaseClient(resolveJdbcUrl(), "kapua", "kapua").update();
 
         // Services by default Locator
         KapuaLocator locator = KapuaLocator.getInstance();
@@ -140,6 +140,8 @@ public class UserServiceSteps extends KapuaTest {
         accountService = locator.getService(AccountService.class);
         credentialService = locator.getService(CredentialService.class);
         accessInfoService = locator.getService(AccessInfoService.class);
+
+        XmlUtil.setContextProvider(new UsersJAXBContextProvider());
     }
 
     @After
@@ -216,6 +218,22 @@ public class UserServiceSteps extends KapuaTest {
         }
     }
 
+    @When("^I configure$")
+    public void setConfigurationValue(List<TestConfig> testConfigs)
+            throws KapuaException {
+        Map<String, Object> valueMap = new HashMap<>();
+
+        for (TestConfig config: testConfigs) {
+            config.addConfigToMap(valueMap);
+        }
+        try {
+            isException = false;
+            accountService.setConfigValues(lastAccount.getId(), valueMap);
+        } catch (KapuaException ex) {
+            isException = true;
+        }
+    }
+
     @Then("^I get KapuaException$")
     public void thenGetKapuaException() throws KapuaException {
         if (!isException) {
@@ -247,7 +265,7 @@ public class UserServiceSteps extends KapuaTest {
      */
     private HashSet<ComparableUser> createUsersInList(List<TestUser> userList, Account account) throws Exception {
         HashSet<ComparableUser> users = new HashSet<>();
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             try {
                 for (TestUser userItem : userList) {
                     String name = userItem.getName();
@@ -281,7 +299,7 @@ public class UserServiceSteps extends KapuaTest {
      */
     private Account createAccount(TestAccount testAccount) throws Exception {
         List<Account> accountList = new ArrayList<>();
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             try {
                 Account account = accountService.create(accountCreatorCreator(testAccount.getName(),
                         testAccount.getScopeId()));
@@ -306,7 +324,7 @@ public class UserServiceSteps extends KapuaTest {
     private Credential createCredentials(TestCredentials testCredentials) throws Exception {
         List<Credential> credentialList = new ArrayList<>();
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             try {
                 User user = userService.findByName(testCredentials.getName());
 
@@ -335,7 +353,7 @@ public class UserServiceSteps extends KapuaTest {
     private void createPermissions(List<TestPermission> permissionList, ComparableUser user, Account account)
             throws Exception {
 
-        KapuaSecurityUtils.doPriviledge(() -> {
+        KapuaSecurityUtils.doPrivileged(() -> {
             try {
                 accessInfoService.create(accessInfoCreatorCreator(permissionList, user, account));
             } catch (KapuaException ke) {
@@ -358,8 +376,7 @@ public class UserServiceSteps extends KapuaTest {
     private AccountCreator accountCreatorCreator(String name, BigInteger scopeId) {
         AccountCreator accountCreator;
 
-        accountCreator = new AccountFactoryImpl().newAccountCreator(new KapuaEid(scopeId), name);
-        accountCreator.setAccountPassword("TooManySecrets#123");
+        accountCreator = new AccountFactoryImpl().newCreator(new KapuaEid(scopeId), name);
         accountCreator.setOrganizationName("ACME Inc.");
         accountCreator.setOrganizationEmail("some@one.com");
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,19 +36,17 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 
 /**
- * Device life cycle service implementation.
+ * {@link DeviceLifeCycleService} implementation.
  * 
- * @since 1.0
- *
+ * @since 1.0.0
+ * 
  */
 @KapuaProvider
-public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
-{
+public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService {
 
     @Override
     public void birth(KapuaId connectionId, KapuaBirthMessage message)
-        throws KapuaException
-    {
+            throws KapuaException {
         KapuaBirthPayload payload = message.getPayload();
         KapuaBirthChannel channel = message.getChannel();
         KapuaId scopeId = message.getScopeId();
@@ -58,11 +56,11 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Device update
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = null;
+        Device device;
         if (deviceId == null) {
-        	String clientId = channel.getClientId();
+            String clientId = channel.getClientId();
 
-        	DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
+            DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
             DeviceCreator deviceCreator = deviceFactory.newCreator(scopeId, clientId);
 
             deviceCreator.setDisplayName(payload.getDisplayName());
@@ -76,6 +74,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             deviceCreator.setOsVersion(payload.getOsVersion());
             deviceCreator.setJvmVersion(payload.getJvmVersion());
             deviceCreator.setOsgiFrameworkVersion(payload.getContainerFrameworkVersion());
+            deviceCreator.setApplicationFrameworkVersion(payload.getApplicationFrameworkVersion());
             deviceCreator.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             deviceCreator.setAcceptEncoding(payload.getAcceptEncoding());
             deviceCreator.setCredentialsMode(DeviceCredentialsMode.LOOSE);
@@ -84,9 +83,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             deviceCreator.setConnectionId(connectionId);
 
             device = deviceRegistryService.create(deviceCreator);
-        }
-        else {
-        	device = deviceRegistryService.find(scopeId, deviceId);
+        } else {
+            device = deviceRegistryService.find(scopeId, deviceId);
             device.setDisplayName(payload.getDisplayName());
             device.setSerialNumber(payload.getSerialNumber());
             device.setModelId(payload.getModelId());
@@ -98,6 +96,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             device.setOsVersion(payload.getOsVersion());
             device.setJvmVersion(payload.getJvmVersion());
             device.setOsgiFrameworkVersion(payload.getContainerFrameworkVersion());
+            device.setApplicationFrameworkVersion(payload.getApplicationFrameworkVersion());
             device.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             device.setAcceptEncoding(payload.getAcceptEncoding());
 
@@ -114,7 +113,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "BIRTH");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        //TODO check this change
+        // TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getSentOn());
 
@@ -128,8 +127,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
     @Override
     public void death(KapuaId connectionId, KapuaDisconnectMessage message)
-        throws KapuaException
-    {
+            throws KapuaException {
         KapuaPayload payload = message.getPayload();
         KapuaId scopeId = message.getScopeId();
         KapuaId deviceId = message.getDeviceId();
@@ -147,7 +145,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, message.getReceivedOn(), "DEATH");
 
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
-        //TODO check this change
+        // TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getSentOn());
 
@@ -161,8 +159,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
     @Override
     public void missing(KapuaId connectionId, KapuaMissingMessage message)
-        throws KapuaException
-    {
+            throws KapuaException {
         KapuaPayload payload = message.getPayload();
         KapuaId scopeId = message.getScopeId();
         KapuaId deviceId = message.getDeviceId();
@@ -180,7 +177,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "MISSING");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        //TODO check this change
+        // TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
@@ -195,8 +192,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
     @Override
     public void applications(KapuaId connectionId, KapuaAppsMessage message)
-        throws KapuaException
-    {
+            throws KapuaException {
         KapuaPayload payload = message.getPayload();
         KapuaId scopeId = message.getScopeId();
         KapuaId deviceId = message.getDeviceId();
@@ -214,7 +210,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "APPLICATION");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        //TODO check this change
+        // TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());
 

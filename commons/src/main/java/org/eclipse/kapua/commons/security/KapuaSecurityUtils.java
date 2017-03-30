@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Eurotech - initial API and implementation
+ *   Eurotech - initial API and implementation
+ *   Red Hat Inc
  *******************************************************************************/
 package org.eclipse.kapua.commons.security;
 
@@ -23,17 +24,11 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  */
 public class KapuaSecurityUtils {
-<<<<<<< HEAD
 
     private static Logger logger = LoggerFactory.getLogger(KapuaSecurityUtils.class);
 
-    public static String MDC_USER_ID = "userId";
+    public static final String MDC_USER_ID = "userId";
 
-=======
-
-    public static String MDC_USER_ID = "userId";
-
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     private static final ThreadLocal<KapuaSession> threadSession = new ThreadLocal<>();
 
     /**
@@ -71,12 +66,8 @@ public class KapuaSecurityUtils {
      * @throws KapuaException
      * @since 1.0.0
      */
-    public static <T> T doPriviledge(Callable<T> privilegedAction)
-<<<<<<< HEAD
+    public static <T> T doPrivileged(Callable<T> privilegedAction)
             throws KapuaException {
-=======
-            throws Exception {
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         T result = null;
 
         // get (and keep) the current session
@@ -95,7 +86,6 @@ public class KapuaSecurityUtils {
 
         try {
             result = privilegedAction.call();
-<<<<<<< HEAD
         } catch (KapuaException ke) {
             throw ke;
         } catch (Exception e) {
@@ -103,15 +93,6 @@ public class KapuaSecurityUtils {
         } finally {
             // restore the original session
             setSession(previousSession);
-=======
-        } finally {
-            session.setTrustedMode(false);
-
-            if (created) {
-                clearSession();
-                session = null;
-            }
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
         }
 
         return result;

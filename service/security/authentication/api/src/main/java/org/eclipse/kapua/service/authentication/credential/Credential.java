@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,9 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.credential;
 
-<<<<<<< HEAD
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -20,8 +18,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-=======
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.id.KapuaIdAdapter;
@@ -33,20 +29,15 @@ import org.eclipse.kapua.model.id.KapuaIdAdapter;
  * @since 1.0
  *
  */
-<<<<<<< HEAD
 @XmlRootElement(name = "credential")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(propOrder = { "userId", 
-                       "credentialType",
-                       "credentialKey"},
-        factoryClass = CredentialXmlRegistry.class, 
-        factoryMethod = "newCredential")
-public interface Credential extends KapuaUpdatableEntity
-{
-=======
+@XmlType(propOrder = { "userId",
+        "credentialType",
+        "credentialKey" }, //
+        factoryClass = CredentialXmlRegistry.class, //
+        factoryMethod = "newCredential") //
 public interface Credential extends KapuaUpdatableEntity {
 
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
     public static final String TYPE = "credential";
 
     public default String getType() {

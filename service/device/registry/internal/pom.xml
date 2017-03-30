@@ -92,19 +92,16 @@
                 <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-core</artifactId>
-            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>info.cukes</groupId>
             <artifactId>cucumber-junit</artifactId>
-            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -131,9 +128,9 @@
                                         <srcFile>src/main/sql/H2/dvc_device_event_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/dvc_device_connection_drop.sql</srcFile>
 
-                                        <srcFile>src/main/sql/H2/dvc_device_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/dvc_device_event_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/dvc_device_connection_create.sql</srcFile>
+                                        <srcFile>src/main/resources/liquibase/dvc_device.sql</srcFile>
+                                        <srcFile>src/main/resources/liquibase/dvc_device_event.sql</srcFile>
+                                        <srcFile>src/main/resources/liquibase/dvc_device_connection.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

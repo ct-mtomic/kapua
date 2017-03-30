@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others All rights reserved. 
-    This program and the accompanying materials are made available under the 
-    terms of the Eclipse Public License v1.0 which accompanies this distribution, 
-    and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
-    Eurotech - initial API and implementation -->
-
+<!--
+    Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
+   
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+   
+    Contributors:
+        Eurotech - initial API and implementation
+        Red Hat Inc
+   
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <!-- POM file generated with GWT webAppCreator -->
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.eclipse.kapua</groupId>
@@ -109,6 +116,10 @@
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-transport-mqtt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>kapua-broker-core</artifactId>
+        </dependency>
 
         <!-- External dependencies -->
         <dependency>
@@ -140,24 +151,13 @@
             <artifactId>validation-api</artifactId>
         </dependency>
         <dependency>
-            <!-- File upload utility classes -->
-            <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.2.2</version>
+            <version>1.3.2</version>
         </dependency>
         <dependency>
-            <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-
-        <dependency>
-            <!-- Base64 classes -->
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
         </dependency>
 
         <dependency>
@@ -182,18 +182,16 @@
             <!-- Apache shiro security framework web support -->
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
-            <version>1.2.3</version>
+            <version>${shiro.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.7</version>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -206,20 +204,19 @@
             <version>0.9</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-            <version>6.1.26</version>
-        </dependency>
+        <!-- use log4j only for testing -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
+            <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
         <finalName>console</finalName>
-        <!-- 
+
+        <!--
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>  -->
 
         <plugins>
@@ -240,22 +237,35 @@
                 </executions>
 
                 <configuration>
-                    <!-- This optimize code but slows GWT compile if set to 'false' -->
-                    <draftCompile>true</draftCompile>
+                    <module>org.eclipse.kapua.app.console.console</module>
 
                     <extraJvmArgs>-Xmx2048m -XX:+UseParallelGC</extraJvmArgs>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
-                    
+
                     <i18nConstantsWithLookupBundle>org.eclipse.kapua.app.console.client.messages.ValidationMessages</i18nConstantsWithLookupBundle>
                     <i18nMessagesBundles>
                         <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleMessages</i18nMessagesBundle>
                         <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleRoleMessages</i18nMessagesBundle>
+                        <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleUserMessages</i18nMessagesBundle>
+                        <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleGroupMessages</i18nMessagesBundle>
+                        <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleCredentialMessages</i18nMessagesBundle>
                         <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleWelcomeMessages</i18nMessagesBundle>
+                    	<i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleAccountMessages</i18nMessagesBundle>
                     </i18nMessagesBundles>
-                    
+
                     <optimizationLevel>9</optimizationLevel>
                     <runTarget>console.jsp</runTarget>
                     <webappDirectory>${project.build.directory}</webappDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!-- GWT 2.4 is limited to Java 7 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
@@ -318,10 +328,10 @@
                             <target>
                                 <echo>Openlayers: copy resources to webapp output folder</echo>
                                 <copy
-                                    todir="${project.build.directory}/${project.build.finalName}">
+                                        todir="${project.build.directory}/${project.build.finalName}">
                                     <fileset
-                                        dir="${project.build.directory}/tmp/openlayers-${openlayers.version}/META-INF/resources/webjars/">
-                                        <exclude name="**/OpenLayers.*.js" />
+                                            dir="${project.build.directory}/tmp/openlayers-${openlayers.version}/META-INF/resources/webjars/">
+                                        <exclude name="**/OpenLayers.*.js"/>
                                     </fileset>
                                 </copy>
                             </target>
@@ -337,9 +347,9 @@
                             <target>
                                 <echo>Openlayers: customize openlayers 'ImgPath' variable</echo>
                                 <replaceregexp byline="true"
-                                    file="${project.build.directory}/${project.build.finalName}/openlayers/${openlayers.version}/OpenLayers.js"
-                                    match="ImgPath:&quot;&quot;"
-                                    replace="ImgPath:&quot;openlayers/${openlayers.version}/img/&quot;" />
+                                               file="${project.build.directory}/${project.build.finalName}/openlayers/${openlayers.version}/OpenLayers.js"
+                                               match="ImgPath:&quot;&quot;"
+                                               replace="ImgPath:&quot;openlayers/${openlayers.version}/img/&quot;"/>
                             </target>
                         </configuration>
                     </execution>
@@ -369,7 +379,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -382,7 +392,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -396,11 +406,29 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+
+                <!-- To help IntelliJ IDEA correctly recognize the source path when using Maven Auto Import -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <webResources>
+                            <resource>
+                                <directory>${project.build.directory}/${project.build.finalName}</directory>
+                            </resource>
+                        </webResources>
+                        <!-- exclude slf4j-api as the web container has to provide this -->
+                        <packagingExcludes>
+                            WEB-INF/lib/slf4j-api-*.jar
+                        </packagingExcludes>
                     </configuration>
                 </plugin>
             </plugins>

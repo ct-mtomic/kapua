@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,65 +8,68 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal.elasticsearch;
 
-import org.eclipse.kapua.service.datastore.internal.model.query.AbstractStorableQueryConverter;
-import org.eclipse.kapua.service.datastore.model.Message;
-import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
+import org.eclipse.kapua.service.datastore.model.DatastoreMessage;
 import org.eclipse.kapua.service.datastore.model.query.MessageQuery;
+import org.eclipse.kapua.service.datastore.model.query.StorableFetchStyle;
 
-public class MessageQueryConverter extends AbstractStorableQueryConverter<Message, MessageQuery>
-{
+/**
+ * Message query converter.<br>
+ * This object adds the specific message included and excluded fields definition to the abstract query converter.
+ *
+ * @since 1.0.0
+ */
+public class MessageQueryConverter extends AbstractStorableQueryConverter<DatastoreMessage, MessageQuery> {
+
     @Override
-    protected String[] getIncludes(MessageFetchStyle fetchStyle)
-    {
+    protected String[] getIncludes(StorableFetchStyle fetchStyle) {
 
         // Fetch mode
         String[] includeSource = null;
 
         switch (fetchStyle) {
-            case METADATA:
-                includeSource = new String[] { "" };
-                break;
-            case METADATA_HEADERS:
-                includeSource = new String[] { EsSchema.MESSAGE_COLLECTED_ON, EsSchema.MESSAGE_POS + ".*", EsSchema.MESSAGE_MTR + ".*" };
-                break;
-            case METADATA_HEADERS_PAYLOAD:
-                includeSource = new String[] { "*" };
+        case FIELDS:
+            includeSource = new String[] { "" };
+            break;
+        case SOURCE_SELECT:
+            includeSource = new String[] { EsSchema.MESSAGE_CAPTURED_ON, EsSchema.MESSAGE_POSITION + ".*", EsSchema.MESSAGE_METRICS + ".*" };
+            break;
+        case SOURCE_FULL:
+            includeSource = new String[] { "*" };
         }
 
         return includeSource;
     }
 
     @Override
-    protected String[] getExcludes(MessageFetchStyle fetchStyle)
-    {
+    protected String[] getExcludes(StorableFetchStyle fetchStyle) {
 
         // Fetch mode
         String[] excludeSource = null;
 
         switch (fetchStyle) {
-            case METADATA:
-                excludeSource = new String[] { "*" };
-                break;
-            case METADATA_HEADERS:
-                excludeSource = new String[] { EsSchema.MESSAGE_BODY };
-                break;
-            case METADATA_HEADERS_PAYLOAD:
-                excludeSource = new String[] { "" };
+        case FIELDS:
+            excludeSource = new String[] { "*" };
+            break;
+        case SOURCE_SELECT:
+            excludeSource = new String[] { EsSchema.MESSAGE_BODY };
+            break;
+        case SOURCE_FULL:
+            excludeSource = new String[] { "" };
         }
 
         return excludeSource;
     }
 
     @Override
-    protected String[] getFields()
-    {
-        return new String[] {EsMessageField.ACCOUNT.toString(),
-                             EsMessageField.ASSET.toString(),
-                             EsMessageField.SEMANTIC_TOPIC.toString(),
-                             EsMessageField.TIMESTAMP.toString()};
+    protected String[] getFields() {
+        return new String[] { //
+                MessageField.SCOPE_ID.field(),
+                MessageField.DEVICE_ID.field(),
+                MessageField.CLIENT_ID.field(),
+                MessageField.CHANNEL.field(),
+                MessageField.TIMESTAMP.field() };
     }
 }

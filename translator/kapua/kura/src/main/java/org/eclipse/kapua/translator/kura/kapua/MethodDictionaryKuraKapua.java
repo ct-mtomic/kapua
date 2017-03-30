@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat Inc
  *
  *******************************************************************************/
 package org.eclipse.kapua.translator.kura.kapua;
@@ -21,19 +22,19 @@ import org.eclipse.kapua.service.device.management.KapuaMethod;
 /**
  * Dictionary class to define actions translations between Kura domain to Kapua domain.<br>
  * For detail about action please refer to {@link KapuaMethod} and {@link KuraMethod}
- * 
+ *
  * @since 1.0
  *
  */
-public class MethodDictionaryKuraKapua
-{
+public class MethodDictionaryKuraKapua {
+
     /**
      * Translations dictionary map
      */
-    private static Map<KuraMethod, KapuaMethod> dictionary;
+    private final static Map<KuraMethod, KapuaMethod> dictionary;
 
     static {
-        dictionary = new HashMap<>();
+        dictionary = new HashMap<>(5);
 
         dictionary.put(KuraMethod.GET, KapuaMethod.READ);
         dictionary.put(KuraMethod.POST, KapuaMethod.CREATE);
@@ -44,12 +45,11 @@ public class MethodDictionaryKuraKapua
 
     /**
      * Returns the action translation from Kura domain to Kapua domain
-     * 
+     *
      * @param kuraMethod
      * @return
      */
-    public static KapuaMethod get(KuraMethod kuraMethod)
-    {
+    public static KapuaMethod get(KuraMethod kuraMethod) {
         return dictionary.get(kuraMethod);
     }
 }

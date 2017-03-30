@@ -429,8 +429,9 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         //
         // Do find
         entityManagerSession.onTransactedResult(em -> {
+            Date now = new Date();
             AccessToken accessToken = AccessTokenDAO.find(em, accessTokenId);
-            accessToken.setExpiresOn(new Date());
+            accessToken.setInvalidatedOn(now);
             return AccessTokenDAO.update(em, accessToken);
         });
 =======

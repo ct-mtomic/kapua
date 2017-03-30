@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,17 +12,22 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.shared.service;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.app.console.shared.GwtKapuaException;
+import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.account.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.account.GwtAccountCreator;
+import org.eclipse.kapua.app.console.shared.model.account.GwtAccountQuery;
 import org.eclipse.kapua.app.console.shared.model.account.GwtAccountStringListItem;
 
 import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+
+import java.util.List;
 
 /**
  * The client side stub for the RPC service.
@@ -137,4 +142,32 @@ public interface GwtAccountService extends RemoteService {
     ListLoadResult<GwtAccountStringListItem> findChildrenAsStrings(String scopeId, boolean recoursive)
         throws GwtKapuaException;
 
+    /**
+     * Returns the configuration of an Account as the list of all the configurable components.
+     *
+     * @param scopeId
+     * @return
+     */
+    public List<GwtConfigComponent> findServiceConfigurations(String scopeId)
+            throws GwtKapuaException;
+
+    /**
+     * Updates the configuration of the provided component.
+     *
+     * @param scopeId
+     * @param configComponent
+     */
+    public void updateComponentConfiguration(GwtXSRFToken xsrfToken, String scopeId, GwtConfigComponent configComponent)
+            throws GwtKapuaException;
+
+    /**
+     * Returns the list of all Account matching the query.
+     * 
+     * @param gwtAccountQuery
+     * @return
+     * @throws GwtKapuaException
+     * 
+     */
+    PagingLoadResult<GwtAccount> query(PagingLoadConfig loadConfig, GwtAccountQuery gwtAccountQuery) 
+            throws GwtKapuaException;
 }

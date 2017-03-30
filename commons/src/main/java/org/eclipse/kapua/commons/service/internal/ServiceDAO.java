@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,6 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
  *******************************************************************************/
 package org.eclipse.kapua.commons.service.internal;
 
@@ -18,14 +17,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Embedded;
 import javax.persistence.EntityExistsException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
@@ -43,12 +45,9 @@ import org.eclipse.kapua.commons.model.query.FieldSortCriteria;
 import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
-<<<<<<< HEAD
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.locator.KapuaLocator;
-=======
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.KapuaEntityPredicates;
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
@@ -106,6 +105,9 @@ public class ServiceDAO {
 
     private static final String LIKE = "%";
 
+    private static final String ATTRIBUTE_SEPARATOR = ".";
+    private static final String ATTRIBUTE_SEPARATOR_ESCAPED = "\\.";
+
     static {
         KapuaLocator locator = null;
         try {
@@ -140,13 +142,16 @@ public class ServiceDAO {
     }
 
     /**
-     * Create entity utility method.<br>
+     * Create {@link KapuaEntity} utility method.<br>
      * This method checks for the constraint violation and, in this case, it throws a specific exception ({@link KapuaEntityExistsException}).
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param entity
-     *            to be created
-     * @return
+     *            The {@link KapuaEntity} to be created.
+     * @return The persisted {@link KapuaEntity}.
+     * 
+     * @since 1.0.0
      */
     public static <E extends KapuaEntity> E create(EntityManager em, E entity) {
         //
@@ -188,15 +193,19 @@ public class ServiceDAO {
     }
 
     /**
-     * Update entity utility method
+     * Update {@link KapuaUpdatableEntity} utility method.
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param clazz
+     *            The {@link KapuaUpdatableEntity} class. This must be the implementing {@code class}.
      * @param entity
-     *            entity to be updated
-     * @return
+     *            The {@link KapuaUpdatableEntity} to be updated
+     * @return The updated {@link KapuaUpdatableEntity}.
      * @throws KapuaEntityNotFoundException
-     *             If entity is not found.
+     *             If the {@link KapuaEntity} does not exists.
+     * 
+     * @since 1.0.0
      */
     public static <E extends KapuaUpdatableEntity> E update(EntityManager em, Class<E> clazz, E entity) throws KapuaEntityNotFoundException {
         //
@@ -206,6 +215,7 @@ public class ServiceDAO {
         //
         // Updating if not null
         if (entityToUpdate != null) {
+            // FIXME: why do this??
             AbstractKapuaUpdatableEntity updatableEntity = (AbstractKapuaUpdatableEntity) entity;
             updatableEntity.setCreatedOn(entityToUpdate.getCreatedOn());
             updatableEntity.setCreatedBy(entityToUpdate.getCreatedBy());
@@ -221,15 +231,18 @@ public class ServiceDAO {
     }
 
     /**
-     * Delete entity utility method
+     * Delete {@link KapuaEntity} utility method
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param clazz
+     *            The {@link KapuaEntity} class. This must be the implementing {@code class}.
      * @param entityId
-     *            entity id of the entity to be deleted
+     *            The {@link KapuaEntity} {@link KapuaId} of the entity to be deleted.
      * 
      * @throws KapuaEntityNotFoundException
-     *             If entity is not found.
+     *             If the {@link KapuaEntity} does not exists.
+     * @since 1.0.0
      */
     public static <E extends KapuaEntity> void delete(EntityManager em, Class<E> clazz, KapuaId entityId)
             throws KapuaEntityNotFoundException {
@@ -248,15 +261,18 @@ public class ServiceDAO {
     }
 
     /**
-     * Find entity by name utility method
+     * Find by fields {@link KapuaEntity} utility method
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param clazz
+     *            The {@link KapuaEntity} class. This must be the implementing {@code class}.
      * @param name
-     *            name of the field from which to search
+     *            The {@link KapuaEntity} name of the field from which to search.
      * @param value
-     *            value of the field from which to search
-     * @return
+     *            The value of the field from which to search.
+     * @return The {@link KapuaEntity} found, or {@code null} if not found.
+     * @since 1.0.0
      */
     public static <E extends KapuaEntity> E findByField(EntityManager em, Class<E> clazz, String name, String value) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -289,17 +305,22 @@ public class ServiceDAO {
     }
 
     /**
-     * Query entity utility method
+     * Query {@link KapuaEntity} utility method.
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param interfaceClass
-     *            result query interface class
+     *            {@link KapuaQuery} result entity interface class
      * @param implementingClass
-     *            result query implementation class
+     *            {@link KapuaQuery} result entity implementation class
      * @param resultContainer
+     *            The {@link KapuaListResult} in which load the result. It must be empty.
      * @param kapuaQuery
-     * @return
+     *            The {@link KapuaQuery} to perform.
+     * @return The reference of the {@code resultContainer} parameter. Results are added to the given {@code resultContainer} parameter.
      * @throws KapuaException
+     *             If filter predicates in the {@link KapuaQuery} are incorrect. See {@link #handleKapuaQueryPredicates()}.
+     * @since 1.0.0
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <I extends KapuaEntity, E extends I, L extends KapuaListResult<I>> L query(EntityManager em,
@@ -320,31 +341,24 @@ public class ServiceDAO {
         // SELECT
         criteriaSelectQuery.select(entityRoot);
 
+        // Fetch LAZY attributes if necessary
+        if (kapuaQuery.getFetchAttributes() != null) {
+            for (String fetchAttribute : kapuaQuery.getFetchAttributes()) {
+                entityRoot.fetch(entityType.getSingularAttribute(fetchAttribute), JoinType.LEFT);
+            }
+        }
+
         //
         // WHERE
         KapuaPredicate kapuaPredicates = kapuaQuery.getPredicate();
         if (kapuaQuery.getScopeId() != null) {
-<<<<<<< HEAD
-
-            AndPredicate scopedAndPredicate = new AndPredicate();
 
             AttributePredicate<KapuaId> scopeId = new AttributePredicate<>(KapuaEntityPredicates.SCOPE_ID, kapuaQuery.getScopeId());
-            scopedAndPredicate.and(scopeId);
-
-            if (kapuaQuery.getPredicate() != null) {
-                scopedAndPredicate.and(kapuaQuery.getPredicate());
-            }
-
-            kapuaPredicates = scopedAndPredicate;
-        }
-
-=======
 
             AndPredicate scopedAndPredicate = new AndPredicate();
-
-            AttributePredicate<KapuaId> scopeId = new AttributePredicate<>("scopeId", kapuaQuery.getScopeId());
             scopedAndPredicate.and(scopeId);
 
+            // Add existing query predicates
             if (kapuaQuery.getPredicate() != null) {
                 scopedAndPredicate.and(kapuaQuery.getPredicate());
             }
@@ -352,7 +366,7 @@ public class ServiceDAO {
             kapuaPredicates = scopedAndPredicate;
         }
 
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
+        // Manage kapua query predicates to build the where clause.
         Map<ParameterExpression, Object> binds = new HashMap<>();
         Expression<Boolean> expr = handleKapuaQueryPredicates(kapuaPredicates,
                 binds,
@@ -360,41 +374,21 @@ public class ServiceDAO {
                 entityRoot,
                 entityRoot.getModel());
 
-<<<<<<< HEAD
         if (expr != null) {
             criteriaSelectQuery.where(expr);
         }
-=======
-        criteriaSelectQuery.where(expr);
-
-        // ParameterExpression<Long> scopeIdParam = cb.parameter(Long.class);
-        // Expression<Boolean> scopeIdExpr = cb.equal(entityRoot.get("scopeId"), scopeIdParam);
-        //
-        // Map<ParameterExpression, Object> binds = new HashMap<>();
-        // binds.put(scopeIdParam, kapuaQuery.getScopeId());
-        // Expression<Boolean> expr = handleKapuaQueryPredicates(kapuaQuery.getPredicate(),
-        // binds,
-        // cb,
-        // entityRoot,
-        // entityRoot.getModel());
-        //
-        // if (expr == null) {
-        // criteriaSelectQuery.where(scopeIdExpr);
-        // } else {
-        // criteriaSelectQuery.where(cb.and(scopeIdExpr, expr));
-        // }
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
 
         //
         // ORDER BY
+        // Default to the KapuaEntity id if no ordering is specified.
         Order order;
         if (kapuaQuery.getSortCriteria() != null) {
             FieldSortCriteria sortCriteria = (FieldSortCriteria) kapuaQuery.getSortCriteria();
 
             if (SortOrder.ASCENDING.equals(sortCriteria.getSortOrder())) {
-                order = cb.asc(entityRoot.get(entityType.getSingularAttribute(sortCriteria.getAttributeName())));
+                order = cb.asc(extractAttribute(entityRoot, sortCriteria.getAttributeName()));
             } else {
-                order = cb.desc(entityRoot.get(entityType.getSingularAttribute(sortCriteria.getAttributeName())));
+                order = cb.desc(extractAttribute(entityRoot, sortCriteria.getAttributeName()));
             }
 
         } else {
@@ -421,7 +415,7 @@ public class ServiceDAO {
             query.setMaxResults(kapuaQuery.getLimit().intValue() + 1);
         }
 
-        // Finally quering!
+        // Finally querying!
         List<E> result = query.getResultList();
 
         // Check limit exceeded
@@ -437,18 +431,21 @@ public class ServiceDAO {
     }
 
     /**
-     * Count entity utility method
+     * Count {@link KapuaEntity} utility method.
      * 
      * @param em
+     *            The {@link EntityManager} that holds the transaction.
      * @param interfaceClass
-     *            result query interface class
+     *            {@link KapuaQuery} result entity interface class
      * @param implementingClass
-     *            result query implementation class
+     *            {@link KapuaQuery} result entity implementation class
      * @param kapuaQuery
-     * @return
+     *            The {@link KapuaQuery} to perform.
+     * @return The number of {@link KapuaEntity}es that matched the filter predicates.
      * @throws KapuaException
+     *             If filter predicates in the {@link KapuaQuery} are incorrect. See {@link #handleKapuaQueryPredicates()}.
+     * @since 1.0.0
      */
-    // @SuppressWarnings({ "rawtypes", "unchecked" })
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <I extends KapuaEntity, E extends I> long count(EntityManager em,
             Class<I> interfaceClass,
@@ -577,15 +574,24 @@ public class ServiceDAO {
             throws KapuaException {
         Expression<Boolean> expr;
         String attrName = attrPred.getAttributeName();
+
+        // Parse attributes
         Object attrValue = attrPred.getAttributeValue();
-        SingularAttribute attribute = entityType.getSingularAttribute(attrName);
-        if (attrValue instanceof Object[] && ((Object[]) attrValue).length == 1) {
-            Object[] attrValues = (Object[]) attrValue;
-            attrValue = attrValues[0];
+        if (attrValue instanceof KapuaId && !(attrValue instanceof KapuaEid)) {
+            attrValue = new KapuaEid((KapuaId) attrValue);
         }
+
+        // Fields to query properties of sub attributes of the root entity
+        SingularAttribute attribute;
+        if (attrName.contains(ATTRIBUTE_SEPARATOR)) {
+            attribute = entityType.getSingularAttribute(attrName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[0]);
+        } else {
+            attribute = entityType.getSingularAttribute(attrName);
+        }
+
         if (attrValue instanceof Object[]) {
             Object[] attrValues = (Object[]) attrValue;
-            Expression<?> orPredicate = entityRoot.get(attribute);
+            Expression<?> orPredicate = extractAttribute(entityRoot, attrName);
 
             Predicate[] orPredicates = new Predicate[attrValues.length];
             for (int i = 0; i < attrValues.length; i++) {
@@ -598,30 +604,30 @@ public class ServiceDAO {
             case LIKE:
                 ParameterExpression<String> pl = cb.parameter(String.class);
                 binds.put(pl, LIKE + attrValue + LIKE);
-                expr = cb.like((Expression<String>) entityRoot.get(attribute), pl);
+                expr = cb.like((Expression<String>) extractAttribute(entityRoot, attrName), pl);
                 break;
 
             case STARTS_WITH:
                 ParameterExpression<String> psw = cb.parameter(String.class);
                 binds.put(psw, attrValue + LIKE);
-                expr = cb.like((Expression<String>) entityRoot.get(attribute), psw);
+                expr = cb.like((Expression<String>) extractAttribute(entityRoot, attrName), psw);
                 break;
 
             case IS_NULL:
-                expr = cb.isNull(entityRoot.get(attribute));
+                expr = cb.isNull(extractAttribute(entityRoot, attrName));
                 break;
 
             case NOT_NULL:
-                expr = cb.isNotNull(entityRoot.get(attribute));
+                expr = cb.isNotNull(extractAttribute(entityRoot, attrName));
                 break;
 
             case NOT_EQUAL:
-                expr = cb.notEqual(entityRoot.get(attribute), attrValue);
+                expr = cb.notEqual(extractAttribute(entityRoot, attrName), attrValue);
                 break;
 
             case GREATER_THAN:
                 if (attrValue instanceof Comparable && ArrayUtils.contains(attribute.getJavaType().getInterfaces(), Comparable.class)) {
-                    Expression<? extends Comparable> comparableExpression = entityRoot.get(attribute);
+                    Expression<? extends Comparable> comparableExpression = extractAttribute(entityRoot, attrName);
                     Comparable comparablAttrValue = (Comparable) attrValue;
                     expr = cb.greaterThan(comparableExpression, comparablAttrValue);
                 } else {
@@ -631,7 +637,7 @@ public class ServiceDAO {
 
             case GREATER_THAN_OR_EQUAL:
                 if (attrValue instanceof Comparable && ArrayUtils.contains(attribute.getJavaType().getInterfaces(), Comparable.class)) {
-                    Expression<? extends Comparable> comparableExpression = entityRoot.get(attribute);
+                    Expression<? extends Comparable> comparableExpression = extractAttribute(entityRoot, attrName);
                     Comparable comparablAttrValue = (Comparable) attrValue;
                     expr = cb.greaterThanOrEqualTo(comparableExpression, comparablAttrValue);
                 } else {
@@ -641,7 +647,7 @@ public class ServiceDAO {
 
             case LESS_THAN:
                 if (attrValue instanceof Comparable && ArrayUtils.contains(attribute.getJavaType().getInterfaces(), Comparable.class)) {
-                    Expression<? extends Comparable> comparableExpression = entityRoot.get(attribute);
+                    Expression<? extends Comparable> comparableExpression = extractAttribute(entityRoot, attrName);
                     Comparable comparablAttrValue = (Comparable) attrValue;
                     expr = cb.lessThan(comparableExpression, comparablAttrValue);
                 } else {
@@ -650,7 +656,7 @@ public class ServiceDAO {
                 break;
             case LESS_THAN_OR_EQUAL:
                 if (attrValue instanceof Comparable && ArrayUtils.contains(attribute.getJavaType().getInterfaces(), Comparable.class)) {
-                    Expression<? extends Comparable> comparableExpression = entityRoot.get(attribute);
+                    Expression<? extends Comparable> comparableExpression = extractAttribute(entityRoot, attrName);
                     Comparable comparablAttrValue = (Comparable) attrValue;
                     expr = cb.lessThanOrEqualTo(comparableExpression, comparablAttrValue);
                 } else {
@@ -658,17 +664,38 @@ public class ServiceDAO {
                 }
                 break;
 
-<<<<<<< HEAD
-=======
-            default:
->>>>>>> 479bf3404ccb8240fd9170f686a736744f92534d
             case EQUAL:
             default:
-                expr = cb.equal(entityRoot.get(attribute), attrValue);
-                break;
+                expr = cb.equal(extractAttribute(entityRoot, attrName), attrValue);
             }
         }
         return expr;
+    }
+
+    /**
+     * Utility method that selects the correct {@link Root} attribute.<br>
+     * This method handles {@link Embedded} attributes and nested {@link KapuaEntity}es up to one level of nesting<br>
+     * 
+     * Filter predicates takes advantage of the dot notation to access {@link Embedded} attributes and nested {@link KapuaEntity}es.
+     * 
+     * @param entityRoot
+     *            The {@link Root} entity from which extract the attribute.
+     * @param attributeName
+     *            The full attribute name. It can contain at maximum one '.' separator.
+     * @return The {@link Path} expression that matches the given {@code attributeName} parameter.
+     * 
+     * @since 1.0.0
+     */
+    @SuppressWarnings("rawtypes")
+    protected static <E> Path extractAttribute(Root<E> entityRoot, String attributeName) {
+
+        Path<?> expressionPath;
+        if (attributeName.contains(ATTRIBUTE_SEPARATOR)) {
+            expressionPath = entityRoot.get(attributeName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[0]).get(attributeName.split(ATTRIBUTE_SEPARATOR_ESCAPED)[1]);
+        } else {
+            expressionPath = entityRoot.get(attributeName);
+        }
+        return expressionPath;
     }
 
     /**
@@ -693,13 +720,13 @@ public class ServiceDAO {
 
                     AccessInfoQuery accessInfoQuery = accessInfoFactory.newQuery(kapuaSession.getScopeId());
                     accessInfoQuery.setPredicate(new AttributePredicate<>(AccessInfoPredicates.USER_ID, userId));
-                    AccessInfoListResult accessInfos = KapuaSecurityUtils.doPriviledge(() -> accessInfoService.query(accessInfoQuery));
+                    AccessInfoListResult accessInfos = KapuaSecurityUtils.doPrivileged(() -> accessInfoService.query(accessInfoQuery));
 
                     List<Permission> groupPermissions = new ArrayList<>();
                     if (!accessInfos.isEmpty()) {
 
                         AccessInfo accessInfo = accessInfos.getFirstItem();
-                        AccessPermissionListResult accessPermissions = KapuaSecurityUtils.doPriviledge(() -> accessPermissionService.findByAccessInfoId(accessInfo.getScopeId(), accessInfo.getId()));
+                        AccessPermissionListResult accessPermissions = KapuaSecurityUtils.doPrivileged(() -> accessPermissionService.findByAccessInfoId(accessInfo.getScopeId(), accessInfo.getId()));
 
                         for (AccessPermission ap : accessPermissions.getItems()) {
                             Permission p = ap.getPermission();
@@ -715,14 +742,14 @@ public class ServiceDAO {
                             }
                         }
 
-                        AccessRoleListResult accessRoles = KapuaSecurityUtils.doPriviledge(() -> accessRoleService.findByAccessInfoId(accessInfo.getScopeId(), accessInfo.getId()));
+                        AccessRoleListResult accessRoles = KapuaSecurityUtils.doPrivileged(() -> accessRoleService.findByAccessInfoId(accessInfo.getScopeId(), accessInfo.getId()));
 
                         for (AccessRole ar : accessRoles.getItems()) {
                             KapuaId roleId = ar.getRoleId();
 
-                            Role role = KapuaSecurityUtils.doPriviledge(() -> roleService.find(ar.getScopeId(), roleId));
+                            Role role = KapuaSecurityUtils.doPrivileged(() -> roleService.find(ar.getScopeId(), roleId));
 
-                            RolePermissionListResult rolePermissions = KapuaSecurityUtils.doPriviledge(() -> rolePermissionService.findByRoleId(role.getScopeId(), role.getId()));
+                            RolePermissionListResult rolePermissions = KapuaSecurityUtils.doPrivileged(() -> rolePermissionService.findByRoleId(role.getScopeId(), role.getId()));
 
                             for (RolePermission rp : rolePermissions.getItems()) {
 

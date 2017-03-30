@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others
+ * Copyright (c) 2011, 2017 Eurotech and/or its affiliates and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,11 +22,11 @@ import org.eclipse.kapua.app.console.client.resources.icons.KapuaIcon;
 import org.eclipse.kapua.app.console.client.ui.button.AddButton;
 import org.eclipse.kapua.app.console.client.ui.button.Button;
 import org.eclipse.kapua.app.console.client.ui.button.DeleteButton;
+import org.eclipse.kapua.app.console.client.ui.button.EditButton;
 import org.eclipse.kapua.app.console.client.ui.button.ExportButton;
 import org.eclipse.kapua.app.console.client.ui.button.RefreshButton;
 import org.eclipse.kapua.app.console.client.ui.misc.color.Color;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
-import org.eclipse.kapua.app.console.client.util.ImageUtils;
 import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
 import org.eclipse.kapua.app.console.client.util.SwappableListStore;
 import org.eclipse.kapua.app.console.client.util.UserAgentUtils;
@@ -105,6 +105,7 @@ public class DevicesTable extends LayoutContainer {
     private ToolBar m_devicesToolBar;
 
     private Button m_addDeviceButton;
+    private Button m_editDeviceButton;
 
     private Button m_refreshButton;
     private boolean refreshProcess;
@@ -187,6 +188,33 @@ public class DevicesTable extends LayoutContainer {
             m_devicesToolBar.add(m_addDeviceButton);
             m_devicesToolBar.add(new SeparatorToolItem());
         }
+
+        //
+        // Edit User Button
+        m_editDeviceButton = new EditButton(new SelectionListener<ButtonEvent>() {
+
+            @Override
+            public void componentSelected(ButtonEvent ce) {
+                if (m_devicesGrid != null) {
+                    final GwtDevice gwtDevice = m_devicesGrid.getSelectionModel().getSelectedItem();
+                    if (gwtDevice != null) {
+                        DeviceForm deviceForm = new DeviceForm(gwtDevice, m_currentSession);
+                        deviceForm.addListener(Events.Hide, new Listener<ComponentEvent>() {
+
+                            public void handleEvent(ComponentEvent be) {
+                                refresh();
+                            }
+                        });
+                        deviceForm.show();
+                    }
+                }
+            }
+
+        });
+
+        m_editDeviceButton.setEnabled(false);
+        m_devicesToolBar.add(m_editDeviceButton);
+        m_devicesToolBar.add(new SeparatorToolItem());
 
         //
         // Refresh Button
@@ -350,33 +378,33 @@ public class DevicesTable extends LayoutContainer {
         column.setHidden(true);
         configs.add(column);
 
+        // //
+        // // Device Management Certificate
+        // column = new ColumnConfig("Device Management Certificate Status", "DM", 50);
+        // column.setAlignment(HorizontalAlignment.CENTER);
+        // GridCellRenderer<GwtDevice> setDmStatusIcon = new GridCellRenderer<GwtDevice>() {
         //
-        // Device Management Certificate
-        column = new ColumnConfig("Device Management Certificate Status", "DM", 50);
-        column.setAlignment(HorizontalAlignment.CENTER);
-        GridCellRenderer<GwtDevice> setDmStatusIcon = new GridCellRenderer<GwtDevice>() {
-
-            public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid) {
-                if (gwtDevice.getSignedCertificateId() == null) {
-                    // Device Management Communication is not signed
-                    return ImageUtils.toHTML(Resources.INSTANCE.dmUnlock16(), MSGS.deviceTableCertificateDMTooltipStatusNotSigned(), "14");
-                } else {
-                    // Device Management Communication is signed
-                    return ImageUtils.toHTML(Resources.INSTANCE.lockGreen16(), MSGS.deviceTableCertificateDMTooltipStatusSigned(), "14");
-                }
-            }
-        };
-        column.setRenderer(setDmStatusIcon);
-        column.setAlignment(HorizontalAlignment.CENTER);
-        column.setSortable(false);
-        configs.add(column);
+        // public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid) {
+        // if (gwtDevice.getSignedCertificateId() == null) {
+        // // Device Management Communication is not signed
+        // return ImageUtils.toHTML(Resources.INSTANCE.dmUnlock16(), MSGS.deviceTableCertificateDMTooltipStatusNotSigned(), "14");
+        // } else {
+        // // Device Management Communication is signed
+        // return ImageUtils.toHTML(Resources.INSTANCE.lockGreen16(), MSGS.deviceTableCertificateDMTooltipStatusSigned(), "14");
+        // }
+        // }
+        // };
+        // column.setRenderer(setDmStatusIcon);
+        // column.setAlignment(HorizontalAlignment.CENTER);
+        // column.setSortable(false);
+        // configs.add(column);
 
         column = new ColumnConfig("applicationIdentifiers", MSGS.deviceTableApplications(), 100);
         column.setSortable(false);
         column.setHidden(false);
         configs.add(column);
 
-        column = new ColumnConfig("esfKuraVersion", MSGS.deviceTableEsfKuraVersion(), 80);
+        column = new ColumnConfig("iotFrameworkVersion", MSGS.deviceTableEsfKuraVersion(), 80);
         column.setSortable(false);
         column.setAlignment(HorizontalAlignment.CENTER);
         configs.add(column);
@@ -549,10 +577,15 @@ public class DevicesTable extends LayoutContainer {
             public void selectionChanged(SelectionChangedEvent<GwtDevice> se) {
                 m_selectedDevice = se.getSelectedItem();
                 if (m_selectedDevice != null) {
-                    m_deleteDeviceButton.setEnabled(true);
+                    if (m_currentSession.hasDeviceUpdatePermission()) {
+                        m_deleteDeviceButton.setEnabled(true);
+                    }
+                    if (m_currentSession.hasDeviceDeletePermission()) {
+                        m_editDeviceButton.setEnabled(true);
+                    }
                     m_devicesView.setDevice(m_selectedDevice);
                 } else {
-                    // m_editDeviceButton.setEnabled(false);
+                    m_editDeviceButton.setEnabled(false);
                     m_deleteDeviceButton.setEnabled(false);
                 }
             }
@@ -624,8 +657,8 @@ public class DevicesTable extends LayoutContainer {
 
         sbUrl.append("format=")
                 .append(format)
-                .append("&account=")
-                .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getName()));
+                .append("&scopeIdString=")
+                .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getId()));
 
         //
         // Adding filtering parameter if specified
@@ -665,7 +698,7 @@ public class DevicesTable extends LayoutContainer {
                     .append(deviceConnectionStatus);
         }
 
-        String esfVersion = m_filterPredicates.getEsfVersion();
+        String esfVersion = m_filterPredicates.getIotFrameworkVersion();
         if (esfVersion != null && !esfVersion.isEmpty()) {
             sbUrl.append("&esfVersion=")
                     .append(esfVersion);

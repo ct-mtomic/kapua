@@ -1,0 +1,35 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+<div class="modal-header">
+    <h3 class="modal-title">{{vm.editAccessGroupID ? 'Edit ' + vm.accessGroup.name + ' access group': 'Add new access group'}}</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal" ng-form="vm.editorForm">
+        <h4 class="modal-title">{{vm.editAccessGroupID ? 'Update ' + vm.accessGroup.name + ' access group' : 'Create a new access group'}}</h4>
+        <hr style="margin-top: 0px;">
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.nameInput.$valid && vm.editorForm.nameInput.$touched)}">
+           <label class="col-md-3 control-label" for="textInput-markup"><span style="color: #FF0000">*</span> Name:</label>
+            <div class="col-md-9">
+                <input type="text" name="nameInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.name" ng-required="true">
+                <span ng-if="!vm.editorForm.nameInput.$valid && vm.editorForm.nameInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>        
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn {{vm.editAccessGroupID ? 'btn-warning' : 'btn-success'}}" ng-click="vm.ok()" ng-disabled="vm.editorForm.$invalid">{{vm.editAccessGroupID ? 'Update' : 'Create'}}</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

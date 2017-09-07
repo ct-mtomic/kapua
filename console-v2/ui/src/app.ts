@@ -31,6 +31,7 @@ import "./welcome/module.ts";
 import "./users/module.ts";
 import "./devices/module.ts";
 import "./connections/module.ts";
+import "./access-groups/module.ts";
 import "./roles/module.ts";
 
 import IndexCtrl from "./IndexCtrl";
@@ -50,6 +51,7 @@ angular.module("app", [
     "app.users",
     "app.devices",
     "app.connections",
+    "app.access-groups",
     "app.roles"
 ])
     .config(["$locationProvider", "$urlRouterProvider", "$httpProvider", (
@@ -96,4 +98,4 @@ angular.module("app", [
                 }
             });
         }])
-        .controller("IndexCtrl", ["$rootScope", "Notifications", IndexCtrl]);
+    .controller("IndexCtrl", ["$rootScope", "Notifications", IndexCtrl]);

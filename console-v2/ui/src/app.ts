@@ -32,6 +32,7 @@ import "./users/module.ts";
 import "./devices/module.ts";
 import "./connections/module.ts";
 import "./access-groups/module.ts";
+import "./settings/module.ts";
 import "./roles/module.ts";
 
 import IndexCtrl from "./IndexCtrl";
@@ -52,6 +53,7 @@ angular.module("app", [
     "app.devices",
     "app.connections",
     "app.access-groups",
+    "app.settings",
     "app.roles"
 ])
     .config(["$locationProvider", "$urlRouterProvider", "$httpProvider", (

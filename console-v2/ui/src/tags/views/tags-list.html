@@ -1,0 +1,88 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+
+<div class="row toolbar-pf table-view-pf-toolbar" id="toolbar1">
+    <div class="col-sm-12">
+      <form class="toolbar-pf-actions">
+        <div class="form-group toolbar-pf-filter">
+          <label class="sr-only" for="filter">Tag Name</label>
+          <div class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rendering Engine <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="#" id="filter1">Tag ID</a></li>
+                <li><a href="#" id="filter2">Tag Name</a></li>
+                <li><a href="#" id="filter3">Created By</a></li>
+                <li><a href="#" id="filter4">Created On</a></li>
+              </ul>
+            </div>
+            <input type="text" class="form-control" placeholder="Filter By Rendering Engine..." autocomplete="off" id="filterInput">
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-success" type="button" id="addTag1" ng-click="vm.addTag()"><span class="fa fa-plus"></span> Add Tag</button>
+          <button class="btn btn-warning" type="button" id="editTag1" ng-click="vm.editTag()" ng-disabled="vm.getSelectedTags().length != 1"><span class="fa fa-pencil-square-o "></span> Edit Tag</button>
+          <button class="btn btn-danger" type="button" id="deleteRows1" ng-click="vm.deleteTags()" ng-disabled="!vm.getSelectedTags().length"><span class="fa fa-trash"></span> Delete Tags</button>
+        </div>
+        <div class="toolbar-pf-action-right">
+          <div class="form-group toolbar-pf-find">
+            <button class="btn btn-link btn-find" type="button">
+              <span class="fa fa-search"></span>
+            </button>
+            <div class="find-pf-dropdown-container">
+              <input type="text" class="form-control" id="find" placeholder="Find By Keyword...">
+              <div class="find-pf-buttons">
+                <span class="find-pf-nums">1 of 3</span>
+                <button class="btn btn-link" type="button">
+                  <span class="fa fa-angle-up"></span>
+                </button>
+                <button class="btn btn-link" type="button">
+                  <span class="fa fa-angle-down"></span>
+                </button>
+                <button class="btn btn-link btn-find-close" type="button">
+                  <span class="pficon pficon-close"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row toolbar-pf-results">
+        <div class="col-sm-9">
+          <div class="hidden">
+            <h5>0 Results</h5>
+            <p>Active filters:</p>
+            <ul class="list-inline"></ul>
+            <p><a href="#">Clear All Filters</a></p>
+          </div>
+        </div>
+        <div class="col-sm-3 table-view-pf-select-results">
+          <strong>{{vm.getSelectedTags().length}}</strong> of <strong>{{tags.length}}</strong> selected
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Table HTML -->
+  <table class="table table-striped table-bordered table-hover" id="table1">
+    <thead>
+      <tr>
+        <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
+        <th>Tag Name</th>
+        <th>Created By</th>
+        <th>Created On</th>
+      </tr>
+    </thead>
+  </table>

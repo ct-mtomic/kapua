@@ -44,6 +44,11 @@ import {IExternalModulesList} from './iExternalModulesList.service';
                 href: "#/access-groups"
             },
             {
+                title: "Tags",
+                iconClass: "fa fa-tags",
+                href: "#/tags"
+            },
+            {
                 title: "Users",
                 iconClass: "fa fa-users",
                 href: "#/users"
@@ -54,15 +59,15 @@ import {IExternalModulesList} from './iExternalModulesList.service';
                 href: "#/roles"
             },
             {
-                title: "Settings",
-                iconClass: "fa fa-cog",
-                href: "#/settings"
-            },
-            {
                 title: "Child Accounts",
                 iconClass: "fa fa-sitemap",
                 href: "#/child-accounts"
-            }
+            },
+            {
+                title: "Settings",
+                iconClass: "fa fa-cog",
+                href: "#/settings"
+            }            
         ];
 
         var moduleList = [];

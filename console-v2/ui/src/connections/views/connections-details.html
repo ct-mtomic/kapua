@@ -1,0 +1,36 @@
+<div class="col-md-12" style="padding: 0px;">
+    <div class="breadcrumbsContent">
+        <ol breadcrumbs class="breadcrumb">
+            <li ng-repeat="breadcrumb in breadcrumbs">
+                <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+                <li>
+        </ol>
+    </div>
+    <div class="displayDetailsContent">
+        <div class="card-pf card-pf-accented card-pf-utilization">
+            <div class="row example-container displayConnectionContainer">
+                <h3 class="col-md-12" style="font-weight: bold;">Connection Details: </h3>
+                <div class="col-md-3" style="font-weight: bold;">Connection Status:</div>
+                <div class="col-md-9">{{vm.connection.status ? vm.connection.status : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Modified On:</div>
+                <div class="col-md-9">{{vm.connection.modifiedOn ? vm.connection.modifiedOn : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Modified By:</div>
+                <div class="col-md-9">{{vm.connection.modifiedBy ? vm.connection.modifiedBy : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Protocol:</div>
+                <div class="col-md-9">{{vm.connection.protocol ? vm.connection.protocol : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Client ID:</div>
+                <div class="col-md-9">{{vm.connection.clientId ? vm.connection.clientId : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">User:</div>
+                <div class="col-md-9">{{vm.connection.userId ? vm.connection.userId : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Client IP:</div>
+                <div class="col-md-9">{{vm.connection.clientIp ? vm.connection.clientIp : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">Server IP:</div>
+                <div class="col-md-9">{{vm.connection.serverIp ? vm.connection.serverIp : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">First Established On:</div>
+                <div class="col-md-9">{{vm.connection.firstEstablishedOn ? vm.connection.firstEstablishedOn : "UNDEFINED"}}</div>
+                <div class="col-md-3" style="font-weight: bold;">First Established By:</div>
+                <div class="col-md-9">{{vm.connection.firstEstablishedBy ? vm.connection.firstEstablishedBy : "UNDEFINED"}}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+
+table.dataTable {
+    height: inherit;
+}
+
+.dataTables_wrapper .dataTable {
+    width: 100% !important;
+}
+
+td.table-view-pf-select {
+    width: 1px;
+}
+
+.detailsAccordion {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.displayDetailsContent {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.displayConnectionContainer {
+    padding-bottom: 16px;
+}
+
+uib-accordion {
+    .panel-group {
+        margin-bottom: 0px;
+    }
+}
+
+tr {
+    cursor: pointer;
+}
+
+.list-view-container {
+    .list-group {
+        margin-bottom: 0px;
+    }
+}
+
+.breadcrumbsContent {
+    margin-left: 10px;
+}
+
+.activeBreadcrumb {
+    color: #000000 !important;
+    text-decoration: none !important;  
+}

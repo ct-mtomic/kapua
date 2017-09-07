@@ -34,6 +34,16 @@ import {IExternalModulesList} from './iExternalModulesList.service';
                 href: "#/devices"
             },
             {
+                title: "Connections",
+                iconClass: "fa fa-plug",
+                href: "#/connections"
+            },
+            {
+                title: "Access Groups",
+                iconClass: "fa fa-object-group",
+                href: "#/access-groups"
+            },
+            {
                 title: "Users",
                 iconClass: "fa fa-users",
                 href: "#/users"

@@ -10,64 +10,13 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-
-table.dataTable {
-    height: inherit;
-}
-
-.dataTables_wrapper .dataTable {
-    width: 100% !important;
-}
-
-td.table-view-pf-select {
-    width: 1px;
-}
-
-.displayDetailsContent {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.displayUserContainer {
-    padding-bottom: 16px;
-}
-
-tr {
-    cursor: pointer;
-}
-
-.breadcrumbsContent {
-    margin-left: 10px;
-}
-
-.activeBreadcrumb {
-    color: #000000 !important;
-    text-decoration: none !important;  
-}
-
-.fieldDescription {
-        color: #C0C0C0;
-}
-
-
-/* modal width */
-@media screen and (min-width: 768px) {
-    .modal-dialog {
-        width: 800px; /* New width for default modal */
-    }
-    .modal-sm {
-        width: 350px; /* New width for small modal */
-    }
-}
-@media screen and (min-width: 992px) {
-    .modal-lg {
-        width: 950px; /* New width for large modal */
-    }
-}
-.modal-body {
-    .dangerIcon {
-        font-size: 50px;
-        color: #a30000;
-        text-align: center;
-    }
+interface IUsersService {
+    getUsers(): ng.IHttpPromise<ListResult<User>>;
+    getUserById(userID: string): ng.IHttpPromise<User>;
+    addUser(reqModel): ng.IHttpPromise<User>;
+    updateUser(userID: string, updateModel: any): ng.IHttpPromise<User>;
+    deleteUserById(userID: string): void;
+    getRoles(): ng.IHttpPromise<ListResult<Role>>;
+    getPermissions(): ng.IHttpPromise<ListResult<Permission>>;
+    getDomains(): ng.IHttpPromise<ListResult<any>>;
 }

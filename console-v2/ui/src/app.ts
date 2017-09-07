@@ -20,6 +20,7 @@ import "angular-patternfly/node_modules/patternfly/dist/css/patternfly-additions
 import "angular-patternfly/dist/styles/angular-patternfly.css";
 
 import "angular-ui-router-breadcrumbs/dist/angular-ui-router-breadcrumbs.js";
+import "bootstrap-datepicker/dist/js/bootstrap-datepicker.js";
 
 import "./index.scss";
 

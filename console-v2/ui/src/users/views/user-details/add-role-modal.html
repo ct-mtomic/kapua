@@ -1,3 +1,4 @@
+<!--
 /*******************************************************************************
 * Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
 *                                                                               
@@ -10,64 +11,23 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-
-table.dataTable {
-    height: inherit;
-}
-
-.dataTables_wrapper .dataTable {
-    width: 100% !important;
-}
-
-td.table-view-pf-select {
-    width: 1px;
-}
-
-.displayDetailsContent {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.displayUserContainer {
-    padding-bottom: 16px;
-}
-
-tr {
-    cursor: pointer;
-}
-
-.breadcrumbsContent {
-    margin-left: 10px;
-}
-
-.activeBreadcrumb {
-    color: #000000 !important;
-    text-decoration: none !important;  
-}
-
-.fieldDescription {
-        color: #C0C0C0;
-}
-
-
-/* modal width */
-@media screen and (min-width: 768px) {
-    .modal-dialog {
-        width: 800px; /* New width for default modal */
-    }
-    .modal-sm {
-        width: 350px; /* New width for small modal */
-    }
-}
-@media screen and (min-width: 992px) {
-    .modal-lg {
-        width: 950px; /* New width for large modal */
-    }
-}
-.modal-body {
-    .dangerIcon {
-        font-size: 50px;
-        color: #a30000;
-        text-align: center;
-    }
-}
+-->
+<div class="modal-header">
+    <h3 class="modal-title">Associate role</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal" ng-form="vm.editorForm">
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="domainsDropdown"> Role:</label>
+            <div class="col-md-9">
+                <select class="combobox form-control" ng-model="vm.submitModel.role" name="roles" id="domainsDropdown">
+                    <option ng-repeat="role in vm.roles" value="{{role.id}}">{{role.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn {{vm.editRoleID ? 'btn-warning' : 'btn-success'}}" ng-click="vm.ok()" ng-disabled="!vm.submitModel.role">{{vm.editRoleID ? 'Update' : 'Create'}}</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

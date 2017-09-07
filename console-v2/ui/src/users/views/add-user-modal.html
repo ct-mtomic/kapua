@@ -1,0 +1,96 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+<div class="modal-header">
+    <h3 class="modal-title">{{vm.editUserID ? 'Edit ' + vm.user.name + ' user': 'Add new user'}}</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal" ng-form="vm.editorForm">
+        <h4 class="modal-title">User Information</h4>
+        <hr style="margin-top: 0px;">
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.usernameInput.$valid && vm.editorForm.usernameInput.$touched)}">
+            <label class="col-md-3 control-label" for="usernameInput"><span style="color: #FF0000">*</span> Username:</label>
+            <div class="col-md-9">
+                <input type="text" name="usernameInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.name" ng-required="true" ng-disabled="vm.editUserID">
+                <span ng-if="!vm.editorForm.usernameInput.$valid && vm.editorForm.usernameInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>
+        <div ng-if="!vm.editUserID" class="form-group" ng-class="{'has-error' : (!vm.editorForm.passwordInput.$valid && vm.editorForm.passwordInput.$touched)}">
+            <label class="col-md-3 control-label" for="passwordInput"><span style="color: #FF0000">*</span> Password:</label>
+            <div class="col-md-9">
+                <input type="password" name="passwordInput" id="textInput-markup" class="form-control" ng-model="vm.password" ng-required="true" ng-change="vm.onChangeConfirmPassword()">
+                <span ng-if="!vm.editorForm.passwordInput.$valid && vm.editorForm.passwordInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>
+        <div ng-if="!vm.editUserID" class="form-group" ng-class="{'has-error' : (!vm.editorForm.confirmInput.$valid && vm.editorForm.confirmInput.$touched) || (!vm.validPassword && vm.editorForm.confirmInput.$touched)}">
+            <label class="col-md-3 control-label" for="confirmInput"><span style="color: #FF0000">*</span> Confirm Password:</label>
+            <div class="col-md-9">
+                <input type="password" name="confirmInput" id="textInput-markup" class="form-control" ng-model="vm.confirmPassword" ng-required="true" ng-change="vm.onChangeConfirmPassword()">
+                <span ng-if="!vm.editorForm.confirmInput.$valid && vm.editorForm.confirmInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>                  
+                <span ng-if="!vm.validPassword && vm.editorForm.confirmInput.$touched && vm.confirmPassword.length" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> Password doesn't match the confirm password!</span>                  
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-3 hidden-md-down"></div>
+            <div class="col-md-9"><div class="fieldDescription">Note: If credetials are used by devices, update them accordingly in the device configuration.</div></div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="displayNameInput"> Display Name:</label>
+            <div class="col-md-9">
+                <input type="text" name="displayNameInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.displayName">
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error' : (vm.editorForm.emailInput.$error.email && vm.editorForm.emailInput.$touched)}">
+            <label class="col-md-3 control-label" for="emailInput"> Email:</label>
+            <div class="col-md-9">
+                <input type="email" name="emailInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.email">
+                <span ng-if="vm.editorForm.emailInput.$error.email && vm.editorForm.emailInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> Invalid email!</span> 
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.phoneInput.$valid && vm.editorForm.phoneInput.$touched)}">
+            <label class="col-md-3 control-label" for="phoneInput"> Phone Number:</label>
+            <div class="col-md-9">
+                <input type="text" name="phoneInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.phoneNumber" ng-pattern="vm.phonePattern">
+                <span ng-if="!vm.editorForm.phoneInput.$valid && vm.editorForm.phoneInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> Invalid phone number!</span>                 
+            </div>
+        </div>
+        <h4 class="modal-title">Status</h4>
+        <hr style="margin-top: 0px;">
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="statusDropdown">Status:</label>
+            <div class="col-md-9">
+                <select class="combobox form-control" ng-model="vm.submitModel.status" name="statusDropdown">
+                    <option value="ENABLED">ENABLED</option>
+                    <option value="DISABLED">DISABLED</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 control-label" for="statusDropdown">Expiration Date:</label>
+            <div class="col-md-9">
+                <input pf-datepicker options="vm.dpOptions" date="vm.expirationDate">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn {{vm.editUserID ? 'btn-warning' : 'btn-success'}}" ng-click="vm.ok()" ng-disabled="vm.editorForm.$invalid || (!vm.editUserID && !vm.validPassword)">{{vm.editUserID ? 'Update' : 'Create'}}</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

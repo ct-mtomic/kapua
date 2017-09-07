@@ -10,64 +10,22 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
+export default class DeleteUsersModalCtrl {
 
-table.dataTable {
-    height: inherit;
-}
+  constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+    private $http: angular.IHttpService,
+    private usersService: IUsersService,
+    private ids: string[],
+    private refreshUserList: boolean) { }
 
-.dataTables_wrapper .dataTable {
-    width: 100% !important;
-}
+delete() {
+    this.ids.forEach((id: string) => {
+      this.usersService.deleteUserById(id);
+    });
+    this.$modalInstance.close(!this.refreshUserList);
+  }
 
-td.table-view-pf-select {
-    width: 1px;
-}
-
-.displayDetailsContent {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.displayUserContainer {
-    padding-bottom: 16px;
-}
-
-tr {
-    cursor: pointer;
-}
-
-.breadcrumbsContent {
-    margin-left: 10px;
-}
-
-.activeBreadcrumb {
-    color: #000000 !important;
-    text-decoration: none !important;  
-}
-
-.fieldDescription {
-        color: #C0C0C0;
-}
-
-
-/* modal width */
-@media screen and (min-width: 768px) {
-    .modal-dialog {
-        width: 800px; /* New width for default modal */
-    }
-    .modal-sm {
-        width: 350px; /* New width for small modal */
-    }
-}
-@media screen and (min-width: 992px) {
-    .modal-lg {
-        width: 950px; /* New width for large modal */
-    }
-}
-.modal-body {
-    .dangerIcon {
-        font-size: 50px;
-        color: #a30000;
-        text-align: center;
-    }
+  cancel() {
+    this.$modalInstance.dismiss("cancel");
+  }
 }

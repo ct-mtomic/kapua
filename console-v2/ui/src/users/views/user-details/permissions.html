@@ -1,0 +1,43 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                      
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+<div class="breadcrumbsContent">
+    <ol breadcrumbs class="breadcrumb">
+        <li ng-repeat="breadcrumb in breadcrumbs">
+            <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+            <li>
+    </ol>
+</div>
+
+<div class="row toolbar-pf table-view-pf-toolbar" id="toolbar1">
+    <div class="form-group">
+        <button class="btn btn-success" type="button" id="addPermission1" ng-click="vm.grantPermission()"><span class="fa fa-plus"></span> Grant</button>
+        <button class="btn btn-danger" type="button" id="deleteRows1" ng-click="vm.revokePermissions()" ng-disabled="!vm.getSelectedPermissions().length"><span class="fa fa-times"></span> Revoke</button>
+    </div>
+    <div class="col-sm-3 pull-right table-view-pf-select-results" style="padding-bottom: 15px;">
+        <strong>{{vm.getSelectedPermissions().length}}</strong> of <strong>{{permissions.length}}</strong> selected
+    </div>
+</div>
+
+<table class="table table-striped table-bordered table-hover" id="table1">
+    <thead>
+        <tr>
+            <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
+            <th>Domain</th>
+            <th>Granted By</th>
+            <th>Granted On</th>
+        </tr>
+    </thead>
+</table>
+

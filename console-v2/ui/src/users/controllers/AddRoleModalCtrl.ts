@@ -10,64 +10,39 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
+export default class AddRoleModalCtrl {
+    private roles: Role[];
 
-table.dataTable {
-    height: inherit;
-}
-
-.dataTables_wrapper .dataTable {
-    width: 100% !important;
-}
-
-td.table-view-pf-select {
-    width: 1px;
-}
-
-.displayDetailsContent {
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.displayUserContainer {
-    padding-bottom: 16px;
-}
-
-tr {
-    cursor: pointer;
-}
-
-.breadcrumbsContent {
-    margin-left: 10px;
-}
-
-.activeBreadcrumb {
-    color: #000000 !important;
-    text-decoration: none !important;  
-}
-
-.fieldDescription {
-        color: #C0C0C0;
-}
-
-
-/* modal width */
-@media screen and (min-width: 768px) {
-    .modal-dialog {
-        width: 800px; /* New width for default modal */
+    private submitModel = {
+        role: null
     }
-    .modal-sm {
-        width: 350px; /* New width for small modal */
+
+    constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        private userID: string,
+        private refreshRoleList: boolean,
+        private usersService: IUsersService) {
+
+        this.getRoles();
+
     }
-}
-@media screen and (min-width: 992px) {
-    .modal-lg {
-        width: 950px; /* New width for large modal */
+
+    addRole(userID: string, submitModel) {
+        // this.usersService.addRole(userID, submitModel).then((result: ng.IHttpPromiseCallbackArg<Role>) => {
+        //     console.log("Users Role added", result.data);
+        // });
     }
-}
-.modal-body {
-    .dangerIcon {
-        font-size: 50px;
-        color: #a30000;
-        text-align: center;
+
+    getRoles() {
+        this.usersService.getRoles().then((result: ng.IHttpPromiseCallbackArg<ListResult<Role>>) => {
+            this.roles = result.data.items.item;
+        });
+    }
+
+    ok() {
+        this.addRole(this.userID, this.submitModel);
+        this.$modalInstance.close(!this.refreshRoleList);
+    }
+    cancel() {
+        this.$modalInstance.dismiss("cancel");
     }
 }

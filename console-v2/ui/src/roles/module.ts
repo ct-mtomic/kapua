@@ -12,9 +12,12 @@
 *******************************************************************************/
 import RoleListCtrl from "./controllers/RolesListCtrl";
 import RoleDetailCtrl from "./controllers/RoleDetailCtrl";
-import RoleDetailDescriptionCtrl from "./controllers/RoleDetailDescriptionCtrl";
 import RoleDetailPermissionsCtrl from "./controllers/RoleDetailPermissionsCtrl";
-import RoleDetailSubjectsCtrl from "./controllers/RoleDetailSubjectsCtrl";
+import RoleDetailGrantedUsersCtrl from "./controllers/RoleDetailGrantedUsersCtrl";
+import AddRoleModalCtrl from "./controllers/AddRoleModalCtrl";
+import AddRolePermissionModalCtrl from "./controllers/AddRolePermissionModalCtrl";
+import DeleteRolesModalCtrl from "./controllers/DeleteRolesModalCtrl";
+import DeleteRolePermissionModalCtrl from "./controllers/DeleteRolePermissionModalCtrl";
 
 import RolesService from "./services/RolesService"
 
@@ -22,9 +25,10 @@ import "./assets/styles/roles.scss";
 
 angular.module("app.roles", [])
     .config(["$stateProvider",
-        ($stateProvider: angular.ui.IStateProvider,
+        ($stateProvider: any,
             $authProvider) => {
             $stateProvider.state("kapua.roles", {
+                breadcrumb: "Roles",
                 url: "/roles",
                 views: {
                     "kapuaView@kapua": {
@@ -34,7 +38,8 @@ angular.module("app.roles", [])
                 }
             })
                 .state("kapua.roles.detail", {
-                    url: "/:idRole",
+                    breadcrumb: "Role Details",
+                    url: "/:id",
                     views: {
                         "kapuaView@kapua": {
                             template: require("./views/roles-details.html"),
@@ -42,16 +47,8 @@ angular.module("app.roles", [])
                         }
                     }
                 })
-                .state("kapua.roles.detail.description", {
-                    url: "/description",
-                    views: {
-                        "kapuaView@kapua": {
-                            template: require("./views/role-details/description.html"),
-                            controller: "RoleDetailDescriptionCtrl as vm"
-                        }
-                    }
-                })
                 .state("kapua.roles.detail.permissions", {
+                    breadcrumb: "Permissions",
                     url: "/permissions",
                     views: {
                         "kapuaView@kapua": {
@@ -60,24 +57,28 @@ angular.module("app.roles", [])
                         }
                     }
                 })
-                .state("kapua.roles.detail.subjects", {
-                    url: "/subjects",
+                .state("kapua.roles.detail.grantedusers", {
+                    breadcrumb: "Granted Users",
+                    url: "/grantedusers",
                     views: {
                         "kapuaView@kapua": {
-                            template: require("./views/role-details/subjects.html"),
-                            controller: "RoleDetailSubjectsCtrl as vm"
+                            template: require("./views/role-details/granted-users.html"),
+                            controller: "RoleDetailGrantedUsersCtrl as vm"
                         }
                     }
                 });
         }])
     //services
-    .service("rolesService",["$http", RolesService])
+    .service("rolesService", ["$http", RolesService])
 
     //controllers
-    .controller("RolesListCtrl", ["rolesService", RoleListCtrl])
-    .controller("RoleDetailCtrl", ["$stateParams", "$http", RoleDetailCtrl])
-    .controller("RoleDetailDescriptionCtrl", ["$stateParams", "$http", RoleDetailDescriptionCtrl])
-    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$http", "rolesService", RoleDetailPermissionsCtrl])
-    .controller("RoleDetailSubjectsCtrl", ["$stateParams", "$http", RoleDetailSubjectsCtrl]);
+    .controller("RolesListCtrl", ["$scope", "$timeout", "$modal", "$state", "rolesService", RoleListCtrl])
+    .controller("AddRoleModalCtrl", ["$modalInstance", "editRoleID", "refreshRoleList", "rolesService", AddRoleModalCtrl])
+    .controller("AddRolePermissionModalCtrl", ["$modalInstance", "roleID", "refreshPermissionList", "rolesService", AddRolePermissionModalCtrl])
+    .controller("DeleteRolesModalCtrl", ["$modalInstance", "$http", "rolesService", "ids", "refreshRoleList", DeleteRolesModalCtrl])
+    .controller("DeleteRolePermissionModalCtrl", ["$modalInstance", "$http", "rolesService", "roleID", "ids", "refreshPermissionList", DeleteRolePermissionModalCtrl])
+    .controller("RoleDetailCtrl", ["$stateParams", "rolesService", RoleDetailCtrl])
+    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$modal", "$state", "rolesService", RoleDetailPermissionsCtrl])
+    .controller("RoleDetailGrantedUsersCtrl", ["$scope", "$stateParams", "rolesService", RoleDetailGrantedUsersCtrl]);
 
 

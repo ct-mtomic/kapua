@@ -1,3 +1,4 @@
+<!--
 /*******************************************************************************
 * Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
 *                                                                               
@@ -10,16 +11,15 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-interface IRolesService {
-    getRoles(): ng.IHttpPromise<ListResult<Role>>;
-    getPermissionsByRole(roleID: string): ng.IHttpPromise<ListResult<RolePermission>>;
-    addPermission(roleID: string, reqModel): ng.IHttpPromise<RolePermission>;
-    getRoleById(roleID: string): ng.IHttpPromise<Role>;
-    getRoleCount(): any;
-    addRole(reqModel): ng.IHttpPromise<Role>;
-    updateRole(roleID: string, updateModel: any): ng.IHttpPromise<Role>;
-    deleteRoleById(roleID: string): void;
-    deleteRolePermissionById(roleID: string, rolePermissionID: string): void;
-    getDomains(): ng.IHttpPromise<ListResult<Domain>>;
-    getUsers(): ng.IHttpPromise<any>;
-}
+-->
+<div class="modal-header">
+  <h3 class="modal-title">Delete selected roles</h3>
+</div>
+<div class="modal-body">
+  <div class="col-sm-2 dangerIcon"><i class="fa fa-exclamation-triangle"></i></div>
+  <div class="col-sm-10">Delete the selected roles and all associated permissions? Also all user will lose this role if deleted.</div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="vm.delete()">Delete</button>
+  <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

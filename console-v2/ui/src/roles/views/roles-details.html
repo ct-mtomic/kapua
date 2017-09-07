@@ -12,14 +12,32 @@
 *                                                                               
 *******************************************************************************/
 -->
-<div>
-  <h3>
-    Role detail
-  </h3>
-  <div>
-    ID: {{:: vm.$stateParams["idRole"] }}
+<div class="col-md-12" style="padding: 0px;">
+  <div class="breadcrumbsContent">
+    <ol breadcrumbs class="breadcrumb">
+      <li ng-repeat="breadcrumb in breadcrumbs">
+        <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+        <li>
+    </ol>
   </div>
-  <div class="col-md-4" pf-aggregate-status-card head-title="Description" show-top-border="true" status="vm.descriptionStatus"></div>
-  <div class="col-md-4" pf-aggregate-status-card head-title="Permissions" show-top-border="true" status="vm.permissionsStatus"></div>
-  <div class="col-md-4" pf-aggregate-status-card head-title="Subjects" show-top-border="true" status="vm.subjectsStatus"></div>
+  <div class="displayDetailsContent">
+    <div class="card-pf card-pf-accented card-pf-utilization">
+      <div class="row example-container displayRoleContainer">
+        <h3 class="col-md-12" style="font-weight: bold;">Role Details: </h3>
+        <div class="col-md-3" style="font-weight: bold;">Role Name:</div>
+        <div class="col-md-9">{{vm.role.name ? vm.role.name : 'UNDEFINED'}}</div>
+        <div class="col-md-3" style="font-weight: bold;">Modified By:</div>
+        <div class="col-md-9">{{vm.role.modifiedBy ? vm.role.modifiedBy : 'UNDEFINED'}}</div>
+        <div class="col-md-3" style="font-weight: bold;">Modified On:</div>
+        <div class="col-md-9">{{vm.role.modifiedOn ? vm.role.modifiedOn : 'UNDEFINED'}}</div>
+        <div class="col-md-3" style="font-weight: bold;">Created By:</div>
+        <div class="col-md-9">{{vm.role.createdBy ? vm.role.createdBy : 'UNDEFINED'}}</div>
+        <div class="col-md-3" style="font-weight: bold;">Created On:</div>
+        <div class="col-md-9">{{vm.role.createdOn ? vm.role.createdOn : 'UNDEFINED'}}</div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="col-md-6" pf-aggregate-status-card head-title="Permissions" show-top-border="true" status="vm.permissionsStatus"></div>
+<div class="col-md-6" pf-aggregate-status-card head-title="Subjects" show-top-border="true" status="vm.subjectsStatus"></div>

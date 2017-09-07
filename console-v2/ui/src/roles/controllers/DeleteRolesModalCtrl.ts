@@ -10,11 +10,22 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-export default class RoleDetailSubjectsCtrl {
-  private roleId: string;
+export default class DeleteRolesModalCtrl {
 
-  constructor(private $stateParams: angular.ui.IStateParamsService,
-              private $http: angular.IHttpService) {
-    this.roleId = $stateParams["idRole"];
+  constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+    private $http: angular.IHttpService,
+    private rolesService: IRolesService,
+    private ids: string[],
+    private refreshRoleList: boolean) { }
+
+delete() {
+    this.ids.forEach((id: string) => {
+      this.rolesService.deleteRoleById(id);
+    });
+    this.$modalInstance.close(!this.refreshRoleList);
+  }
+
+  cancel() {
+    this.$modalInstance.dismiss("cancel");
   }
 }

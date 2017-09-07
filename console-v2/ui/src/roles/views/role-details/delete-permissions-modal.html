@@ -1,3 +1,4 @@
+<!--
 /*******************************************************************************
 * Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
 *                                                                               
@@ -10,11 +11,15 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-export default class RoleDetailDescriptionCtrl {
-  private roleId: string;
-
-  constructor(private $stateParams: angular.ui.IStateParamsService,
-              private $http: angular.IHttpService) {
-    this.roleId = $stateParams["idRole"];
-  }
-}
+-->
+<div class="modal-header">
+  <h3 class="modal-title">Delete selected permissions</h3>
+</div>
+<div class="modal-body">
+  <div class="col-sm-2 dangerIcon"><i class="fa fa-exclamation-triangle"></i></div>
+  <div class="col-sm-10">Delete selected permissions?</div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-danger" ng-click="vm.delete()">Delete</button>
+  <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

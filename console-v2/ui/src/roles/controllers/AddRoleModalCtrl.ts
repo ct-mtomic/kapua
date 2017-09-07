@@ -10,40 +10,49 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
-export default class RoleDetailCtrl {
+export default class AddRoleModalCtrl {
     private role: Role;
-    private roleDescription: RoleDescription[];
-    private RolePermissions: RolePermission[];
-    private roleSubjects: RoleSubject[];
-    private permissionsStatus = {
-        "title": "Permissions",
-        "count": null,
-        "href": null,
-        "iconClass": "fa fa-key",
-        "notifications": []
-    };
-    private subjectsStatus = {
-        "title": "Granted Users",
-        "count": null,
-        "href": null,
-        "iconClass": "fa fa-pencil-square-o",
-        "notifications": []
-    };
-
-    constructor(private $stateParams: angular.ui.IStateParamsService,
+    constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        private editRoleID: string,
+        private refreshRoleList: boolean,
         private rolesService: IRolesService) {
-        this.permissionsStatus.href = `roles/${$stateParams["id"]}/permissions`;
-        this.subjectsStatus.href = `roles/${$stateParams["id"]}/grantedusers`;
-        this.getRoleById($stateParams["id"]);
+
+        this.editRoleID ? this.getRoleById(this.editRoleID) : null;
+    }
+    private submitModel = {
+        permissions: [
+            { "action": "read" }
+        ],
+        name: ""
     }
 
     getRoleById(roleID: string): void {
         this.rolesService.getRoleById(roleID).then((responseData: ng.IHttpPromiseCallbackArg<Role>) => {
             this.role = responseData.data;
+            this.submitModel.name = responseData.data.name;
         });
+    }
 
-        this.rolesService.getPermissionsByRole(roleID).then((responseData: ng.IHttpPromiseCallbackArg<ListResult<RolePermission>>) => {
-            this.permissionsStatus.count = responseData.data.items.item.length;
+    addRole() {
+        this.rolesService.addRole(this.submitModel).then((responseData: ng.IHttpPromiseCallbackArg<Role>) => {
+            console.log("Added role: ", responseData.data);
         });
+    }
+
+    editRole(roleID: string) {
+        let updateModel = {
+            name: this.submitModel.name
+        }
+        this.rolesService.updateRole(roleID, updateModel).then((responseData: ng.IHttpPromiseCallbackArg<Role>) => {
+            console.log("Updated role: ", responseData.data);
+        });
+    }
+
+    ok() {
+        this.editRoleID ? this.editRole(this.editRoleID) : this.addRole();
+        this.$modalInstance.close(!this.refreshRoleList);
+    }
+    cancel() {
+        this.$modalInstance.dismiss("cancel");
     }
 }

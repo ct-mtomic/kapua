@@ -11,19 +11,192 @@
 *                                                                               
 *******************************************************************************/
 export default class RoleDetailPermissionsCtrl {
-  private roleId: string;
   private permissions: RolePermission[];
+  private refreshPermissionList: boolean = false;
 
   constructor(private $stateParams: angular.ui.IStateParamsService,
-    private $http: angular.IHttpService,
+    private $scope: any,
+    private $timeout: any,
+    private $modal: angular.ui.bootstrap.IModalService,
+    private $state: any,
     private rolesService: IRolesService) {
-    this.roleId = $stateParams["idRole"];
-    this.getPermissonsByRole(this.roleId);
+
+    $scope.$watch(
+      () => { return this.refreshPermissionList; },
+      () => {
+        $timeout(function () {
+          rolesService.getPermissionsByRole($stateParams["id"]).then((result: ng.IHttpPromiseCallbackArg<ListResult<RolePermission>>) => {
+            $(() => {
+              $scope.permissions = result.data.items.item;
+              // DataTable Config
+              $("#table1").dataTable().fnDestroy();
+              $("#table1").dataTable({
+                columns: [
+                  {
+                    data: null,
+                    className: "table-view-pf-select checkboxField",
+                    render: function (data, type, full, meta) {
+                      // Select row checkbox renderer
+                      let id = "select" + data.id;
+                      return `<label class="sr-only" for="` + id + `">Select row ` + meta.row +
+                        `</label><input type="checkbox" id="` + id + `" name="` + id + `">`;
+                    },
+                    sortable: false,
+                    width: "10px"
+                  },
+                  {
+                    data: "id",
+                    width: "35%",
+                  },
+                  {
+                    data: "createdBy",
+                    width: "25%",
+                  },
+                  {
+                    data: "createdOn"
+                  }
+                ],
+                data: $scope.permissions,
+                dom: "t",
+                language: {
+                  zeroRecords: "No records found"
+                },
+                order: [[1, "asc"]],
+                pfConfig: {
+                  emptyStateSelector: "#emptyState1",
+                  filterCols: [
+                    null,
+                    {
+                      default: true,
+                      optionSelector: "#filter1",
+                      placeholder: "Filter By Rendering Engine..."
+                    }, {
+                      optionSelector: "#filter2",
+                      placeholder: "Filter By Browser..."
+                    }, {
+                      optionSelector: "#filter3",
+                      placeholder: "Filter By Platform(s)..."
+                    }, {
+                      optionSelector: "#filter4",
+                      placeholder: "Filter By Engine Version..."
+                    }, {
+                      optionSelector: "#filter5",
+                      placeholder: "Filter By CSS Grade..."
+                    }
+                  ],
+                  toolbarSelector: "#toolbar1",
+                  selectAllSelector: `th:first-child input[type="checkbox"]`
+                },
+                select: {
+                  selector: `td:first-child input[type="checkbox"]`,
+                  style: "multi"
+                },
+              } as DataTables.Settings);
+
+              /**
+               * Utility to find items in Table View
+               */
+              let findTableViewUtil = function (config) {
+                // Upon clicking the find button, show the find dropdown content
+                $(".btn-find").click(function () {
+                  $(this).parent().find(".find-pf-dropdown-container").toggle();
+                });
+
+                // Upon clicking the find close button, hide the find dropdown content
+                $(".btn-find-close").click(function () {
+                  $(".find-pf-dropdown-container").hide();
+                });
+
+                // Upon clicking on table row
+                let table = $('#table1').DataTable();
+
+                $(".checkBoxField").on('click', function () {
+                  let data: any = table.row(this).data();
+                  if (data) {
+                    if (!$('#select' + data.id).is(':focus')) {
+                      $('#select' + data.id).focus();
+                      $('#select' + data.id).click();
+                    }
+                    let selected: number = 0;
+                    $scope.permissions.forEach((permission: RolePermission) => {
+                      let rawCheckbox: any = $('#select' + permission.id)[0];
+                      rawCheckbox.checked ? selected++ : null;
+                    });
+                    $scope.$apply();
+                    let allCheckbox: any = $('#selectAll')[0];
+                    selected === $scope.permissions.length ? allCheckbox.checked = true : allCheckbox.checked = false;
+                  } else {
+                    if (!$('#selectAll').is(':focus')) {
+                      $('#selectAll').focus();
+                      $('#selectAll').click();
+                    }
+                    $scope.permissions.forEach((permission: RolePermission) => {
+                      let rawCheckbox: any = $('#select' + permission.id)[0];
+                      let allCheckbox: any = $('#selectAll')[0];
+                      rawCheckbox.checked = allCheckbox.checked;
+                    });
+
+                    let selected: number = 0;
+                    $scope.permissions.forEach((permission: RolePermission) => {
+                      let rawCheckbox: any = $('#select' + permission.id)[0];
+                      rawCheckbox.checked ? selected++ : null;
+                    });
+                    $scope.$apply();
+                  }
+                });
+              };
+              // Initialize find util
+              new findTableViewUtil(null);
+              let dataTable = ($(".datatable") as any).dataTable();
+            });
+          });
+        }, 500);
+      });
   }
 
-  getPermissonsByRole(roleID: string): void {
-    this.rolesService.getPermissionsByRole(roleID).then((permissionsResponse: ng.IHttpPromiseCallbackArg<ListResult<RolePermission>>) => {
-      this.permissions = permissionsResponse.data.items.item;
+  getSelectedPermissions(): string[] {
+    let selected: string[] = [];
+    if (this.$scope.permissions)
+      this.$scope.permissions.forEach((permission: RolePermission) => {
+        let rawCheckbox: any = $('#select' + permission.id)[0];
+        if (rawCheckbox.checked == true)
+          selected.push(permission.id);
+      });
+    return selected;
+  }
+
+  deletePermissions() {
+    let modal = this.$modal.open({
+      template: require("../views/role-details/delete-permissions-modal.html"),
+      controller: "DeleteRolePermissionModalCtrl as vm",
+      resolve: {
+        roleID: () => this.$stateParams["id"],
+        ids: () => this.getSelectedPermissions(),
+        refreshPermissionList: () => this.refreshPermissionList
+      }
     });
+    modal.result.then((result: any) => {
+      this.refreshPermissionList = result;
+    },
+      (result) => {
+        console.warn(result);
+      });
+  }
+
+  addPermission() {
+    let modal = this.$modal.open({
+      template: require("../views/role-details/add-permission-modal.html"),
+      controller: "AddRolePermissionModalCtrl as vm",
+      resolve: {
+        roleID: () => this.$stateParams["id"],
+        refreshPermissionList: () => this.refreshPermissionList
+      }
+    });
+    modal.result.then((result: any) => {
+      this.refreshPermissionList = result;
+    },
+      (result) => {
+        console.warn(result);
+      });
   }
 }

@@ -1,0 +1,95 @@
+/*******************************************************************************
+* Copyright (c) 2011, 2016 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+table.dataTable {
+    height: inherit;
+}
+
+.dataTables_wrapper .dataTable {
+    width: 100% !important;
+}
+
+td.table-view-pf-select {
+    width: 1px;
+}
+
+.displayDetailsContent {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.displayRoleContainer {
+    padding-bottom: 16px;
+}
+
+tr {
+    cursor: pointer;
+}
+
+.breadcrumbsContent {
+    margin-left: 10px;
+}
+
+.activeBreadcrumb {
+    color: #000000 !important;
+    text-decoration: none !important;  
+}
+
+
+/* modal width */
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+        width: 800px; /* New width for default modal */
+    }
+    .modal-sm {
+        width: 350px; /* New width for small modal */
+    }
+}
+@media screen and (min-width: 992px) {
+    .modal-lg {
+        width: 950px; /* New width for large modal */
+    }
+}
+.modal-body {
+    .dangerIcon {
+        font-size: 50px;
+        color: #a30000;
+        text-align: center;
+    }
+}
+
+grantedusers {
+    .header {
+        padding-bottom: 16px;
+    }
+    .headerTitle {
+        font-size: 20px;
+        font-weight: bold;
+        padding-top: 3px;
+    }
+    .headerActions {
+        text-align: right;
+        padding-top: 5px;
+        padding-right: 16px;
+    }
+    .headerConfigs {
+        padding-bottom: 10px;
+        overflow: hidden;
+    }
+    .list-group-item-heading {
+        padding-top: 6px;
+    }
+    .list-group-item-container {
+        background: none;
+        border-top: none;
+    }
+}

@@ -1,4 +1,3 @@
-<!--
 /*******************************************************************************
 * Copyright (c) 2011, 2016 Eurotech and/or its affiliates                       
 *                                                                               
@@ -11,15 +10,31 @@
 *     Eurotech - initial API and implementation                                 
 *                                                                               
 *******************************************************************************/
--->
-<div class="modal-header">
-  <h3 class="modal-title">Delete selected devices</h3>
-</div>
-<div class="modal-body">
-  Device with ID: {{vm.id}} has been deleted... <br>
-  Are you sure?
-</div>
-<div class="modal-footer">
-  <button class="btn btn-danger" ng-click="vm.delete()">Delete</button>
-  <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
-</div>
+export default class UploadApplySnapshotsModalCtrl {
+    private editorForm: any;
+    constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
+        private $scope: any,
+        private $http: angular.IHttpService,
+        private devicesService: IDevicesService) {
+
+        $scope.fileUpload = function (element) {
+            $scope.file = element.files[0];
+            $scope.filePath = element.value;
+            $scope.$apply();
+        }
+        // File input validation
+        $scope.$watch(
+            () => { return $scope.filePath; },
+            () => {
+                if ($scope.filePath != undefined)
+                    this.editorForm.$dirty = true;
+            }
+        );
+    }
+    ok() {
+        this.$modalInstance.close("ok");
+    }
+    cancel() {
+        this.$modalInstance.dismiss("cancel");
+    }
+}

@@ -1,0 +1,34 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+<div class="modal-header">
+    <h3 class="modal-title">Upload and Apply</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal" ng-form="vm.editorForm">
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="textInput-markup">File:</label>
+            <div class="col-md-10">
+                <div class="col-md-10 col-sm-9 col-xs-9" style="padding-left: 0; padding-right: 8px;"><input type="text" id="textInput-markup" class="form-control" ng-model="filePath" readonly></div>
+                <label for="upload" class="col-md-2 col-sm-3 col-xs-3 btn btn-default"><span class="fa fa-folder-open"></span> Browse ...
+                <input type="file" id="upload" style="display:none" onchange="angular.element(this).scope().fileUpload(this)">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-success" ng-click="vm.ok()" ng-disabled="!vm.editorForm.$dirty">Upload</button>
+</div>

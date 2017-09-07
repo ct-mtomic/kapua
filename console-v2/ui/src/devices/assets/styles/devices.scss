@@ -53,10 +53,9 @@ tr {
     }
 }
 
-bundles, packages, commands, configurations {
+bundles, packages, commands, configurations, events {
     .header {
-        overflow: hidden;
-        padding-bottom: 10px;
+        padding-bottom: 16px;
     }
     .headerTitle {
         font-size: 20px;
@@ -67,6 +66,10 @@ bundles, packages, commands, configurations {
         text-align: right;
         padding-top: 5px;
         padding-right: 16px;
+    }
+    .headerConfigs {
+        padding-bottom: 10px;
+        overflow: hidden;
     }
     .list-group-item-heading {
         padding-top: 6px;

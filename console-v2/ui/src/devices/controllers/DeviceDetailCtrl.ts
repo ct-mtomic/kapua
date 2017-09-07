@@ -22,104 +22,42 @@ export default class DeviceDetailCtrl {
     "title": "Installed Packages",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-cube",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 4,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 1
-    //   }
-    // ]
+    "iconClass": "fa fa-cube"
   };
+  
   private eventsStatus = {
     "title": "Events",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-history",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 5,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 2
-    //   }
-    // ]
+    "iconClass": "fa fa-history"
   };
+
   private bundlesStatus = {
     "title": "Bundles",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-cubes",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 6,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 3
-    //   }
-    // ]
+    "iconClass": "fa fa-cubes"
   };
+
   private configurationsStatus = {
     "title": "Configurations",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-cogs",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 7,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 4
-    //   }
-    // ]
+    "iconClass": "fa fa-cogs"
   };
+
   private commandsStatus = {
     "title": "Commands",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-terminal",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 8,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 5
-    //   }
-    // ]
+    "iconClass": "fa fa-terminal"
   };
 
   private groupsStatus = {
     "title": "Groups",
     "count": null,
     "href": null,
-    "iconClass": "fa fa-object-group",
-    // "notifications": [
-    //   {
-    //     "iconClass": "pficon pficon-error-circle-o",
-    //     "count": 9,
-    //     "href": "#"
-    //   },
-    //   {
-    //     "iconClass": "pficon pficon-warning-triangle-o",
-    //     "count": 6
-    //   }
-    // ]
+    "iconClass": "fa fa-object-group"
   };
 
   private oneAtATime: boolean = false;
@@ -135,14 +73,23 @@ export default class DeviceDetailCtrl {
     this.commandsStatus.href = `devices/${$stateParams["id"]}/commands`;
     this.groupsStatus.href = `devices/${$stateParams["id"]}/groups`;
     this.getDeviceById($stateParams["id"]);
-    this.getBundlesCount($stateParams["id"]);
-    this.getPackagesCount($stateParams["id"]);
   }
 
   getDeviceById(deviceID): void {
     this.devicesService.getDeviceById(deviceID).then((responseData: ng.IHttpPromiseCallbackArg<Device>) => {
       this.device = responseData.data;
       this.items = this.deviceMapperService.prepareViewItems(this.device);
+      if (this.device.connection && this.device.connection.status === "CONNECTED") {
+        this.getBundlesCount(this.$stateParams["id"]);
+        this.getPackagesCount(this.$stateParams["id"]);
+        this.getEventsCount(this.$stateParams["id"]);
+      }
+    });
+  }
+
+  getEventsCount(deviceID: string) {
+    this.devicesService.getEventsByDeviceId(deviceID).then((responseData: ng.IHttpPromiseCallbackArg<ListResult<DeviceEvent>>) => {
+      this.eventsStatus.count = responseData.data.items.item.length;
     });
   }
 
@@ -151,6 +98,7 @@ export default class DeviceDetailCtrl {
       this.bundlesStatus.count = responseData.data.bundle.length;
     });
   }
+
   getPackagesCount(deviceID: string): void {
     this.devicesService.getPackagesByDeviceId(deviceID).then((responseData: ng.IHttpPromiseCallbackArg<DevicePackages>) => {
       this.packagesStatus.count = responseData.data.devicePackage.length;

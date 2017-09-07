@@ -11,14 +11,20 @@
 *                                                                               
 *******************************************************************************/
 export default class DeleteDevicesModalCtrl {
+
   constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
-              private $http: angular.IHttpService,
-              private id: any) { }
-  ok() {
-    this.$http.delete(`api/devices/${this.id}`).then((deleteResult) => {
-      this.$modalInstance.close("ok");
+    private $http: angular.IHttpService,
+    private devicesService: IDevicesService,
+    private ids: string[],
+    private refreshDeviceList: boolean) { }
+
+  delete() {
+    this.ids.forEach((id: string) => {
+      this.devicesService.deleteDevice(id);
     });
+    this.$modalInstance.close(!this.refreshDeviceList);
   }
+
   cancel() {
     this.$modalInstance.dismiss("cancel");
   }

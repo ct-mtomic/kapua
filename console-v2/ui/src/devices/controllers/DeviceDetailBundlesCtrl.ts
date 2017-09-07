@@ -17,23 +17,31 @@ export default class DeviceDetailBundlesCtrl {
     constructor(private $stateParams: angular.ui.IStateParamsService,
         private $http: angular.IHttpService,
         private $scope: any,
+        private $timeout: any,
         private devicesService: IDevicesService) {
         $scope.deviceId = $stateParams["id"];
 
-        this.getBundles($scope.deviceId);
+        devicesService.getBundlesByDeviceId($scope.deviceId).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
+            $scope.bundles = responseData.data.bundle;
+        });
 
         let startBundle = function (action, item) {
-            alert("Starting bundle with ID: " + item.id);
-            // devicesService.startDeviceBundle($scope.deviceId, item.id).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
-            //     $scope.bundles = responseData.data.bundle;
-            // });
+            devicesService.startDeviceBundle($scope.deviceId, item.id);
+            $timeout(function () {
+                devicesService.getBundlesByDeviceId($scope.deviceId).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
+                    $scope.bundles = responseData.data.bundle;
+                });
+            }, 100);
+
         }
 
         let stopBundle = function (action, item): void {
-            alert("Stopping bundle with ID: " + item.id);
-            // devicesService.stopDeviceBundle($scope.deviceId, item.id).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
-            //     $scope.bundles = responseData.data.bundle;
-            // });
+            devicesService.stopDeviceBundle($scope.deviceId, item.id);
+            $timeout(function () {
+                devicesService.getBundlesByDeviceId($scope.deviceId).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
+                    $scope.bundles = responseData.data.bundle;
+                });
+            }, 100);
         }
 
         $scope.actionButtons = [
@@ -59,7 +67,7 @@ export default class DeviceDetailBundlesCtrl {
     };
 
     getBundles(deviceID: string) {
-        this.devicesService.getBundlesByDeviceId(this.$scope.deviceId).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
+        this.devicesService.getBundlesByDeviceId(deviceID).then((responseData: ng.IHttpPromiseCallbackArg<DeviceBundles>) => {
             this.$scope.bundles = responseData.data.bundle;
         });
     }

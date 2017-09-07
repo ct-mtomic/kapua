@@ -12,16 +12,20 @@
 *******************************************************************************/
 interface IDevicesService {
     getDevices(): ng.IHttpPromise<ListResult<Device>>;
+    addDevice(reqModel): ng.IHttpPromise<Device>;
+    deleteDevice(deviceID: string): void;
     getDeviceById(deviceID: string): ng.IHttpPromise<Device>;
     getBundlesByDeviceId(deviceID: string): ng.IHttpPromise<DeviceBundles>;
+    getEventsByDeviceId(deviceID: string): ng.IHttpPromise<ListResult<DeviceEvent>>;
     getPackagesByDeviceId(deviceID: string): ng.IHttpPromise<DevicePackages>;
     getConfigsByDeviceId(deviceID: string): ng.IHttpPromise<DeviceConfigurations>;
-    startDeviceBundle(deviceID: string, bundleID: number): ng.IHttpPromise<DeviceBundles>;
-    stopDeviceBundle(deviceID: string, bundleID: number): ng.IHttpPromise<DeviceBundles>;
+    startDeviceBundle(deviceID: string, bundleID: number): void;
+    stopDeviceBundle(deviceID: string, bundleID: number): void;
     downloadPackage(deviceID: string, devicePackage: DevicePackage): any;
     uninstallPackage(deviceID: string, devicePackage: DevicePackage): any;
     executeCommand(deviceID: string): any;    
     applyConfig(config: DeviceConfiguration, deviceID: string): ng.IHttpPromise<DeviceConfigurations>;
     getSnapshotsByDeviceId(deviceID: string): ng.IHttpPromise<DeviceSnapshots>;
-    rollbackSnapshot(deviceID: string, snapshot: DeviceSnapshot): ng.IHttpPromise<DeviceSnapshots>;
+    rollbackSnapshot(deviceID: string, snapshotID: string): void;
+    getGroups(): ng.IHttpPromise<ListResult<Group>>;
 }

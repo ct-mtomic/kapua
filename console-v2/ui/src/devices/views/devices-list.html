@@ -33,7 +33,8 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-default" type="button" id="deleteRows1" ng-click="vm.deleteDevices()">Delete Rows</button>
+        <button class="btn btn-success" type="button" id="addDevice1" ng-click="vm.addDevice()"><span class="fa fa-plus"></span> Add Device</button>
+        <button class="btn btn-danger" type="button" id="deleteRows1" ng-click="vm.deleteDevices()" ng-disabled="deleteDisabled"><span class="fa fa-trash"></span> Delete Rows</button>
         <div class="dropdown btn-group dropdown-kebab-pf">
           <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebab" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="true">
@@ -92,12 +93,12 @@
 <table class="table table-striped table-bordered table-hover" id="table1">
   <thead>
     <tr>
-      <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
+      <th title="Select all rows"><label class="sr-only" for="selectAll"></label><input type="checkbox" id="selectAll" name="selectAll"></th>
       <th>Connection Status</th>
       <th>Client ID</th>
-      <th>Platform(s)</th>
-      <th>Engine Version</th>
-      <th>CSS Grade</th>
+      <th>Display Name</th>
+      <th>Oparating System Version</th>
+      <th>Serial Number</th>
     </tr>
   </thead>
 </table>

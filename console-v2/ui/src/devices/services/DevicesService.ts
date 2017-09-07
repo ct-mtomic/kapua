@@ -19,12 +19,24 @@ export default class DevicesService implements IDevicesService {
         return this.$http.get("api/_/devices?fetchAttributes=connection");
     }
 
+    addDevice(reqModel): ng.IHttpPromise<Device> {
+        return this.$http.post("/api/_/devices", reqModel);
+    }
+
+    deleteDevice(deviceID: string): void {
+        this.$http.delete("/api/_/devices/" + deviceID);
+    }
+
     getDeviceById(deviceID: string): ng.IHttpPromise<Device> {
         return this.$http.get("/api/_/devices/" + deviceID);
     }
 
     getBundlesByDeviceId(deviceID: string): ng.IHttpPromise<DeviceBundles> {
         return this.$http.get("/api/_/devices/" + deviceID + "/bundles");
+    };
+
+    getEventsByDeviceId(deviceID: string): ng.IHttpPromise<ListResult<DeviceEvent>> {
+        return this.$http.get("/api/_/devices/" + deviceID + "/events");
     };
 
     getPackagesByDeviceId(deviceID: string): ng.IHttpPromise<DevicePackages> {
@@ -39,12 +51,12 @@ export default class DevicesService implements IDevicesService {
         return this.$http.get("/api/_/devices/" + deviceID + "/snapshots");
     };
 
-    startDeviceBundle(deviceID: string, bundleID: number): ng.IHttpPromise<DeviceBundles> {
-        return this.$http.post("/api/_/devices/" + deviceID + "/bundles/" + bundleID + "/_start", {});
+    startDeviceBundle(deviceID: string, bundleID: number): void {
+        this.$http.post("/api/_/devices/" + deviceID + "/bundles/" + bundleID + "/_start", null);
     };
 
-    stopDeviceBundle(deviceID: string, bundleID: number): ng.IHttpPromise<DeviceBundles> {
-        return this.$http.post("/api/_/devices/" + deviceID + "/bundles/" + bundleID + "/_stop", {});
+    stopDeviceBundle(deviceID: string, bundleID: number): void {
+        this.$http.post("/api/_/devices/" + deviceID + "/bundles/" + bundleID + "/_stop", null);
     };
 
     downloadPackage(deviceID: string, devicePackage: DevicePackage): any {
@@ -71,8 +83,15 @@ export default class DevicesService implements IDevicesService {
 
     executeCommand(deviceID: string): any {
         let requestModel = {
-            // TO BE defined            
+            // TO BE defined 
+            //     "stderr": "string",
+            //     "stdout": "string",
+            //     "exceptionMessage": "string",
+            //     "exceptionStack": "string",
+            //     "exitCode": 0,
+            //     "hasTimedout": false           
         };
+
         return this.$http.post("/api/_/devices/" + deviceID + "/commands/_execute", requestModel);
     }
 
@@ -80,8 +99,12 @@ export default class DevicesService implements IDevicesService {
         return this.$http.post("/api/_/devices/" + deviceID + "/configurations", config);
     }
 
-    rollbackSnapshot(deviceID: string, snapshot: DeviceSnapshot): ng.IHttpPromise<DeviceSnapshots> {
-        return this.$http.post("/api/_/devices/" + deviceID + "/snapshots/" + snapshot.id, snapshot);
+    rollbackSnapshot(deviceID: string, snapshotID: string): void {
+        this.$http.post("/api/_/devices/" + deviceID + "/snapshots/" + snapshotID + "/_rollback", null);
+    }
+
+    getGroups(): ng.IHttpPromise<ListResult<Group>> {
+        return this.$http.get("/api/_/groups");
     }
 
 }

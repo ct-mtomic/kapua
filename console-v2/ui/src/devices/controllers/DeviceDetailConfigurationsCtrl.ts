@@ -16,6 +16,7 @@ export default class DeviceDetailConfigurationsCtrl {
     private snapshots: DeviceSnapshot[];
 
     constructor(private $scope: any,
+        private $modal: angular.ui.bootstrap.IModalService,
         private $stateParams: angular.ui.IStateParamsService,
         private $http: angular.IHttpService,
         private $templateCache: any,
@@ -25,10 +26,7 @@ export default class DeviceDetailConfigurationsCtrl {
         this.getSnapshots($scope.deviceId);
 
         let rollbackSnapshot = function (action, item) {
-            alert("Rollback snapshot with ID: " + item.id);
-            // devicesService.rollbackSnapshot($scope.deviceId, item).then((responseData: ng.IHttpPromiseCallbackArg<DeviceSnapshots>) => {
-            //     $scope.snapshots = responseData.data.snapshotId;
-            // });
+            devicesService.rollbackSnapshot($scope.deviceId, item.id);
         }
 
         let downloadSnapshot = function (action, item): void {
@@ -140,8 +138,17 @@ export default class DeviceDetailConfigurationsCtrl {
         // });
     }
 
-    uploadAndApplySnapshot() {
-        alert("Snapshot uploading ... ");
-    }
+    uploadAndApplySnapshot(): void {
+    let modal = this.$modal.open({
+      template: require("../views/device-details/upload-apply-snapshots-modal.html"),
+      controller: "UploadApplySnapshotsModalCtrl as vm"
+    });
+    modal.result.then((result: any) => {
+      console.info(result);
+    },
+      (result) => {
+        console.warn(result);
+      });
+  }
 
 }

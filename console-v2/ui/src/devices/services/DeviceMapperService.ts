@@ -11,7 +11,7 @@
 *                                                                               
 *******************************************************************************/
 export default class DeviceMapperService implements IDeviceMapperService {
-    
+
     constructor() {
     }
 
@@ -26,7 +26,7 @@ export default class DeviceMapperService implements IDeviceMapperService {
                     },
                     {
                         displayName: "Connection Status",
-                        value: device.connection.status ? device.connection.status : "UNDEFINED"
+                        value: device.connection ? device.connection.status ? device.connection.status : "UNDEFINED" : "UNDEFINED"
                     },
                     {
                         displayName: "Connection ID",

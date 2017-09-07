@@ -20,6 +20,8 @@ import DeviceDetailBundlesCtrl from "./controllers/DeviceDetailBundlesCtrl";
 import DeviceDetailConfigurationsCtrl from "./controllers/DeviceDetailConfigurationsCtrl";
 import DeviceDetailCommandsCtrl from "./controllers/DeviceDetailCommandsCtrl";
 import DeviceDetailGroupsCtrl from "./controllers/DeviceDetailGroupsCtrl";
+import UploadApplySnapshotsModalCtrl from "./controllers/UploadApplySnapshotsModalCtrl";
+import AddDeviceModalCtrl from "./controllers/AddDeviceModalCtrl";
 
 import DevicesService from "./services/DevicesService";
 import DeviceMapperService from "./services/DeviceMapperService";
@@ -110,12 +112,14 @@ angular.module("app.devices", [])
     .service("deviceMapperService", [DeviceMapperService])
 
     //controllers
-    .controller("DevicesListCtrl", ["$modal", "$state", "devicesService", DevicesListCtrl])
-    .controller("DeleteDevicesModalCtrl", ["$modalInstance", "$http", "id", DeleteDevicesModalCtrl])
+    .controller("DevicesListCtrl", ["$scope", "$timeout", "$modal", "$state", "devicesService", DevicesListCtrl])
+    .controller("AddDeviceModalCtrl", ["$modalInstance", "$http", "refreshDeviceList", "devicesService", AddDeviceModalCtrl])
+    .controller("DeleteDevicesModalCtrl", ["$modalInstance", "$http", "devicesService", "ids", "refreshDeviceList", DeleteDevicesModalCtrl])
+    .controller("UploadApplySnapshotsModalCtrl", ["$modalInstance", "$scope", "$http", "devicesService", UploadApplySnapshotsModalCtrl])
     .controller("DeviceDetailCtrl", ["$stateParams", "$http", "devicesService", "deviceMapperService", DeviceDetailCtrl])
     .controller("DeviceDetailPackagesCtrl", ["$stateParams", "$scope", "$http", "$templateCache", "devicesService", DeviceDetailPackagesCtrl])
-    .controller("DeviceDetailEventsCtrl", ["$stateParams", "$http", DeviceDetailEventsCtrl])
-    .controller("DeviceDetailBundlesCtrl", ["$stateParams", "$http", "$scope", "devicesService", DeviceDetailBundlesCtrl])
-    .controller("DeviceDetailConfigurationsCtrl", ["$scope", "$stateParams", "$http", "$templateCache", "devicesService", DeviceDetailConfigurationsCtrl])
+    .controller("DeviceDetailEventsCtrl", ["$stateParams", "$http", "$scope", "devicesService", DeviceDetailEventsCtrl])
+    .controller("DeviceDetailBundlesCtrl", ["$stateParams", "$http", "$scope", "$timeout", "devicesService", DeviceDetailBundlesCtrl])
+    .controller("DeviceDetailConfigurationsCtrl", ["$scope", "$modal", "$stateParams", "$http", "$templateCache", "devicesService", DeviceDetailConfigurationsCtrl])
     .controller("DeviceDetailCommandsCtrl", ["$scope","$stateParams", "devicesService", DeviceDetailCommandsCtrl])
     .controller("DeviceDetailGroupsCtrl", ["$stateParams", "$http", DeviceDetailGroupsCtrl]);

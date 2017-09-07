@@ -11,5 +11,17 @@
 *                                                                               
 *******************************************************************************/
 interface DeviceEvent {
-  name: string;
+  action: string;
+  createdBy: string;
+  createdOn: string;
+  deviceId: string;
+  eventMessage: string;
+  id: string;
+  receivedOn: string;
+  resource: string;
+  responseCode: string;
+  scopeId: string;
+  sentOn: string;
+  type: string;
+  disableRowExpansion: boolean;
 }

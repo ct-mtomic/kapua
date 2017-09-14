@@ -1,0 +1,114 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                         
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+
+<div class="col-md-12" style="padding: 0px;">
+    <div class="breadcrumbsContent">
+        <ol breadcrumbs class="breadcrumb">
+            <li ng-repeat="breadcrumb in breadcrumbs">
+                <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+                <li>
+        </ol>
+    </div>
+</div>
+
+<div class="col-md-6" pf-aggregate-status-card head-title="Users" show-top-border="true" status="vm.usersStatus"></div>
+<div class="col-md-6" pf-aggregate-status-card head-title="Settings" show-top-border="true" status="vm.settingsStatus"></div>
+
+<div class="col-md-12" style="padding: 0px;">
+    <div class="displayDetailsContent">
+        <div class="card-pf card-pf-accented card-pf-utilization">
+            <div class="row example-container">
+                <uib-accordion close-others="vm.oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="Account Information" is-open="true">
+                        <div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Account Name:</div>
+                                <div class="col-md-9">{{vm.childAccount.name ? vm.childAccount.name : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Modified On:</div>
+                                <div class="col-md-9">{{vm.childAccount.modifiedOn ? vm.childAccount.modifiedOn : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Modified By:</div>
+                                <div class="col-md-9">{{vm.childAccount.modifiedBy ? vm.childAccount.modifiedBy : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Created On:</div>
+                                <div class="col-md-9">{{vm.childAccount.createdOn ? vm.childAccount.createdOn : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Created By:</div>
+                                <div class="col-md-9">{{vm.childAccount.createdBy ? vm.childAccount.createdBy : "N/A"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div uib-accordion-group class="panel-default" heading="Deployment Info" is-open="true">
+                        <div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Broker URL:</div>
+                                <div class="col-md-9">{{vm.childAccount.brokerUrl ? vm.childAccount.brokerUrl : "N/A"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div uib-accordion-group class="panel-default" heading="Organization Information" is-open="true">
+                        <div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Organization Name:</div>
+                                <div class="col-md-9">{{vm.childAccount.organizationName ? vm.childAccount.organizationName : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Reference Person:</div>
+                                <div class="col-md-9">{{vm.childAccount.referencePerson ? vm.childAccount.referencePerson : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Email:</div>
+                                <div class="col-md-9">{{vm.childAccount.email ? vm.childAccount.email : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Phone Number:</div>
+                                <div class="col-md-9">{{vm.childAccount.phoneNumber ? vm.childAccount.phoneNumber : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Address 1:</div>
+                                <div class="col-md-9">{{vm.childAccount.address1 ? vm.childAccount.address1 : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Address 2:</div>
+                                <div class="col-md-9">{{vm.childAccount.address2 ? vm.childAccount.address2 : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Zip/Post Code:</div>
+                                <div class="col-md-9">{{vm.childAccount.postCode ? vm.childAccount.postCode : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">City:</div>
+                                <div class="col-md-9">{{vm.childAccount.city ? vm.childAccount.city : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">State/Province:</div>
+                                <div class="col-md-9">{{vm.childAccount.state ? vm.childAccount.state : "N/A"}}</div>
+                            </div>
+                            <div class="col-md-12" style="padding: 0px;">
+                                <div class="col-md-3" style="font-weight: bold;">Country:</div>
+                                <div class="col-md-9">{{vm.childAccount.country ? vm.childAccount.country : "N/A"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion>
+            </div>
+        </div>
+    </div>
+</div>

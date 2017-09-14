@@ -1,0 +1,111 @@
+<!--
+/*******************************************************************************
+* Copyright (c) 2016, 2017 Eurotech and/or its affiliates                       
+*                                                                               
+* All rights reserved. This program and the accompanying materials              
+* are made available under the terms of the Eclipse Public License v1.0         
+* which accompanies this distribution, and is available at                      
+* http://www.eclipse.org/legal/epl-v10.html                                     
+*                                                                               
+* Contributors:                                                                 
+*     Eurotech - initial API and implementation                                 
+*                                                                               
+*******************************************************************************/
+-->
+<div class="modal-header">
+    <h3 class="modal-title">{{vm.childAccountID ? 'Edit ' + vm.childAccount.name + ' account': 'Add new Child Account'}}</h3>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal" ng-form="vm.editorForm">
+        <h4 class="modal-title">Account Information</h4>
+        <hr style="margin-top: 0px;">
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.nameInput.$valid && vm.editorForm.nameInput.$touched)}">
+            <label class="col-md-3 control-label" for="textInput-markup"><span style="color: #FF0000">*</span> Account Name:</label>
+            <div class="col-md-9">
+                <input type="text" name="nameInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.name" ng-required="true">
+                <span ng-if="!vm.editorForm.nameInput.$valid && vm.editorForm.nameInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>
+
+        <h4 class="modal-title">Organization Information</h4>
+        <hr style="margin-top: 0px;">
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.orgNameInput.$valid && vm.editorForm.orgNameInput.$touched)}">
+            <label class="col-md-3 control-label" for="textInput-markup"><span style="color: #FF0000">*</span> Organization Name:</label>
+            <div class="col-md-9">
+                <input type="text" name="orgNameInput" id="textInput-markup" class="form-control" ng-model="vm.submitModel.organizationName"
+                    ng-required="true">
+                <span ng-if="!vm.editorForm.orgNameInput.$valid && vm.editorForm.orgNameInput.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{'has-error' : (!vm.editorForm.email.$valid && vm.editorForm.email.$touched)}">
+            <label class="col-md-3 control-label" for="textInput-markup"><span style="color: #FF0000">*</span> Email:</label>
+            <div class="col-md-9">
+                <input type="text" name="email" id="textInput-markup" class="form-control" ng-model="vm.submitModel.email" ng-required="true">
+                <span ng-if="!vm.editorForm.email.$valid && vm.editorForm.email.$touched" class="help-block">
+                  <span class="fa fa-exclamation-triangle" ></span> This field is required</span>
+            </div>
+        </div>
+        <div style="padding-left: 30px;">
+            <h4 ng-click="vm.collapse = !vm.collapse" class="modal-title moreInfo"><i class="fa" ng-class="vm.collapse ? ' fa-chevron-down' : ' fa-chevron-right'"></i> More Information</h4>
+            <hr style="margin-top: 0px;">
+            <div ng-show="vm.collapse" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Reference Person:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.referencePerson">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Phone Number:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.phoneNumber">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Address 1:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.address1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Address 2:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.address2">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Zip/Post Code:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.postCode">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">City:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.city">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">State/Province:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.state">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="textInput-markup">Country:</label>
+                    <div class="col-md-9">
+                        <input type="text" id="textInput-markup" class="form-control" ng-model="vm.submitModel.country">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn {{vm.editRoleID ? 'btn-warning' : 'btn-success'}}" ng-click="vm.ok()" ng-disabled="vm.editorForm.$invalid">{{vm.editRoleID ? 'Update' : 'Create'}}</button>
+    <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+</div>

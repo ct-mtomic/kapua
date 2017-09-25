@@ -46,5 +46,5 @@ angular.module("app.connections", [])
     .service("connectionsService", ["$http", ConnectionsService])
 
     // controllers
-    .controller("ConnectionsListCtrl", ["$scope", "$timeout", "$modal", "$state", "connectionsService", ConnectionsListCtrl])
+    .controller("ConnectionsListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "connectionsService", ConnectionsListCtrl])
     .controller("ConnectionDetailCtrl", ["$stateParams", "connectionsService", ConnectionDetailCtrl]);

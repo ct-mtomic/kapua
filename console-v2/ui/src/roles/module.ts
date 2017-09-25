@@ -72,13 +72,13 @@ angular.module("app.roles", [])
     .service("rolesService", ["$http", RolesService])
 
     //controllers
-    .controller("RolesListCtrl", ["$scope", "$timeout", "$modal", "$state", "rolesService", RoleListCtrl])
+    .controller("RolesListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "rolesService", RoleListCtrl])
     .controller("AddRoleModalCtrl", ["$modalInstance", "editRoleID", "refreshRoleList", "rolesService", AddRoleModalCtrl])
     .controller("AddRolePermissionModalCtrl", ["$modalInstance", "roleID", "refreshPermissionList", "rolesService", AddRolePermissionModalCtrl])
     .controller("DeleteRolesModalCtrl", ["$modalInstance", "$http", "rolesService", "ids", "refreshRoleList", DeleteRolesModalCtrl])
     .controller("DeleteRolePermissionModalCtrl", ["$modalInstance", "$http", "rolesService", "roleID", "ids", "refreshPermissionList", DeleteRolePermissionModalCtrl])
     .controller("RoleDetailCtrl", ["$stateParams", "rolesService", RoleDetailCtrl])
-    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$modal", "$state", "rolesService", RoleDetailPermissionsCtrl])
+    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$uibModal", "$state", "rolesService", RoleDetailPermissionsCtrl])
     .controller("RoleDetailGrantedUsersCtrl", ["$scope", "$stateParams", "rolesService", RoleDetailGrantedUsersCtrl]);
 
 

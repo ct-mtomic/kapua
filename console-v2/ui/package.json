@@ -5,8 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "angular-local-storage": "^0.5.0",
-    "angular-patternfly": "^3.15.0",
+    "angular-patternfly": "^4.11.0",
     "angular-ui-router": "^0.3.2",
+    "angular-ui-router-breadcrumbs": "0.0.2",
+    "angularjs-datatables": "^0.5.9",
     "oclazyload": "^1.0.9",
     "satellizer": "^0.15.5"
   },
@@ -43,6 +45,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "typescript": "~2.2.1",
     "ts-loader": "^1.1.0",
     "typings": "^2.1.0",
     "url-loader": "^0.5.7",

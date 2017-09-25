@@ -13,8 +13,17 @@
 import "angular-patternfly";
 import "angular-ui-router";
 import "angular-local-storage";
-import "angular-patternfly/node_modules/patternfly/node_modules/datatables/media/js/jquery.dataTables.js";
 
+// DataTables
+import "angular-patternfly/node_modules/patternfly/node_modules/jquery/dist/jquery.js";
+import "angular-patternfly/node_modules/patternfly/node_modules/datatables.net/js/jquery.dataTables.js";
+import "angular-patternfly/node_modules/patternfly/node_modules/datatables.net-select/js/dataTables.select.js";
+import "angularjs-datatables/dist/angular-datatables.min.js";
+import "angularjs-datatables/dist/plugins/select/angular-datatables.select.min.js";
+
+import "angular-patternfly/node_modules/datatables.net-dt/css/jquery.dataTables.css";
+
+// Patternfly
 import "angular-patternfly/node_modules/patternfly/dist/css/patternfly.css";
 import "angular-patternfly/node_modules/patternfly/dist/css/patternfly-additions.css";
 import "angular-patternfly/dist/styles/angular-patternfly.css";
@@ -46,6 +55,7 @@ angular.module("app", [
     "ui.router.breadcrumbs",
     "patternfly",
     "patternfly.charts",
+    "patternfly.table",
     "LocalStorageModule",
     "app.commons",
     "app.login",

@@ -25,7 +25,6 @@ export default class DevicesListCtrl {
 
     $scope.allItems = [];
     $scope.items = [];
-    $scope.actionsText = "";
 
     $scope.$watch(
       () => { return $scope.refreshDeviceList; },
@@ -113,7 +112,7 @@ export default class DevicesListCtrl {
       $scope.toolbarConfig.filterConfig.resultsCount = $scope.items.length;
     };
 
-    var deleteDevices = function (action) {
+    var deleteItems = function (action) {
       let selected: string[] = [];
       var selectedItems = $filter('filter')($scope.allItems, { selected: true });
       if (selectedItems.length) {
@@ -138,7 +137,7 @@ export default class DevicesListCtrl {
       }
     };
 
-    var deleteDevice = function (action, item) {
+    var deleteItem = function (action, item) {
       let selected: string[] = [];
       selected.push(item.id);
       let modal = $modal.open({
@@ -158,7 +157,7 @@ export default class DevicesListCtrl {
         });
     };
 
-    var addDevice = function (action) {
+    var addItem = function (action) {
       let modal = $modal.open({
         template: require("../views/add-device-modal.html"),
         controller: "AddDeviceModalCtrl as vm",
@@ -175,7 +174,7 @@ export default class DevicesListCtrl {
         });
     }
 
-    var editDevice = function (action, item) {
+    var editItem = function (action, item) {
       let modal = $modal.open({
         template: require("../views/add-device-modal.html"),
         controller: "AddDeviceModalCtrl as vm",
@@ -249,12 +248,12 @@ export default class DevicesListCtrl {
         {
           name: 'Add device',
           title: 'Add new device',
-          actionFn: addDevice
+          actionFn: addItem
         },
         {
           name: 'Delete devices',
           title: 'Delete selected devices',
-          actionFn: deleteDevices,
+          actionFn: deleteItems,
           isDisabled: true
         }
       ],
@@ -292,12 +291,12 @@ export default class DevicesListCtrl {
       {
         name: 'Edit',
         title: 'Edit device',
-        actionFn: editDevice
+        actionFn: editItem
       },
       {
         name: 'Delete',
         title: 'Delete device',
-        actionFn: deleteDevice
+        actionFn: deleteItem
       }
     ];
 

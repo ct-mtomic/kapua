@@ -48,7 +48,7 @@ angular.module("app.access-groups", [])
     .service("accessGroupsService", ["$http", AccessGroupsService])
 
     //controllers
-    .controller("AccessGroupsListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "accessGroupsService", AccessGroupsListCtrl])
+    .controller("AccessGroupsListCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "accessGroupsService", AccessGroupsListCtrl])
     .controller("AddAccessGroupModalCtrl", ["$uibModalInstance", "editAccessGroupID", "refreshAccessGroupList", "accessGroupsService", AddAccessGroupModalCtrl])
     .controller("DeleteAccessGroupsModalCtrl", ["$uibModalInstance", "$http", "accessGroupsService", "ids", "refreshAccessGroupList", DeleteAccessGroupsModalCtrl])
     .controller("AccessGroupDetailsCtrl", ["$stateParams", "accessGroupsService", AccessGroupDetailsCtrl]);

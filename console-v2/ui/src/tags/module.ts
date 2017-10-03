@@ -50,6 +50,6 @@ angular.module("app.tags", [])
     //controllers
     .controller("TagsListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "tagsService", TagsListCtrl])
     .controller("TagDetailsCtrl", ["$stateParams", "tagsService", TagDetailsCtrl])
-    .controller("AddTagModalCtrl", ["$modalInstance", "editTagID", "refreshTagList", "tagsService", AddTagModalCtrl])
-    .controller("DeleteTagsModalCtrl", ["$modalInstance", "$http", "tagsService", "ids", "refreshTagList", DeleteTagsModalCtrl]);
+    .controller("AddTagModalCtrl", ["$uibModalInstance", "editTagID", "refreshTagList", "tagsService", AddTagModalCtrl])
+    .controller("DeleteTagsModalCtrl", ["$uibModalInstance", "$http", "tagsService", "ids", "refreshTagList", DeleteTagsModalCtrl]);
 

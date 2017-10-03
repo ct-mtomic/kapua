@@ -12,6 +12,13 @@
 *                                                                               
 *******************************************************************************/
 -->
+<div class="breadcrumbsContent">
+  <ol breadcrumbs class="breadcrumb">
+      <li ng-repeat="breadcrumb in breadcrumbs">
+          <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+          <li>
+  </ol>
+</div>
 <div class="col-md-12" style="padding: 0px;">
   <div class="displayDetailsContent">
     <div class="card-pf card-pf-accented card-pf-utilization">
@@ -32,12 +39,12 @@
   </div>
 </div>
 
-<div class="col-md-4" pf-aggregate-status-card head-title="Installed Packages" show-top-border="true" status="vm.packagesStatus"></div>
-<div class="col-md-4" pf-aggregate-status-card head-title="Events" show-top-border="true" status="vm.eventsStatus"></div>
-<div class="col-md-4" pf-aggregate-status-card head-title="Bundles" show-top-border="true" status="vm.bundlesStatus"></div>
-<div class="col-md-4" pf-aggregate-status-card head-title="Configurations" show-top-border="true" status="vm.configurationsStatus"></div>
-<div class="col-md-4" pf-aggregate-status-card head-title="Commands" show-top-border="true" status="vm.commandsStatus"></div>
-<div class="col-md-4" pf-aggregate-status-card head-title="Groups" show-top-border="true" status="vm.groupsStatus"></div>
+<pf-aggregate-status-card class="col-md-4" head-title="Installed Packages" show-top-border="true" status="vm.packagesStatus"></pf-aggregate-status-card>
+<pf-aggregate-status-card class="col-md-4" head-title="Events" show-top-border="true" status="vm.eventsStatus"></pf-aggregate-status-card>
+<pf-aggregate-status-card class="col-md-4" head-title="Bundles" show-top-border="true" status="vm.bundlesStatus"></pf-aggregate-status-card>
+<pf-aggregate-status-card class="col-md-4" head-title="Configurations" show-top-border="true" status="vm.configurationsStatus"></pf-aggregate-status-card>
+<pf-aggregate-status-card class="col-md-4" head-title="Commands" show-top-border="true" status="vm.commandsStatus"></pf-aggregate-status-card>
+<pf-aggregate-status-card class="col-md-4" head-title="Groups" show-top-border="true" status="vm.groupsStatus"></pf-aggregate-status-card>
 
 <div class="col-md-12" style="padding: 0px;">
   <div class="displayDetailsContent">

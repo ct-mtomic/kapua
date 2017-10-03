@@ -15,6 +15,13 @@
 <!--<div>
   Device packages list. id: {{ vm.deviceId }}
 </div>-->
+<div class="breadcrumbsContent">
+  <ol breadcrumbs class="breadcrumb">
+      <li ng-repeat="breadcrumb in breadcrumbs">
+          <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+          <li>
+  </ol>
+</div>
 <packages>
   <div class="displayDetailsContent">
 
@@ -28,7 +35,7 @@
           </div>
         </div>
         <div class="list-view-container">
-          <div pf-list-view class="example-list-view" id="exampleListView" config="vm.config" items="packages" action-buttons="actionButtons">
+          <pf-list-view class="example-list-view" id="exampleListView" config="vm.config" items="packages" action-buttons="actionButtons">
             <div class="list-view-pf-description">
               <div class="list-group-item-heading">
                 <span class="fa fa-folder-open" style="font-size: 16px; padding-right: 6px;"></span>{{item.name}}
@@ -56,7 +63,7 @@
                   </div>
                 </div>
             </list-expanded-content>
-            </div>
+            </pf-list-view>
           </div>
         </div>
       </div>

@@ -53,6 +53,10 @@ tr {
     }
 }
 
+.blank-slate-pf {
+    height: auto;
+}
+
 bundles, packages, commands, configurations, events {
     .header {
         padding-bottom: 16px;
@@ -119,4 +123,34 @@ configurations {
         border-left-color: #3f9c35;
         border-top-color: #3f9c35;
     }
+}
+
+.truncate-text-container {
+    position: relative;
+    max-width: 100%;
+    padding: 0 !important;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
+    vertical-align: text-bottom !important;
+}
+.truncate-text-ellipsis {
+    position: absolute;
+    white-space: nowrap;
+    overflow-y: visible;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    max-width: 100%;
+    min-width: 0;
+    top: 0;
+    left: 0;
+}
+.truncate-text-container:after,
+.truncate-text-ellipsis:after {
+    content: '-';
+    display: inline-block;
+    visibility: hidden;
+    width: 0;
 }

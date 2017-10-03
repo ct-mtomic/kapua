@@ -15,6 +15,7 @@ interface IDevicesService {
     addDevice(reqModel): ng.IHttpPromise<Device>;
     deleteDevice(deviceID: string): void;
     getDeviceById(deviceID: string): ng.IHttpPromise<Device>;
+    updateDevice(deviceID: string, updateModel: any): ng.IHttpPromise<Device>;
     getBundlesByDeviceId(deviceID: string): ng.IHttpPromise<DeviceBundles>;
     getEventsByDeviceId(deviceID: string): ng.IHttpPromise<ListResult<DeviceEvent>>;
     getPackagesByDeviceId(deviceID: string): ng.IHttpPromise<DevicePackages>;

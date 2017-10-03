@@ -51,6 +51,7 @@ interface Device {
   biosVersion: string;
   clientId: string;
   connection: ConnectionModel;
+  connectionStatus: string;
   connectionId: string;
   createdBy: string;
   createdOn: string;

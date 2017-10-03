@@ -88,15 +88,15 @@ angular.module("app.users", [])
 
     // controllers
     .controller("UsersListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "usersService", UsersListCtrl])
-    .controller("AddUserModalCtrl", ["$modalInstance", "editUserID", "refreshUserList", "usersService", AddUserModalCtrl])
-    .controller("DeleteUsersModalCtrl", ["$modalInstance", "$http", "usersService", "ids", "refreshUserList", DeleteUsersModalCtrl])
+    .controller("AddUserModalCtrl", ["$uibModalInstance", "editUserID", "refreshUserList", "usersService", AddUserModalCtrl])
+    .controller("DeleteUsersModalCtrl", ["$uibModalInstance", "$http", "usersService", "ids", "refreshUserList", DeleteUsersModalCtrl])
     .controller("UserDetailCtrl", ["$stateParams", "usersService", UserDetailCtrl])
     .controller("UserPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$uibModal", "$state", "usersService", UserPermissionsCtrl])
     .controller("UserRolesCtrl", ["$stateParams", "$scope", "$timeout", "$uibModal", "$state", "usersService", UserRolesCtrl]) 
     .controller("UserCredentialsCtrl", ["$stateParams", "$scope", "$timeout", "$uibModal", "$state", "usersService", UserCredentialsCtrl])
-    .controller("AddRoleModalCtrl", ["$modalInstance", "userID", "refreshRoleList", "usersService", AddRoleModalCtrl])
-    .controller("DeleteRolesModalCtrl", ["$modalInstance", "usersService", "userID", "ids",  "refreshRoleList", DeleteRolesModalCtrl])
-    .controller("GrantPermissionModalCtrl", ["$modalInstance", "userID", "refreshPermissionsList", "usersService", GrantPermissionModalCtrl])
-    .controller("RevokePermissionsModalCtrl", ["$modalInstance", "usersService", "userID", "ids",  "refreshPermissionsList", RevokePermissionsModalCtrl])
-    .controller("AddCredentialModalCtrl", ["$modalInstance", "editUserID", "editCredentialID", "refreshCredentialList",  "usersService", AddCredentialModalCtrl])
-    .controller("DeleteCredentialsModalCtrl", ["$modalInstance", "usersService", "userID", "ids",  "refreshCredentialList", DeleteCredentialsModalCtrl]);
+    .controller("AddRoleModalCtrl", ["$uibModalInstance", "userID", "refreshRoleList", "usersService", AddRoleModalCtrl])
+    .controller("DeleteRolesModalCtrl", ["$uibModalInstance", "usersService", "userID", "ids",  "refreshRoleList", DeleteRolesModalCtrl])
+    .controller("GrantPermissionModalCtrl", ["$uibModalInstance", "userID", "refreshPermissionsList", "usersService", GrantPermissionModalCtrl])
+    .controller("RevokePermissionsModalCtrl", ["$uibModalInstance", "usersService", "userID", "ids",  "refreshPermissionsList", RevokePermissionsModalCtrl])
+    .controller("AddCredentialModalCtrl", ["$uibModalInstance", "editUserID", "editCredentialID", "refreshCredentialList",  "usersService", AddCredentialModalCtrl])
+    .controller("DeleteCredentialsModalCtrl", ["$uibModalInstance", "usersService", "userID", "ids",  "refreshCredentialList", DeleteCredentialsModalCtrl]);

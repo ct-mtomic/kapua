@@ -11,10 +11,13 @@
 *                                                                               
 *******************************************************************************/
 export default class AddDeviceModalCtrl {
+    private device: Device;
     constructor(private $modalInstance: angular.ui.bootstrap.IModalServiceInstance,
         private $http: angular.IHttpService,
+        private editDeviceID: string,
         private refreshDeviceList: boolean,
         private devicesService: IDevicesService) {
+        this.editDeviceID ? this.getDeviceById(this.editDeviceID) : null;
         this.getGroups();
     }
 
@@ -41,8 +44,29 @@ export default class AddDeviceModalCtrl {
         });
     }
 
+    getDeviceById(deviceID): void {
+        this.devicesService.getDeviceById(deviceID).then((responseData: ng.IHttpPromiseCallbackArg<Device>) => {
+            this.device = responseData.data;
+            this.submitModel.clientId = responseData.data.clientId;
+            this.submitModel.displayName = responseData.data.displayName;
+        });
+    }
+
+    editDevice(deviceID: string) {
+        let updateModel = {
+            clientId: this.submitModel.cliendId,
+            displayName: this.submitModel.displayName,
+            groupId: this.submitModel.groupId,
+            osVersion: "Windows 10 2.3.3",
+            serialNumber: "My-Raspberry-Pi"
+        }
+        this.devicesService.updateDevice(deviceID, updateModel).then((responseData: ng.IHttpPromiseCallbackArg<Device>) => {
+            console.log("Updated device: ", responseData.data);
+        });
+    }
+
     ok() {
-        this.addDevice();
+        this.editDeviceID ? this.editDevice(this.editDeviceID) : this.addDevice();
         this.$modalInstance.close(!this.refreshDeviceList);
     }
     cancel() {

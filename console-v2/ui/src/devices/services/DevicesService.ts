@@ -31,6 +31,10 @@ export default class DevicesService implements IDevicesService {
         return this.$http.get("/api/_/devices/" + deviceID);
     }
 
+    updateDevice(deviceID: string, updateModel: any): ng.IHttpPromise<Device> {
+        return this.$http.put("/api/_/devices/" + deviceID, updateModel);
+    }
+
     getBundlesByDeviceId(deviceID: string): ng.IHttpPromise<DeviceBundles> {
         return this.$http.get("/api/_/devices/" + deviceID + "/bundles");
     };

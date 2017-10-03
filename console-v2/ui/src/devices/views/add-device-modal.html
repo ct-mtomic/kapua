@@ -13,7 +13,7 @@
 *******************************************************************************/
 -->
 <div class="modal-header">
-    <h3 class="modal-title">Add new device</h3>
+    <h3 class="modal-title">{{vm.editDeviceID ? 'Edit ' + vm.device.displayName + ' device': 'Add new device'}}</h3>
 </div>
 <div class="modal-body">
     <div class="form-horizontal" ng-form="vm.editorForm">
@@ -76,6 +76,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-success" ng-click="vm.ok()">Submit</button>
+    <button class="btn {{vm.editDeviceID ? 'btn-warning' : 'btn-success'}}" ng-click="vm.ok()">{{vm.editDeviceID ? 'Update' : 'Create'}}</button>
     <button class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>

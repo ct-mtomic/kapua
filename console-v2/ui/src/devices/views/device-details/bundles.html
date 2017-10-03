@@ -12,6 +12,13 @@
 *                                                                               
 *******************************************************************************/
 -->
+<div class="breadcrumbsContent">
+  <ol breadcrumbs class="breadcrumb">
+      <li ng-repeat="breadcrumb in breadcrumbs">
+          <a ng-class="{'activeBreadcrumb':$last}" ui-sref="{{breadcrumb.stateName}}">{{breadcrumb.text}}</a>
+          <li>
+  </ol>
+</div>
 <bundles>
   <div class="displayDetailsContent">
 
@@ -24,7 +31,7 @@
           </div>
         </div>
         <div class="list-view-container">
-          <div pf-list-view class="example-list-view" id="exampleListView" config="vm.config" items="bundles" action-buttons="actionButtons"
+          <pf-list-view class="example-list-view" id="exampleListView" config="vm.config" items="bundles" action-buttons="actionButtons"
             enable-button-for-item-fn="vm.enableButtonForItemFn">
             <div class="list-view-pf-description">
               <div class="list-group-item-heading">
@@ -42,7 +49,7 @@
                 {{item.version}}
               </div>
             </div>
-          </div>
+          </pf-list-view>
         </div>
       </div>
     </div>

@@ -30,10 +30,11 @@ import "./assets/styles/devices.scss";
 
 angular.module("app.devices", [])
     .config(["$stateProvider",
-        ($stateProvider: angular.ui.IStateProvider,
+        ($stateProvider: any,
             $authProvider) => {
             $stateProvider
                 .state("kapua.devices", {
+                    breadcrumb: "Devices",
                     url: "/devices",
                     views: {
                         "kapuaView@kapua": {
@@ -43,6 +44,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail", {
+                    breadcrumb: "Device Details",
                     url: "/:id",
                     views: {
                         "kapuaView@kapua": {
@@ -52,6 +54,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.packages", {
+                    breadcrumb: "Installed Packages",
                     url: "/packages",
                     views: {
                         "kapuaView@kapua": {
@@ -61,6 +64,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.events", {
+                    breadcrumb: "Events",
                     url: "/events",
                     views: {
                         "kapuaView@kapua": {
@@ -70,6 +74,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.bundles", {
+                    breadcrumb: "Bundles",
                     url: "/bundles",
                     views: {
                         "kapuaView@kapua": {
@@ -79,6 +84,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.configurations", {
+                    breadcrumb: "Configurations",
                     url: "/configurations",
                     views: {
                         "kapuaView@kapua": {
@@ -88,6 +94,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.commands", {
+                    breadcrumb: "Commands",
                     url: "/commands",
                     views: {
                         "kapuaView@kapua": {
@@ -97,6 +104,7 @@ angular.module("app.devices", [])
                     }
                 })
                 .state("kapua.devices.detail.groups", {
+                    breadcrumb: "Groups",
                     url: "/groups",
                     views: {
                         "kapuaView@kapua": {
@@ -112,10 +120,10 @@ angular.module("app.devices", [])
     .service("deviceMapperService", [DeviceMapperService])
 
     //controllers
-    .controller("DevicesListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "devicesService", DevicesListCtrl])
-    .controller("AddDeviceModalCtrl", ["$modalInstance", "$http", "refreshDeviceList", "devicesService", AddDeviceModalCtrl])
-    .controller("DeleteDevicesModalCtrl", ["$modalInstance", "$http", "devicesService", "ids", "refreshDeviceList", DeleteDevicesModalCtrl])
-    .controller("UploadApplySnapshotsModalCtrl", ["$modalInstance", "$scope", "$http", "devicesService", UploadApplySnapshotsModalCtrl])
+    .controller("DevicesListCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "devicesService", DevicesListCtrl])
+    .controller("AddDeviceModalCtrl", ["$uibModalInstance", "$http", "editDeviceID", "refreshDeviceList", "devicesService", AddDeviceModalCtrl])
+    .controller("DeleteDevicesModalCtrl", ["$uibModalInstance", "$http", "devicesService", "ids", "refreshDeviceList", DeleteDevicesModalCtrl])
+    .controller("UploadApplySnapshotsModalCtrl", ["$uibModalInstance", "$scope", "$http", "devicesService", UploadApplySnapshotsModalCtrl])
     .controller("DeviceDetailCtrl", ["$stateParams", "$http", "devicesService", "deviceMapperService", DeviceDetailCtrl])
     .controller("DeviceDetailPackagesCtrl", ["$stateParams", "$scope", "$http", "$templateCache", "devicesService", DeviceDetailPackagesCtrl])
     .controller("DeviceDetailEventsCtrl", ["$stateParams", "$http", "$scope", "devicesService", DeviceDetailEventsCtrl])

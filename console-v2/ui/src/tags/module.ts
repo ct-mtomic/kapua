@@ -48,7 +48,7 @@ angular.module("app.tags", [])
     .service("tagsService", ["$http", TagsService])
 
     //controllers
-    .controller("TagsListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "tagsService", TagsListCtrl])
+    .controller("TagsListCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "tagsService", TagsListCtrl])
     .controller("TagDetailsCtrl", ["$stateParams", "tagsService", TagDetailsCtrl])
     .controller("AddTagModalCtrl", ["$uibModalInstance", "editTagID", "refreshTagList", "tagsService", AddTagModalCtrl])
     .controller("DeleteTagsModalCtrl", ["$uibModalInstance", "$http", "tagsService", "ids", "refreshTagList", DeleteTagsModalCtrl]);

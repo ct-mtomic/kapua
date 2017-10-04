@@ -15,4 +15,8 @@ export default class TagsService implements ITagsService {
     constructor(private $http: ng.IHttpService) {
     }
 
+    getTags(): ng.IHttpPromise<ListResult<Tag>> {
+        return this.$http.get("/api/_/tags");
+    }
+
 }

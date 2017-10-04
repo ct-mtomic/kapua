@@ -11,5 +11,5 @@
 *                                                                               
 *******************************************************************************/
 interface ITagsService {
-
+    getTags(): ng.IHttpPromise<ListResult<Tag>>
 }

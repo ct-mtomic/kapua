@@ -20,24 +20,8 @@
     </ol>
 </div>
 
-<div class="row toolbar-pf table-view-pf-toolbar" id="toolbar1">
-    <div class="form-group">
-        <button class="btn btn-success" type="button" id="addRole1" ng-click="vm.addRole()"><span class="fa fa-plus"></span> Add Role</button>
-        <button class="btn btn-danger" type="button" id="deleteRows1" ng-click="vm.deleteRoles()" ng-disabled="!vm.getSelectedRoles().length"><span class="fa fa-trash"></span> Delete Roles</button>
-    </div>
-    <div class="col-sm-3 pull-right table-view-pf-select-results" style="padding-bottom: 15px;">
-        <strong>{{vm.getSelectedRoles().length}}</strong> of <strong>{{roles.length}}</strong> selected
-    </div>
-</div>
-
-<table class="table table-striped table-bordered table-hover" id="table1">
-    <thead>
-        <tr>
-            <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
-            <th>Name</th>
-            <th>Created By</th>
-            <th>Created On</th>
-        </tr>
-    </thead>
-</table>
-
+<pf-toolbar id="exampleToolbar" config="toolbarConfig"></pf-toolbar>
+<div ng-if="showComponent">
+    <pf-table-view config="tableConfig" empty-state-config="emptyStateConfig" dt-options="dtOptions" page-config="pageConfig"
+        columns="columns" items="items" action-buttons="tableActionButtons" menu-actions="tableMenuActions">
+    </pf-table-view>

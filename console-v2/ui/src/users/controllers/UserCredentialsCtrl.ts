@@ -13,232 +13,333 @@
 
 export default class UserCredentialsCtrl {
   private credentials: any[];
-  private refreshCredentialList: boolean = false;
+  private refreshList: boolean = false;
 
   constructor(private $stateParams: angular.ui.IStateParamsService,
     private $scope: any,
     private $timeout: any,
+    private $filter: any,
     private $modal: angular.ui.bootstrap.IModalService,
     private $state: any,
     private usersService: IUsersService) {
 
+    $scope.allItems = [];
+    $scope.items = [];
+
     $scope.$watch(
-      () => { return this.refreshCredentialList; },
+      () => { return $scope.refreshList; },
       () => {
-        $timeout(function () {
-          // usersService.getCredentials().then((result: ng.IHttpPromiseCallbackArg<ListResult<any>>) => {
-            $(() => {
-              // $scope.credentials = result.data.items.item;
-              $scope.credentials = 
-                [
-                  {id: "11", status: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ"},
-                  {id: "12", status: "DISABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ"},
-                  {id: "13", status: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ"},
-                  {id: "14", status: "DISABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ"},
-                  {id: "15", status: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ"},
-                ];
-              
-              // DataTable Config
-              $("#table1").dataTable().fnDestroy();
-              $("#table1").dataTable({
-                columns: [
-                  {
-                    data: null,
-                    className: "table-view-pf-select checkboxField",
-                    render: function (data, type, full, meta) {
-                      // Select row checkbox renderer
-                      let id = "select" + data.id;
-                      return `<label class="sr-only" for="` + id + `">Select row ` + meta.row +
-                        `</label><input type="checkbox" id="` + id + `" name="` + id + `">`;
-                    },
-                    sortable: false,
-                    width: "10px"
-                  },
-                  {
-                    data: "status",
-                    render: function (data, type, full, meta) {
-                      return data === 'ENABLED' ? `<i class="fa fa-key" style="color: rgb(29,158,116); padding-top: 4px;"></i>` :
-                        `<i class="fa fa-key" style="color: rgb(255,0,0); padding-top: 4px;"></i>`;
-                    },
-                    width: "5%",
-                  },
-                  {
-                    data: "credentialType",
-                    width: "25%",
-                  },
-                  {
-                    data: "expirationDate",
-                    width: "25%",
-                  },
-                  {
-                    data: "createdOn",
-                    width: "25%",
-                  },
-                  {
-                    data: "createdBy"
-                  }
-                ],
-                pageLength: 500,
-                data: $scope.credentials,
-                dom: "t",
-                language: {
-                  zeroRecords: "No records found"
-                },
-                order: [[1, "asc"]],
-                pfConfig: {
-                  emptyStateSelector: "#emptyState1",
-                  filterCols: [
-                    null,
-                    {
-                      default: true,
-                      optionSelector: "#filter1",
-                      placeholder: "Filter By Rendering Engine..."
-                    }, {
-                      optionSelector: "#filter2",
-                      placeholder: "Filter By Browser..."
-                    }, {
-                      optionSelector: "#filter3",
-                      placeholder: "Filter By Platform(s)..."
-                    }, {
-                      optionSelector: "#filter4",
-                      placeholder: "Filter By Engine Version..."
-                    }, {
-                      optionSelector: "#filter5",
-                      placeholder: "Filter By CSS Grade..."
-                    }
-                  ],
-                  toolbarSelector: "#toolbar1",
-                  selectAllSelector: `th:first-child input[type="checkbox"]`
-                },
-                select: {
-                  selector: `td:first-child input[type="checkbox"]`,
-                  style: "multi"
-                },
-              } as DataTables.Settings);
-
-              /**
-               * Utility to find items in Table View
-               */
-              let findTableViewUtil = function (config) {
-                // Upon clicking the find button, show the find dropdown content
-                $(".btn-find").click(function () {
-                  $(this).parent().find(".find-pf-dropdown-container").toggle();
-                });
-
-                // Upon clicking the find close button, hide the find dropdown content
-                $(".btn-find-close").click(function () {
-                  $(".find-pf-dropdown-container").hide();
-                });
-
-                // Upon clicking on table row
-                let table = $('#table1').DataTable();
-
-                $(".checkBoxField").on('click', function () {
-                  let data: any = table.row(this).data();
-                  if (data) {
-                    if (!$('#select' + data.id).is(':focus')) {
-                      $('#select' + data.id).focus();
-                      $('#select' + data.id).click();
-                    }
-                    let selected: number = 0;
-                    $scope.credentials.forEach((credential: any) => {
-                      let rawCheckbox: any = $('#select' + credential.id)[0];
-                      rawCheckbox.checked ? selected++ : null;
-                    });
-                    $scope.$apply();
-                    let allCheckbox: any = $('#selectAll')[0];
-                    selected === $scope.credentials.length ? allCheckbox.checked = true : allCheckbox.checked = false;
-                  } else {
-                    if (!$('#selectAll').is(':focus')) {
-                      $('#selectAll').focus();
-                      $('#selectAll').click();
-                    }
-                    $scope.credentials.forEach((credential: any) => {
-                      let rawCheckbox: any = $('#select' + credential.id)[0];
-                      let allCheckbox: any = $('#selectAll')[0];
-                      rawCheckbox.checked = allCheckbox.checked;
-                    });
-
-                    let selected: number = 0;
-                    $scope.credentials.forEach((credential: any) => {
-                      let rawCheckbox: any = $('#select' + credential.id)[0];
-                      rawCheckbox.checked ? selected++ : null;
-                    });
-                    $scope.$apply();
-                  }
-                });
-              };
-              // Initialize find util
-              new findTableViewUtil(null);
-              let dataTable = ($(".datatable") as any).dataTable();
-            });
-          // });
-        }, 500);
+        $scope.updateItems();
       });
-  }
 
-  getSelectedCredentials(): string[] {
-    let selected: string[] = [];
-    if (this.$scope.credentials)
-      this.$scope.credentials.forEach((credential: any) => {
-        let rawCheckbox: any = $('#select' + credential.id)[0];
-        if (rawCheckbox.checked == true)
-          selected.push(credential.id);
-      });
-    return selected;
-  }
-
-  deleteCredentials() {
-    let modal = this.$modal.open({
-      template: require("../views/user-details/delete-credentials-modal.html"),
-      controller: "DeleteCredentialsModalCtrl as vm",
-      resolve: {
-        userID: () => this.$stateParams["id"],
-        ids: () => this.getSelectedCredentials(),
-        refreshCredentialList: () => this.refreshCredentialList
+    $scope.columns = [
+      {
+        header: "Status",
+        itemField: "enableStatus",
+        templateFn: function (value) {
+          var style = value === "ENABLED" ? '29,158,116' : '255,0,0';
+          return '<i class="fa fa-key" style="color: rgb(' + style + '); padding-top: 4px;"</i>';
+        }
+      },
+      {
+        header: "Id",
+        itemField: "id"
+      },
+      {
+        header: "Credential Type",
+        itemField: "credentialType"
+      },
+      {
+        header: "Expiration Date",
+        itemField: "expirationDate"
+      },
+      {
+        header: "Created On",
+        itemField: "createdOn"
+      },
+      {
+        header: "Created By",
+        itemField: "createdBy"
       }
-    });
-    modal.result.then((result: any) => {
-      this.refreshCredentialList = result;
-    },
-      (result) => {
-        console.warn(result);
-      });
-  }
+    ];
 
-  addCredential() {
-    let modal = this.$modal.open({
-      template: require("../views/user-details/add-credential-modal.html"),
-      controller: "AddCredentialModalCtrl as vm",
-      resolve: {
-        editUserID: () => this.$stateParams["id"],
-        editCredentialID: () => null,
-        refreshCredentialList: () => this.refreshCredentialList
-      }
-    });
-    modal.result.then((result: any) => {
-      this.refreshCredentialList = result;
-    },
-      (result) => {
-        console.warn(result);
-      });
-  }
+    $scope.pageConfig = {
+      pageNumber: 1,
+      pageSize: 5,
+      pageSizeIncrements: [5, 10, 15]
+    }
 
-  editCredential() {
-    let modal = this.$modal.open({
-      template: require("../views/user-details/add-credential-modal.html"),
-      controller: "AddCredentialModalCtrl as vm",
-      resolve: {
-        editUserID: () => this.$stateParams["id"],
-        editCredentialID: () => this.getSelectedCredentials()[0],
-        refreshCredentialList: () => this.refreshCredentialList
+    var matchesFilter = function (item, filter) {
+      var match = true;
+
+      if (filter.id === 'enableStatus') {
+        match = item.enableStatus === filter.value;
+      } else if (filter.id === 'credentialType') {
+        match = item.credentialType.match(filter.value) !== null;
+      } else if (filter.id === 'expirationDate') {
+        match = item.expirationDate.match(filter.value);
+      } else if (filter.id === 'createdOn') {
+        match = item.createdOn.match(filter.value) !== null;
+      } else if (filter.id === 'createdBy') {
+        match = item.createdBy.match(filter.value);
       }
-    });
-    modal.result.then((result: any) => {
-      this.refreshCredentialList = result;
-    },
-      (result) => {
-        console.warn(result);
+      return match;
+    };
+
+    var matchesFilters = function (item, filters) {
+      var matches = true;
+
+      filters.forEach(function (filter) {
+        if (!matchesFilter(item, filter)) {
+          matches = false;
+          return false;
+        }
       });
+      return matches;
+    };
+
+    var applyFilters = function (filters) {
+      $scope.items = [];
+      if (filters && filters.length > 0) {
+        $scope.allItems.forEach(function (item) {
+          if (matchesFilters(item, filters)) {
+            $scope.items.push(item);
+          }
+        });
+      } else {
+        $scope.items = $scope.allItems;
+      }
+    };
+
+    var filterChange = function (filters) {
+      applyFilters(filters);
+      $scope.toolbarConfig.filterConfig.resultsCount = $scope.items.length;
+    };
+
+    var deleteItems = function (action) {
+      let selected: string[] = [];
+      var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+      if (selectedItems.length) {
+        selectedItems.forEach((item: any) => {
+          selected.push(item.id);
+        });
+        let modal = $modal.open({
+          template: require("../views/user-details/delete-credentials-modal.html"),
+          controller: "DeleteUserCredentialsModalCtrl as vm",
+          resolve: {
+            userID: () => $stateParams["id"],
+            ids: () => selected,
+            refreshCredentialList: () => $scope.refreshList
+          }
+        });
+        modal.result.then((result: any) => {
+          $scope.refreshList = result;
+          $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+        },
+          (result) => {
+            console.warn(result);
+          });
+      }
+    };
+
+    var deleteItem = function (action, item) {
+      let selected: string[] = [];
+      selected.push(item.id);
+      let modal = $modal.open({
+        template: require("../views/user-details/delete-credentials-modal.html"),
+        controller: "DeleteUserCredentialsModalCtrl as vm",
+        resolve: {
+          userID: () => $stateParams["id"],
+          ids: () => selected,
+          refreshCredentialList: () => $scope.refreshList
+        }
+      });
+      modal.result.then((result: any) => {
+        $scope.refreshList = result;
+        $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+      },
+        (result) => {
+          console.warn(result);
+        });
+    };
+
+    var addItem = function (action) {
+      let modal = $modal.open({
+        template: require("../views/user-details/add-credential-modal.html"),
+        controller: "AddUserCredentialModalCtrl as vm",
+        resolve: {
+          editUserID: () => $stateParams["id"],
+          editCredentialID: () => undefined,
+          refreshCredentialList: () => $scope.refreshList
+        }
+      });
+      modal.result.then((result: any) => {
+        $scope.refreshList = result;
+      },
+        (result) => {
+          console.warn(result);
+        });
+    }
+
+    var editItem = function (action, item) {
+      let modal = $modal.open({
+        template: require("../views/user-details/add-credential-modal.html"),
+        controller: "AddUserCredentialModalCtrl as vm",
+        resolve: {
+          editUserID: () => $stateParams["id"],
+          editCredentialID: () => item.id,
+          refreshCredentialList: () => $scope.refreshList
+        }
+      });
+      modal.result.then((result: any) => {
+        $scope.refreshList = result;
+      },
+        (result) => {
+          console.warn(result);
+        });
+    }
+
+
+    function handleCheckBoxChange(item?) {
+      var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+      if (selectedItems) {
+        $scope.toolbarConfig.filterConfig.selectedCount = selectedItems.length;
+      }
+      $scope.isItemsSelected();
+    }
+
+    $scope.filterConfig = {
+      fields: [
+        {
+          id: 'enableStatus',
+          title: 'Status',
+          placeholder: 'Filter by Status...',
+          filterType: 'select',
+          filterValues: ['ENABLED', 'DISABLED']
+        },
+        {
+          id: 'credentialType',
+          title: 'Credential Type',
+          placeholder: 'Filter by Credential Type...',
+          filterType: 'text'
+        },
+        {
+          id: 'expirationDate',
+          title: 'Expiration Date',
+          placeholder: 'Filter by Expiration Date...',
+          filterType: 'text'
+        },
+        {
+          id: 'createdOn',
+          title: 'Created On',
+          placeholder: 'Filter by Created On...',
+          filterType: 'text'
+        },
+        {
+          id: 'createdBy',
+          title: 'Created By',
+          placeholder: 'Filter by Created By...',
+          filterType: 'text'
+        }
+      ],
+      resultsCount: $scope.items.length,
+      totalCount: $scope.allItems.length,
+      appliedFilters: [],
+      onFilterChange: filterChange
+    };
+
+    $scope.toolbarActionsConfig = {
+      primaryActions: [
+        {
+          name: 'Add Credential',
+          title: 'Add new Credential',
+          actionFn: addItem
+        },
+        {
+          name: 'Delete Credential',
+          title: 'Delete selected Credential',
+          actionFn: deleteItems,
+          isDisabled: true
+        }
+      ],
+      actionsInclude: true
+    };
+
+    $scope.toolbarConfig = {
+      filterConfig: $scope.filterConfig,
+      sortConfig: $scope.sortConfig,
+      actionsConfig: $scope.toolbarActionsConfig,
+      isTableView: true
+    };
+
+    $scope.tableConfig = {
+      onCheckBoxChange: handleCheckBoxChange,
+      selectionMatchProp: "id",
+      itemsAvailable: true,
+      showCheckboxes: true
+    };
+
+    $scope.emptyStateConfig = {
+      icon: 'pficon-warning-triangle-o',
+      title: 'No Items Available'
+    };
+
+    $scope.tableActionButtons = [
+      {
+        name: 'Edit',
+        title: 'Edit Credential',
+        actionFn: editItem
+      },
+    ];
+
+    $scope.tableMenuActions = [
+      {
+        name: 'Delete',
+        title: 'Delete Credential',
+        actionFn: deleteItem
+      }
+    ];
+
+    $scope.updateItemsAvailable = function () {
+      if (!$scope.tableConfig.itemsAvailable) {
+        $scope.toolbarConfig.filterConfig.resultsCount = 0;
+        $scope.toolbarConfig.filterConfig.totalCount = 0;
+        $scope.toolbarConfig.filterConfig.selectedCount = 0;
+      } else {
+        $scope.toolbarConfig.filterConfig.resultsCount = $scope.items.length;
+        $scope.toolbarConfig.filterConfig.totalCount = $scope.allItems.length;
+        handleCheckBoxChange();
+      }
+    };
+
+    $scope.isItemsSelected = function () {
+      $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+      var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+      if (selectedItems.length) {
+        $scope.toolbarActionsConfig.primaryActions[1].isDisabled = false;
+      }
+    }
+
+    $scope.showComponent = true;
+
+    $scope.updateItems = function () {
+      $scope.showComponent = false;
+      $timeout(() => {
+        // usersService.getCredentials().then((result: ng.IHttpPromiseCallbackArg<ListResult<Credential>>) => {
+        //   $scope.allItems = result.data.items.item;
+        $scope.allItems = [
+          { id: "id1", enableStatus: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ" },
+          { id: "id2", enableStatus: "DISABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ" },
+          { id: "id3", enableStatus: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ" },
+          { id: "id4", enableStatus: "DISABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ" },
+          { id: "id5", enableStatus: "ENABLED", credentialType: "Type", expirationDate: "2017-10-08", createdOn: "2017-08-08", createdBy: "AQ" },
+        ];
+        $scope.items = $scope.allItems;
+        $scope.tableConfig.itemsAvailable = $scope.allItems.length ? true : false;
+        $scope.updateItemsAvailable();
+        // });
+        $scope.showComponent = true
+      }, 500);
+    };
   }
 }

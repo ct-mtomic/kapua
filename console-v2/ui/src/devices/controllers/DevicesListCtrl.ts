@@ -14,7 +14,7 @@ import { DeviceConnectionStatus } from "../models/DeviceConnectionStatus";
 
 export default class DevicesListCtrl {
   private devices: Device[];
-  private refreshDeviceList: boolean = false;
+  private refreshList: boolean = false;
 
   constructor(private $scope: any,
     private $timeout: any,
@@ -27,7 +27,7 @@ export default class DevicesListCtrl {
     $scope.items = [];
 
     $scope.$watch(
-      () => { return $scope.refreshDeviceList; },
+      () => { return $scope.refreshList; },
       () => {
         $scope.updateItems();
       });
@@ -124,11 +124,11 @@ export default class DevicesListCtrl {
           controller: "DeleteDevicesModalCtrl as vm",
           resolve: {
             ids: () => selected,
-            refreshDeviceList: () => $scope.refreshDeviceList
+            refreshDeviceList: () => $scope.refreshList
           }
         });
         modal.result.then((result: any) => {
-          $scope.refreshDeviceList = result;
+          $scope.refreshList = result;
           $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
         },
           (result) => {
@@ -145,11 +145,11 @@ export default class DevicesListCtrl {
         controller: "DeleteDevicesModalCtrl as vm",
         resolve: {
           ids: () => selected,
-          refreshDeviceList: () => $scope.refreshDeviceList
+          refreshDeviceList: () => $scope.refreshList
         }
       });
       modal.result.then((result: any) => {
-        $scope.refreshDeviceList = result;
+        $scope.refreshList = result;
         $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
       },
         (result) => {
@@ -163,11 +163,11 @@ export default class DevicesListCtrl {
         controller: "AddDeviceModalCtrl as vm",
         resolve: {
           editDeviceID: () => undefined,
-          refreshDeviceList: () => $scope.refreshDeviceList
+          refreshDeviceList: () => $scope.refreshList
         }
       });
       modal.result.then((result: any) => {
-        $scope.refreshDeviceList = result;
+        $scope.refreshList = result;
       },
         (result) => {
           console.warn(result);
@@ -180,11 +180,11 @@ export default class DevicesListCtrl {
         controller: "AddDeviceModalCtrl as vm",
         resolve: {
           editDeviceID: () => item.id,
-          refreshDeviceList: () => $scope.refreshDeviceList
+          refreshDeviceList: () => $scope.refreshList
         }
       });
       modal.result.then((result: any) => {
-        $scope.refreshDeviceList = result;
+        $scope.refreshList = result;
       },
         (result) => {
           console.warn(result);

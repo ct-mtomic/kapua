@@ -72,13 +72,15 @@ angular.module("app.roles", [])
     .service("rolesService", ["$http", RolesService])
 
     //controllers
-    .controller("RolesListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "rolesService", RoleListCtrl])
-    .controller("AddRoleModalCtrl", ["$uibModalInstance", "editRoleID", "refreshRoleList", "rolesService", AddRoleModalCtrl])
-    .controller("AddRolePermissionModalCtrl", ["$uibModalInstance", "roleID", "refreshPermissionList", "rolesService", AddRolePermissionModalCtrl])
-    .controller("DeleteRolesModalCtrl", ["$uibModalInstance", "$http", "rolesService", "ids", "refreshRoleList", DeleteRolesModalCtrl])
-    .controller("DeleteRolePermissionModalCtrl", ["$uibModalInstance", "$http", "rolesService", "roleID", "ids", "refreshPermissionList", DeleteRolePermissionModalCtrl])
+    .controller("RolesListCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "rolesService", RoleListCtrl])
     .controller("RoleDetailCtrl", ["$stateParams", "rolesService", RoleDetailCtrl])
-    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$uibModal", "$state", "rolesService", RoleDetailPermissionsCtrl])
-    .controller("RoleDetailGrantedUsersCtrl", ["$scope", "$stateParams", "rolesService", RoleDetailGrantedUsersCtrl]);
+    .controller("AddRoleModalCtrl", ["$uibModalInstance", "editRoleID", "refreshRoleList", "rolesService", AddRoleModalCtrl])
+    .controller("DeleteRolesModalCtrl", ["$uibModalInstance", "$http", "rolesService", "ids", "refreshRoleList", DeleteRolesModalCtrl])
+    .controller("RoleDetailPermissionsCtrl", ["$stateParams", "$scope", "$timeout", "$filter", "$uibModal", "$state", "rolesService", RoleDetailPermissionsCtrl])
+    .controller("RoleDetailGrantedUsersCtrl", ["$scope", "$stateParams", "rolesService", RoleDetailGrantedUsersCtrl])
+    .controller("AddRolePermissionModalCtrl", ["$uibModalInstance", "roleID", "refreshPermissionList", "rolesService", AddRolePermissionModalCtrl])
+    .controller("DeleteRolePermissionModalCtrl", ["$uibModalInstance", "$http", "rolesService", "roleID", "ids", "refreshPermissionList", DeleteRolePermissionModalCtrl]);
+
+
 
 

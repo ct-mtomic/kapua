@@ -107,7 +107,7 @@ export default class UserPermissionsCtrl {
           controller: "RevokeUserPermissionsModalCtrl as vm",
           resolve: {
             userID: () => $stateParams["id"],
-            ids: () => this.selected,
+            ids: () => selected,
             refreshPermissionsList: () => $scope.refreshList
           }
         });
@@ -129,7 +129,7 @@ export default class UserPermissionsCtrl {
         controller: "RevokeUserPermissionsModalCtrl as vm",
         resolve: {
           userID: () => $stateParams["id"],
-          ids: () => this.selected,
+          ids: () => selected,
           refreshPermissionsList: () => $scope.refreshList
         }
       });

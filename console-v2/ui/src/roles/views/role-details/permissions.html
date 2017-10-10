@@ -19,25 +19,10 @@
             <li>
     </ol>
 </div>
-
-<div class="row toolbar-pf table-view-pf-toolbar" id="toolbar1">
-    <div class="form-group">
-        <button class="btn btn-success" type="button" id="addPermission1" ng-click="vm.addPermission()"><span class="fa fa-plus"></span> Add Permission</button>
-        <button class="btn btn-danger" type="button" id="deleteRows1" ng-click="vm.deletePermissions()" ng-disabled="!vm.getSelectedPermissions().length"><span class="fa fa-trash"></span> Delete Permissions</button>
-    </div>
-    <div class="col-sm-3 pull-right table-view-pf-select-results" style="padding-bottom: 15px;">
-        <strong>{{vm.getSelectedPermissions().length}}</strong> of <strong>{{permissions.length}}</strong> selected
-    </div>
+<pf-toolbar id="exampleToolbar" config="toolbarConfig"></pf-toolbar>
+<div ng-if="showComponent">
+  <pf-table-view config="tableConfig" empty-state-config="emptyStateConfig" dt-options="dtOptions" page-config="pageConfig"
+    columns="columns" items="items" action-buttons="tableActionButtons" menu-actions="tableMenuActions">
+  </pf-table-view>
 </div>
-
-<table class="table table-striped table-bordered table-hover" id="table1">
-    <thead>
-        <tr>
-            <th><label class="sr-only" for="selectAll">Select all rows</label><input type="checkbox" id="selectAll" name="selectAll"></th>
-            <th>ID</th>
-            <th>Created By</th>
-            <th>Created On</th>
-        </tr>
-    </thead>
-</table>
 

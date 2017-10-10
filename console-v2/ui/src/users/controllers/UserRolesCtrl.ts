@@ -107,7 +107,7 @@ export default class UserRolesCtrl {
           controller: "DeleteUserRolesModalCtrl as vm",
           resolve: {
             userID: () => $stateParams["id"],
-            ids: () => this.selected,
+            ids: () => selected,
             refreshRoleList: () => $scope.refreshList
           }
         });
@@ -129,7 +129,7 @@ export default class UserRolesCtrl {
         controller: "DeleteUserRolesModalCtrl as vm",
         resolve: {
           userID: () => $stateParams["id"],
-          ids: () => this.selected,
+          ids: () => selected,
           refreshRoleList: () => $scope.refreshList
         }
       });

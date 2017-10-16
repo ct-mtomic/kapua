@@ -72,9 +72,9 @@ angular.module("app.child-accounts", [])
     .service("childAccountsService", ["$http", ChildAccountsService])
 
     //controllers
-    .controller("ChildAccountsListCtrl", ["$scope", "$timeout", "$uibModal", "$state", "childAccountsService", ChildAccountsListCtrl])
+    .controller("ChildAccountsListCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "childAccountsService", ChildAccountsListCtrl])
     .controller("AddChildAccountModalCtrl", ["$uibModalInstance", "editChildAccountID", "refreshChildAccountList", "childAccountsService", AddChildAccountModalCtrl])
-    .controller("ChildAccountsUsersCtrl", ["$scope", "$timeout", "$uibModal", "$state", "$stateParams", "childAccountsService", ChildAccountsUsersCtrl])
+    .controller("ChildAccountsUsersCtrl", ["$scope", "$timeout", "$filter", "$uibModal", "$state", "$stateParams", "childAccountsService", ChildAccountsUsersCtrl])
     .controller("ChildAccountsSettingsCtrl", ["$scope", "$uibModal", "$stateParams", "childAccountsService", ChildAccountsSettingsCtrl])
     .controller("DeleteChildAccountsModalCtrl", ["$uibModalInstance", "$http", "childAccountsService", "ids", "refreshChildAccountList", DeleteChildAccountsModalCtrl])
     .controller("AddAccountUserModalCtrl", ["$uibModalInstance", "childAccountID", "editUserID", "refreshUserList", "childAccountsService", AddUserModalCtrl])

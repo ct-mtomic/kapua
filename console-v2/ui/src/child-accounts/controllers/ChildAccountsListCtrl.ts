@@ -12,240 +12,328 @@
 *******************************************************************************/
 export default class ChildAccountsListCtrl {
     private childAccounts: ChildAccount[];
-    private refreshChildAccountList: boolean = false;
+    private refreshList: boolean = false;
 
     constructor(private $scope: any,
         private $timeout: any,
+        private $filter: any,
         private $modal: angular.ui.bootstrap.IModalService,
         private $state: any,
         private childAccountsService: IChildAccountsService) {
 
+        $scope.allItems = [];
+        $scope.items = [];
+
         $scope.$watch(
-            () => { return this.refreshChildAccountList; },
+            () => { return $scope.refreshList; },
             () => {
-                $timeout(function () {
-                    childAccountsService.getChildAccounts().then((result: ng.IHttpPromiseCallbackArg<ListResult<ChildAccount>>) => {
-                        $(() => {
-                            // $scope.childAccounts = result.data.items.item;
-                            $scope.childAccounts = [
-                                {
-                                    id: "id1",
-                                    name: "Acc Name 1",
-                                    modifiedOn: "2017/09/11",
-                                    modifiedBy: "admin",
-                                    createdOn: "2017/09/11",
-                                    createdBy: "admin",
-                                    organizationName: "Org Name 1",
-                                    email: "email@mail.com",
-                                    referencePerson: "Person 1",
-                                    phoneNumber: "+ 381 64 454 1032",
-                                    address1: "Uzice 031",
-                                    address2: "Cacak 032",
-                                    postCode: "31000",
-                                    city: "Uzice",
-                                    state: "Srbija",
-                                    country: "Srbija"
-                                }
-                            ]
-                            // DataTable Config
-                            $("#table1").dataTable().fnDestroy();
-                            $("#table1").dataTable({
-                                columns: [
-                                    {
-                                        data: null,
-                                        className: "table-view-pf-select checkboxField",
-                                        render: function (data, type, full, meta) {
-                                            // Select row checkbox renderer
-                                            let id = "select" + data.id;
-                                            return `<label class="sr-only" for="` + id + `">Select row ` + meta.row +
-                                                `</label><input type="checkbox" id="` + id + `" name="` + id + `">`;
-                                        },
-                                        sortable: false,
-                                        width: "10px"
-                                    },
-                                    {
-                                        data: "name",
-                                        width: "25%",
-                                    },
-                                    {
-                                        data: "organizationName",
-                                        width: "25%",
-                                    },
-                                    {
-                                        data: "email",
-                                        width: "25%",
-                                    },
-                                    {
-                                        data: "modifiedOn"
-                                    }
-                                ],
-                                pageLength: 500,
-                                data: $scope.childAccounts,
-                                dom: "t",
-                                language: {
-                                    zeroRecords: "No records found"
-                                },
-                                order: [[1, "asc"]],
-                                pfConfig: {
-                                    emptyStateSelector: "#emptyState1",
-                                    filterCols: [
-                                        null,
-                                        {
-                                            default: true,
-                                            optionSelector: "#filter1",
-                                            placeholder: "Filter By Rendering Engine..."
-                                        }, {
-                                            optionSelector: "#filter2",
-                                            placeholder: "Filter By Browser..."
-                                        }, {
-                                            optionSelector: "#filter3",
-                                            placeholder: "Filter By Platform(s)..."
-                                        }, {
-                                            optionSelector: "#filter4",
-                                            placeholder: "Filter By Engine Version..."
-                                        }, {
-                                            optionSelector: "#filter5",
-                                            placeholder: "Filter By CSS Grade..."
-                                        }
-                                    ],
-                                    toolbarSelector: "#toolbar1",
-                                    selectAllSelector: `th:first-child input[type="checkbox"]`
-                                },
-                                select: {
-                                    selector: `td:first-child input[type="checkbox"]`,
-                                    style: "multi"
-                                },
-                            } as DataTables.Settings);
+                $scope.updateItems();
+            });
 
-                            /**
-                             * Utility to find items in Table View
-                             */
-                            let findTableViewUtil = function (config) {
-                                // Upon clicking the find button, show the find dropdown content
-                                $(".btn-find").click(function () {
-                                    $(this).parent().find(".find-pf-dropdown-container").toggle();
-                                });
+        $scope.columns = [
+            {
+                header: "Name",
+                itemField: "name"
+            },
+            {
+                header: "Organization Name",
+                itemField: "organizationName"
+            },
+            {
+                header: "Email",
+                itemField: "email"
+            },
+            {
+                header: "Modified On",
+                itemField: "modifiedOn"
+            }
+        ];
 
-                                // Upon clicking the find close button, hide the find dropdown content
-                                $(".btn-find-close").click(function () {
-                                    $(".find-pf-dropdown-container").hide();
-                                });
+        $scope.pageConfig = {
+            pageNumber: 1,
+            pageSize: 5,
+            pageSizeIncrements: [5, 10, 15]
+        }
 
-                                // Upon clicking on table row
-                                let table = $('#table1').DataTable();
+        var matchesFilter = function (item, filter) {
+            var match = true;
 
-                                $(".checkBoxField").on('click', function () {
-                                    let data: any = table.row(this).data();
-                                    if (data) {
-                                        if (!$('#select' + data.id).is(':focus')) {
-                                            $('#select' + data.id).focus();
-                                            $('#select' + data.id).click();
-                                        }
-                                        let selected: number = 0;
-                                        $scope.childAccounts.forEach((childAccounts: ChildAccount) => {
-                                            let rawCheckbox: any = $('#select' + childAccounts.id)[0];
-                                            rawCheckbox.checked ? selected++ : null;
-                                        });
-                                        $scope.$apply();
-                                        let allCheckbox: any = $('#selectAll')[0];
-                                        selected === $scope.childAccounts.length ? allCheckbox.checked = true : allCheckbox.checked = false;
-                                    } else {
-                                        if (!$('#selectAll').is(':focus')) {
-                                            $('#selectAll').focus();
-                                            $('#selectAll').click();
-                                        }
-                                        $scope.childAccounts.forEach((childAccounts: ChildAccount) => {
-                                            let rawCheckbox: any = $('#select' + childAccounts.id)[0];
-                                            let allCheckbox: any = $('#selectAll')[0];
-                                            rawCheckbox.checked = allCheckbox.checked;
-                                        });
+            if (filter.id === 'name') {
+                match = item.name.match(filter.value) !== null;
+            } else if (filter.id === 'organizationName') {
+                match = item.organizationName.match(filter.value);
+            } else if (filter.id === 'email') {
+                match = item.email.match(filter.value);
+            } else if (filter.id === 'modifiedOn') {
+                match = item.modifiedOn.match(filter.value);
+            }
+            return match;
+        };
 
-                                        let selected: number = 0;
-                                        $scope.childAccounts.forEach((childAccounts: ChildAccount) => {
-                                            let rawCheckbox: any = $('#select' + childAccounts.id)[0];
-                                            rawCheckbox.checked ? selected++ : null;
-                                        });
-                                        $scope.$apply();
-                                    }
-                                });
+        var matchesFilters = function (item, filters) {
+            var matches = true;
 
-                                $('tr').on('click', function () {
-                                    let data: any = table.row(this).data();
-                                    if (data) {
-                                        if (!$("#select" + data.id).is(':focus')) {
-                                            $state.go("kapua.child-accounts.detail", { id: data.id });
-                                        }
-                                    }
-                                });
-                            };
-                            // Initialize find util
-                            new findTableViewUtil(null);
-                            let dataTable = ($(".datatable") as any).dataTable();
-                        });
+            filters.forEach(function (filter) {
+                if (!matchesFilter(item, filter)) {
+                    matches = false;
+                    return false;
+                }
+            });
+            return matches;
+        };
+
+        var applyFilters = function (filters) {
+            $scope.items = [];
+            if (filters && filters.length > 0) {
+                $scope.allItems.forEach(function (item) {
+                    if (matchesFilters(item, filters)) {
+                        $scope.items.push(item);
+                    }
+                });
+            } else {
+                $scope.items = $scope.allItems;
+            }
+        };
+
+        var filterChange = function (filters) {
+            applyFilters(filters);
+            $scope.toolbarConfig.filterConfig.resultsCount = $scope.items.length;
+        };
+
+        var deleteItems = function (action) {
+            let selected: string[] = [];
+            var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+            if (selectedItems.length) {
+                selectedItems.forEach((item: ChildAccount) => {
+                    selected.push(item.id);
+                });
+                let modal = $modal.open({
+                    template: require("../views/delete-child-accounts-modal.html"),
+                    controller: "DeleteChildAccountsModalCtrl as vm",
+                    resolve: {
+                        ids: () => selected,
+                        refreshChildAccountList: () => $scope.refreshList
+                    }
+                });
+                modal.result.then((result: any) => {
+                    $scope.refreshList = result;
+                    $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+                },
+                    (result) => {
+                        console.warn(result);
                     });
-                }, 500);
-            });
-    }
-
-    getSelectedChildAccounts(): string[] {
-        let selected: string[] = [];
-        if (this.$scope.childAccounts)
-            this.$scope.childAccounts.forEach((childAccounts: ChildAccount) => {
-                let rawCheckbox: any = $('#select' + childAccounts.id)[0];
-                if (rawCheckbox.checked == true)
-                    selected.push(childAccounts.id);
-            });
-        return selected;
-    }
-
-    deleteChildAccounts() {
-        let modal = this.$modal.open({
-            template: require("../views/delete-child-accounts-modal.html"),
-            controller: "DeleteChildAccountsModalCtrl as vm",
-            resolve: {
-                ids: () => this.getSelectedChildAccounts(),
-                refreshChildAccountList: () => this.refreshChildAccountList
             }
-        });
-        modal.result.then((result: any) => {
-            this.refreshChildAccountList = result;
-        },
-            (result) => {
-                console.warn(result);
-            });
-    }
+        };
 
-    addChildAccount() {
-        let modal = this.$modal.open({
-            template: require("../views/add-child-account-modal.html"),
-            controller: "AddChildAccountModalCtrl as vm",
-            resolve: {
-                editChildAccountID: () => null,
-                refreshChildAccountList: () => this.refreshChildAccountList
-            }
-        });
-        modal.result.then((result: any) => {
-            this.refreshChildAccountList = result;
-        },
-            (result) => {
-                console.warn(result);
+        var deleteItem = function (action, item) {
+            let selected: string[] = [];
+            selected.push(item.id);
+            let modal = $modal.open({
+                template: require("../views/delete-child-accounts-modal.html"),
+                controller: "DeleteChildAccountsModalCtrl as vm",
+                resolve: {
+                    ids: () => selected,
+                    refreshChildAccountList: () => $scope.refreshList
+                }
             });
-    }
+            modal.result.then((result: any) => {
+                $scope.refreshList = result;
+                $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+            },
+                (result) => {
+                    console.warn(result);
+                });
+        };
 
-    editChildAccount(ChildAccountID) {
-        let modal = this.$modal.open({
-            template: require("../views/add-child-account-modal.html"),
-            controller: "AddChildAccountModalCtrl as vm",
-            resolve: {
-                editChildAccountID: () => this.getSelectedChildAccounts()[0],
-                refreshChildAccountList: () => this.refreshChildAccountList
-            }
-        });
-        modal.result.then((result: any) => {
-            this.refreshChildAccountList = result;
-        },
-            (result) => {
-                console.warn(result);
+        var addItem = function (action) {
+            let modal = $modal.open({
+                template: require("../views/add-child-account-modal.html"),
+                controller: "AddChildAccountModalCtrl as vm",
+                resolve: {
+                    editChildAccountID: () => undefined,
+                    refreshChildAccountList: () => $scope.refreshList
+                }
             });
+            modal.result.then((result: any) => {
+                $scope.refreshList = result;
+            },
+                (result) => {
+                    console.warn(result);
+                });
+        }
+
+        var editItem = function (action, item) {
+            let modal = $modal.open({
+                template: require("../views/add-child-account-modal.html"),
+                controller: "AddChildAccountModalCtrl as vm",
+                resolve: {
+                    editChildAccountID: () => item.id,
+                    refreshChildAccountList: () => $scope.refreshList
+                }
+            });
+            modal.result.then((result: any) => {
+                $scope.refreshList = result;
+            },
+                (result) => {
+                    console.warn(result);
+                });
+        }
+
+        function handleCheckBoxChange(item?) {
+            var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+            if (selectedItems) {
+                $scope.toolbarConfig.filterConfig.selectedCount = selectedItems.length;
+            }
+            $scope.isItemsSelected();
+        }
+
+        var viewDetails = function (action, item) {
+            $state.go("kapua.child-accounts.detail", { id: item.id });
+        }
+
+        $scope.filterConfig = {
+            fields: [
+                {
+                    id: 'name',
+                    title: 'Name',
+                    placeholder: 'Filter by Name...',
+                    filterType: 'text'
+                },
+                {
+                    id: 'organizationName',
+                    title: 'Organization Name',
+                    placeholder: 'Filter by Organization Name...',
+                    filterType: 'text'
+                },
+                {
+                    id: 'email',
+                    title: 'Email',
+                    placeholder: 'Filter by Email...',
+                    filterType: 'text'
+                },
+                {
+                    id: 'modifiedOn',
+                    title: 'Modified On',
+                    placeholder: 'Filter by Modified On...',
+                    filterType: 'text'
+                }
+            ],
+            resultsCount: $scope.items.length,
+            totalCount: $scope.allItems.length,
+            appliedFilters: [],
+            onFilterChange: filterChange
+        };
+
+        $scope.toolbarActionsConfig = {
+            primaryActions: [
+                {
+                    name: 'Add Account',
+                    title: 'Add new account',
+                    actionFn: addItem
+                },
+                {
+                    name: 'Delete Accounts',
+                    title: 'Delete selected accounts',
+                    actionFn: deleteItems,
+                    isDisabled: true
+                }
+            ],
+            actionsInclude: true
+        };
+
+        $scope.toolbarConfig = {
+            filterConfig: $scope.filterConfig,
+            sortConfig: $scope.sortConfig,
+            actionsConfig: $scope.toolbarActionsConfig,
+            isTableView: true
+        };
+
+        $scope.tableConfig = {
+            onCheckBoxChange: handleCheckBoxChange,
+            selectionMatchProp: "name",
+            itemsAvailable: true,
+            showCheckboxes: true
+        };
+
+        $scope.emptyStateConfig = {
+            icon: 'pficon-warning-triangle-o',
+            title: 'No Items Available'
+        };
+
+        $scope.tableActionButtons = [
+            {
+                name: 'View',
+                title: 'View account details',
+                actionFn: viewDetails
+            }
+        ];
+
+        $scope.tableMenuActions = [
+            {
+                name: 'Edit',
+                title: 'Edit account',
+                actionFn: editItem
+            },
+            {
+                name: 'Delete',
+                title: 'Delete account',
+                actionFn: deleteItem
+            }
+        ];
+
+        $scope.updateItemsAvailable = function () {
+            if (!$scope.tableConfig.itemsAvailable) {
+                $scope.toolbarConfig.filterConfig.resultsCount = 0;
+                $scope.toolbarConfig.filterConfig.totalCount = 0;
+                $scope.toolbarConfig.filterConfig.selectedCount = 0;
+            } else {
+                $scope.toolbarConfig.filterConfig.resultsCount = $scope.items.length;
+                $scope.toolbarConfig.filterConfig.totalCount = $scope.allItems.length;
+                handleCheckBoxChange();
+            }
+        };
+
+        $scope.isItemsSelected = function () {
+            $scope.toolbarActionsConfig.primaryActions[1].isDisabled = true;
+            var selectedItems = $filter('filter')($scope.allItems, { selected: true });
+            if (selectedItems.length) {
+                $scope.toolbarActionsConfig.primaryActions[1].isDisabled = false;
+            }
+        }
+
+        $scope.showComponent = true;
+
+        $scope.updateItems = function () {
+            $scope.showComponent = false;
+            $timeout(() => {
+                childAccountsService.getChildAccounts().then((result: ng.IHttpPromiseCallbackArg<ListResult<ChildAccount>>) => {
+                    $scope.allItems = result.data.items.item;
+                    $scope.allItems = [ // to be removed
+                        {
+                            id: "id1",
+                            name: "Acc Name 1",
+                            modifiedOn: "2017/09/11",
+                            modifiedBy: "admin",
+                            createdOn: "2017/09/11",
+                            createdBy: "admin",
+                            organizationName: "Org Name 1",
+                            email: "email@mail.com",
+                            referencePerson: "Person 1",
+                            phoneNumber: "+ 381 64 454 1032",
+                            address1: "Uzice 031",
+                            address2: "Cacak 032",
+                            postCode: "31000",
+                            city: "Uzice",
+                            state: "Srbija",
+                            country: "Srbija"
+                        }
+                    ];
+                    $scope.items = $scope.allItems;
+                    $scope.tableConfig.itemsAvailable = $scope.allItems.length ? true : false;
+                    $scope.updateItemsAvailable();
+                });
+                $scope.showComponent = true
+            }, 500);
+        };
     }
 }
